@@ -93,7 +93,25 @@ namespace YetAnotherRelogger.Forms.Wizard
             _ucDiablo.checkBox2.Checked = bot.Diablo.UseIsBoxer;
             _ucDiablo.textBox13.Text = bot.Diablo.CharacterSet;
             _ucDiablo.textBox12.Text = bot.Diablo.DisplaySlot;
-            
+
+            if (bot.Diablo.CpuCount != Environment.ProcessorCount)
+            {
+                bot.Diablo.ProcessorAffinity = bot.Diablo.AllProcessors;
+                bot.Diablo.CpuCount = Environment.ProcessorCount;
+            }
+
+            if (_ucDiablo.cpus.Count != bot.Diablo.CpuCount)
+            {
+                Logger.Instance.Write("For whatever reason Diablo and UI see different number of CPUs, affinity disabled");
+            }
+            else
+            {
+                for (int i = 0; i < bot.Diablo.CpuCount; i++)
+                {
+                    _ucDiablo.cpus[i].Checked = ((bot.Diablo.ProcessorAffinity & (1 << i)) != 0);
+                }
+            }
+
             //d.Serial = string.Format("{0}-{1}-{2}-{3}", ucDiablo.textBox4.Text, ucDiablo.textBox5.Text, ucDiablo.textBox7.Text, ucDiablo.textBox6.Text);
             //ucDiablo.textBox8.Text = bot.diablo.RestoreCode;
 
@@ -164,6 +182,30 @@ namespace YetAnotherRelogger.Forms.Wizard
                 d.UseIsBoxer = _ucDiablo.checkBox2.Checked;
                 d.CharacterSet = _ucDiablo.textBox13.Text;
                 d.DisplaySlot = _ucDiablo.textBox12.Text;
+
+                // Affinity
+                if (d.CpuCount != Environment.ProcessorCount)
+                {
+                    d.ProcessorAffinity = d.AllProcessors;
+                    d.CpuCount = Environment.ProcessorCount;
+                }
+
+                if (_ucDiablo.cpus.Count != d.CpuCount)
+                {
+                    Logger.Instance.Write("For whatever reason Diablo and UI see different number of CPUs, affinity disabled");
+                }
+                else
+                {
+                    int intProcessorAffinity = 0;
+                    for (int i = 0; i < d.CpuCount; i++)
+                    {
+                        if (_ucDiablo.cpus[i].Checked)
+                            intProcessorAffinity |= (1 << i);
+                    }
+                    if (intProcessorAffinity == 0)
+                        intProcessorAffinity = -1;
+                    d.ProcessorAffinity = intProcessorAffinity;
+                }
 
                 d.ManualPosSize = _ucDiablo.checkBox3.Checked;
                 int.TryParse(_ucDiablo.textBox2.Text, out result);
