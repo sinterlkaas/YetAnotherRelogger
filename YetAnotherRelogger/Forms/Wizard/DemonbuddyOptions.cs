@@ -16,8 +16,9 @@ namespace YetAnotherRelogger.Forms.Wizard
         private void DemonbuddyOptions_Load(object sender, EventArgs e)
         {
             checkBox1.Checked = true;
-            this.VisibleChanged += new EventHandler(DemonbuddyOptions_VisibleChanged);
-            this.comboBox2.SelectedIndex = 2;
+            VisibleChanged += new EventHandler(DemonbuddyOptions_VisibleChanged);
+            comboBox2.SelectedIndex = 2;
+            comboBox1.SelectedIndex = 0;
         }
 
         void DemonbuddyOptions_VisibleChanged(object sender, EventArgs e)
@@ -28,10 +29,12 @@ namespace YetAnotherRelogger.Forms.Wizard
 
         private void button1_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Demonbuddy.exe|*.exe";
-            ofd.FileName = "Demonbuddy.exe";
-            ofd.Title = "Browse to Demonbuddy.exe";
+            var ofd = new OpenFileDialog
+                          {
+                              Filter = "Demonbuddy.exe|*.exe",
+                              FileName = "Demonbuddy.exe",
+                              Title = "Browse to Demonbuddy.exe"
+                          };
             if (ofd.ShowDialog() == DialogResult.OK)
                 textBox4.Text = ofd.FileName;
         }

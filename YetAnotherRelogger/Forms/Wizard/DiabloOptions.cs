@@ -40,7 +40,10 @@ namespace YetAnotherRelogger.Forms.Wizard
             textBox9.KeyPress += new KeyPressEventHandler(NumericCheck);
             textBox10.KeyPress += new KeyPressEventHandler(NumericCheck);
             textBox11.KeyPress += new KeyPressEventHandler(NumericCheck);
+            textBox12.KeyPress += new KeyPressEventHandler(NumericCheck);
             comboBox3.SelectedIndex = 2;
+            comboBox1.SelectedIndex = 0;
+            comboBox2.SelectedIndex = 1;
         }
 
         void NumericCheck(object sender, KeyPressEventArgs e)

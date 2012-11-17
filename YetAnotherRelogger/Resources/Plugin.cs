@@ -105,7 +105,7 @@ namespace YARPLUGIN
 
                 if (ReCrashTender.Any(re => re.IsMatch(msg)))
                 {
-                    Send("CrashTender"); // tell relogger to crash tender :)
+                    Send("CrashTender"); // tell relogger to "crash tender" :)
                     break;
                 }
                 if (!_allPluginsCompiled && FindPluginsCompiled(msg)) continue;
@@ -193,18 +193,8 @@ namespace YARPLUGIN
         {
             while (true)
             {
-                if (ErrorDialog.IsVisible)
-                { // Check if Demonbuddy found errordialog
-                    Send("CheckConnection", true);
-                }
-                else if (UIElementTester.isValid(0xB4433DA3F648A992))
-                { // Demonbuddy failed to find error dialo use static hash to find the OK button
-                    Send("CheckConnection", true);
-                }
-                //else if (UIElementTester.isValid(_UIElement.loginscreen_username))
-                //{ // We are at loginscreen
-                //    Send("CheckConnection", true);
-                //}
+                // Handle errors and other strange situations
+                ErrorHandling(); 
 
                 _bs.PluginPulse = DateTime.Now.Ticks;
                 _bs.IsRunning = BotMain.IsRunning;
@@ -241,6 +231,59 @@ namespace YARPLUGIN
         }
         #endregion
 
+        #region Handle Errors and strange situations
+
+        private bool handlederror;
+        private void ErrorHandling()
+        {
+            if (ErrorDialog.IsVisible)
+            { // Check if Demonbuddy found errordialog
+                if (!handlederror)
+                {
+                    Send("CheckConnection", pause:true);
+                    handlederror = true;
+                }
+                else
+                {
+                    handlederror = false;
+                    ErrorDialog.Click();
+                    bootTo();
+                }
+            }
+            else if (UIElementTester.isValid(_UIElement.errordialog_okbutton))
+            { // Demonbuddy failed to find error dialog use static hash to find the OK button
+                Send("CheckConnection", pause: true);
+                UIElement.FromHash(_UIElement.errordialog_okbutton).Click();
+                bootTo();
+            }
+            else
+            {
+                handlederror = false;
+                if (UIElementTester.isValid(_UIElement.loginscreen_username))
+                { // We are at loginscreen
+                    Send("CheckConnection", pause: true);
+                }
+            }
+
+        }
+
+        private void bootTo()
+        {
+            var timeout = DateTime.Now;
+            while (DateTime.Now.Subtract(timeout).TotalSeconds <= 15)
+            {
+                BotMain.PauseFor(TimeSpan.FromMilliseconds(600));
+                if (UIElementTester.isValid(_UIElement.startresume_button))
+                    break;
+                if (UIElementTester.isValid(_UIElement.loginscreen_username))
+                { // We are at loginscreen
+                    Send("CheckConnection", pause: true);
+                    break;
+                }
+                Thread.Sleep(500);
+            }
+        }
+        #endregion
 
         #region PipeClientSend
         private void Send(string data, bool pause = false, bool xml = false, int retry = 1, int timeout = 3000)
@@ -512,7 +555,8 @@ namespace YARPLUGIN
         loginscreen_username = 0xDE8625FCCFFDFC28,
         loginscreen_password = 0xBA2D3316B4BB4104,
         loginscreen_loginbutton = 0x50893593B5DB22A9,
-        startresume_button = 0x51A3923949DC80B7;
+        startresume_button = 0x51A3923949DC80B7,
+        errordialog_okbutton = 0xB4433DA3F648A992;
     }
     public static class UIElementTester
     {

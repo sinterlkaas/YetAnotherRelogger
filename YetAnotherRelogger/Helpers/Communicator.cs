@@ -214,6 +214,10 @@ namespace YetAnotherRelogger.Helpers
                             b.Demonbuddy.CrashTender();
                             Send("Roger!");
                             break;
+                        case "CheckConnection":
+                            ConnectionCheck.CheckValidConnection(silent: true);
+                            Send("Roger!");
+                            break;
                         // Unknown command reply
                         default:
                             Send("Unknown command!");

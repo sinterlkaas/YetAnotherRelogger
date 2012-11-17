@@ -247,6 +247,7 @@ namespace YetAnotherRelogger.Helpers
         #endregion
     }
 
+    #region IPAdressRange Check
     public class IPAddressRange
     {
         readonly AddressFamily addressFamily;
@@ -289,4 +290,5 @@ namespace YetAnotherRelogger.Helpers
             return true;
         }
     }
+#endregion
 }
