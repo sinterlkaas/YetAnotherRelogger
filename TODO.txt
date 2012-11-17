@@ -1,8 +1,0 @@
-Important: Ingame error msg detection -> Ask relogger what connection we are on -> if banned close all diablos!
-BUGFIX: Xml escape special characters 
-Add Allowed IP / Hosts check
-Add TomasD Coinage contributed code (GPH Check)
-Add option to always force window size
-Add option to add Registry identity for multiple launch on D3
-Add Profile schedule randomize profile selection
-Add donate button in about screen
