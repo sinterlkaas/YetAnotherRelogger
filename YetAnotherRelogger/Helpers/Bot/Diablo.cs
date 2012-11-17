@@ -41,6 +41,13 @@ namespace YetAnotherRelogger.Helpers.Bot
         public string Serial { get; set; }
         public string RestoreCode { get; set; }
 
+        // Affinity
+        // If CpuCount does not match current machines CpuCount,
+        // the affinity is set to all processor
+        public int CpuCount          { get; set; }
+        public int ProcessorAffinity { get; set; }
+
+        [XmlIgnore] public int AllProcessors { get { return 0x7fffffff; } }
         [XmlIgnore] public Process Proc;
         [XmlIgnore] public IntPtr MainWindowHandle;
         [XmlIgnore] private bool _isStopped;
@@ -51,6 +58,12 @@ namespace YetAnotherRelogger.Helpers.Bot
             {
                 return (Proc != null && !Proc.HasExited && !_isStopped);
             }
+        }
+
+        public DiabloClass()
+        {
+            CpuCount = Environment.ProcessorCount;
+            ProcessorAffinity = AllProcessors;
         }
 
         [XmlIgnore] private DateTime _lastRepsonse;
@@ -156,6 +169,17 @@ namespace YetAnotherRelogger.Helpers.Bot
                     Parent.Stop();
                     return;
                 }
+            }
+
+            if (!UseIsBoxer) // Don't want to fight with isboxer
+            {
+                if (CpuCount != Environment.ProcessorCount)
+                {
+                    ProcessorAffinity = AllProcessors; // set it to all ones
+                    CpuCount = Environment.ProcessorCount;
+                }
+
+                Proc.ProcessorAffinity = (IntPtr)ProcessorAffinity;
             }
 
            
