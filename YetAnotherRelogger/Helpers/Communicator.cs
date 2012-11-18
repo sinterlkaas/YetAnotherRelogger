@@ -116,6 +116,8 @@ namespace YetAnotherRelogger.Helpers
                         if (bot != null)
                         {
                             if (bot.AntiIdle.Stats == null) bot.AntiIdle.Stats = new BotStats();
+
+                            bot.AntiIdle.UpdateCoinage(stats.Coinage);
                             bot.AntiIdle.Stats = stats;
                             bot.AntiIdle.LastStats = DateTime.Now;
                             Send(bot.AntiIdle.Reply());
