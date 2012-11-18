@@ -35,8 +35,7 @@ namespace YetAnotherRelogger
             if (_fcThread != null)
                 _fcThread.Abort();
 
-            _fcThread = new Thread(new ThreadStart(ForegroundCheckerWorker));
-            _fcThread.IsBackground = true;
+            _fcThread = new Thread(new ThreadStart(ForegroundCheckerWorker)) {IsBackground = true};
             _fcThread.Start();
         }
         public void Stop()
@@ -69,11 +68,10 @@ namespace YetAnotherRelogger
                             _lastDemonbuddy = bot.Demonbuddy.Proc.MainWindowHandle;
                             Logger.Instance.WriteGlobal("<{0}> Diablo:{1}: has focus. Bring attached Demonbuddy to front", bot.Name, bot.Diablo.Proc.Id);
                                     
-                            WinAPI.ShowWindow(_lastDemonbuddy, WinAPI.WindowShowStyle.ForceMinimized);
-                            Thread.Sleep(300);
                             WinAPI.ShowWindow(_lastDemonbuddy, WinAPI.WindowShowStyle.ShowNormal);
-                            Thread.Sleep(300);
+                            WinAPI.SetForegroundWindow(_lastDemonbuddy);
                             WinAPI.ShowWindow(_lastDiablo, WinAPI.WindowShowStyle.ShowNormal);
+                            WinAPI.SetForegroundWindow(_lastDiablo);
                         }
                     }
                     Thread.Sleep(1000);
