@@ -18,12 +18,60 @@ namespace YetAnotherRelogger.Helpers.Bot
         public bool IsInitialized;
         public int FixAttempts;
 
+        public int LastCoinage;
+        public DateTime LastCoinageIncrease;
+        public DateTime LastCoinageBugReported;
+        public DateTime LastCoinageReset; // So we give it a minute to get in shape
+
         private DateTime _lastIdleAction;
 
         public AntiIdleClass()
         {
             FixAttempts = 0;
             Stats = new BotStats();
+            ResetCoinage();
+        }
+
+        // When program is paused, we don't want this to run on and on
+        public void ResetCoinage()
+        {
+            LastCoinageIncrease = DateTime.Now;
+            LastCoinageBugReported = DateTime.Now;
+            LastCoinage = 0;
+            LastCoinageReset = DateTime.MinValue;
+        }
+
+        public void UpdateCoinage(int NewCoinage)
+        {
+            if(NewCoinage < 0)
+            {
+                Debug.WriteLine("We could not read Coinage assuming problem");
+                return;
+            }
+            if (NewCoinage == 0)
+            {
+                Debug.WriteLine("We got 0 gold, which is often a glitch, assuming problem");
+                return;
+            }
+
+            Debug.WriteLine("We received Coinage info! Old: {0}; New {1}, we are {2}",
+                LastCoinage, NewCoinage, (LastCoinage != NewCoinage)?"good":"lazy");
+
+            if (NewCoinage < LastCoinage)
+            {
+                // We either repaired, or went shopping, all is well
+                LastCoinageIncrease = DateTime.Now;
+            }
+            else if (NewCoinage > LastCoinage)
+            {
+                // We got more monies, all is well
+                LastCoinageIncrease = DateTime.Now;
+                LastCoinageBugReported = DateTime.Now;
+            }
+            // Otherwise we are stuck on the same gold, and that's not profitable.
+            // Yes, the if above could be: NewCoinage != LastCoinage, but I wanted
+            // to explain why we have those two
+            LastCoinage = NewCoinage;
         }
 
         public string Reply()
@@ -71,10 +119,11 @@ namespace YetAnotherRelogger.Helpers.Bot
                 case IdleState.UserStop:
                     if (Stats.IsRunning)
                         State = IdleState.CheckIdle;
+                    ResetCoinage();
                     break;
                 case IdleState.UserPause:
-                        if(!Stats.IsPaused)
-                            State = IdleState.CheckIdle;
+                    if(!Stats.IsPaused)
+                        State = IdleState.CheckIdle;
                     break;
                 case IdleState.NewProfile:
                     State = IdleState.CheckIdle;
@@ -119,6 +168,29 @@ namespace YetAnotherRelogger.Helpers.Bot
                     return "Restart";
                 }
 
+                // Prints a warning about gold error
+                if (General.DateSubtract(LastCoinageIncrease) > 30)
+                {
+                    if (General.DateSubtract(LastCoinageBugReported) > 30)
+                    {
+                        Logger.Instance.Write(Parent, "Demonbuddy:{0}: has not gained any gold in {1} seconds and counting",
+                            Parent.Demonbuddy.Proc.Id, General.DateSubtract(LastCoinageIncrease));
+                        LastCoinageBugReported = DateTime.Now;
+                    }
+                }
+
+                // If we are w/o gold change for 2 minutes, send reset, but at max every 45s
+                if (General.DateSubtract(LastCoinageIncrease) > 120)
+                {
+                    if(General.DateSubtract(LastCoinageReset) < 45) // we still give it a chance
+                        return "Roger!";
+					// When we give up, it sends false, we send Roger and kill DB
+                    if (!FixAttemptCounter()) return "Roger!";
+					Logger.Instance.Write(Parent, "Demonbuddy:{0}: has not gained any gold in 2 minutes", Parent.Demonbuddy.Proc.Id);
+                    LastCoinageReset = DateTime.Now;
+                    return "Restart";
+                }
+
                 return "Roger!";
             }
         }
@@ -142,6 +214,8 @@ namespace YetAnotherRelogger.Helpers.Bot
         {
             State = IdleState.CheckIdle;
             Stats.Reset();
+
+            ResetCoinage();
             
             if (all)
             {
