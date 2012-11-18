@@ -388,5 +388,20 @@ namespace YetAnotherRelogger.Helpers.Tools
         }
 
         #endregion
+
+        #region Register/Post Message
+        [DllImport("user32")]
+        public static extern int RegisterWindowMessage(string message);
+        public static int RegisterWindowMessage(string format, params object[] args)
+        {
+            string message = String.Format(format, args);
+            return RegisterWindowMessage(message);
+        }
+
+        public const int HWND_BROADCAST = 0xffff;
+
+        [DllImport("user32")]
+        public static extern bool PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
+        #endregion
     }
 }

@@ -329,8 +329,6 @@ namespace YetAnotherRelogger.Forms
 
         }
 
-        
-
         private void button6_Click(object sender, EventArgs e)
         {
             if (Program.Pause)
@@ -344,5 +342,17 @@ namespace YetAnotherRelogger.Forms
                 button6.Text = "Unpause";
             }
         }
+
+        protected override void WndProc(ref Message message)
+        {
+            // Show first instance form
+            if (message.Msg == SingleInstance.WM_SHOWFIRSTINSTANCE)
+            {
+                Show();
+                WinAPI.ShowWindow(Handle, WinAPI.WindowShowStyle.ShowNormal);
+                WinAPI.SetForegroundWindow(Handle);
+            }
+            base.WndProc(ref message);
+        } 
     }
 }
