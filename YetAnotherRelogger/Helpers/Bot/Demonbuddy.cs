@@ -56,6 +56,32 @@ namespace YetAnotherRelogger.Helpers.Bot
             ProcessorAffinity = AllProcessors;
         }
 
+
+        public bool IsInitialized
+        {
+            get
+            {
+                if (General.DateSubtract(Parent.AntiIdle.InitTime) > 180)
+                {
+                    Parent.AntiIdle.FailedInitCount++;
+                    if (Parent.AntiIdle.FailedInitCount > 3)
+                    {
+                        Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to initialize more than 3 times", Parent.Demonbuddy.Proc.Id);
+                        Parent.Stop();
+
+                    }
+                    else
+                    {
+                        Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to initialize", Parent.Demonbuddy.Proc.Id);
+                        Parent.Demonbuddy.Stop(true);
+                        Thread.Sleep(2000);
+                        Parent.Demonbuddy.Start();
+                    }
+                    return false;
+                }
+                return Parent.AntiIdle.IsInitialized;
+            }
+        }
         private DateTime _lastRepsonse;
         public void CrashCheck()
         {
