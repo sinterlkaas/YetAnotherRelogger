@@ -188,7 +188,6 @@ namespace YetAnotherRelogger.Helpers.Bot
                     ProcessorAffinity = AllProcessors; // set it to all ones
                     CpuCount = Environment.ProcessorCount;
                 }
-                Logger.Instance.Write("Affinity " + AllProcessors);
                 Proc.ProcessorAffinity = (IntPtr)ProcessorAffinity;
             }
 
