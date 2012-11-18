@@ -17,6 +17,8 @@ namespace YetAnotherRelogger.Helpers.Bot
         public int FailedStartDelay;
         public bool IsInitialized;
         public int FixAttempts;
+        public int FailedInitCount;
+        public DateTime InitTime;
 
         public int LastCoinage;
         public DateTime LastCoinageIncrease;
@@ -79,7 +81,6 @@ namespace YetAnotherRelogger.Helpers.Bot
             switch (State)
             {
                 case IdleState.Initialize:
-                        // TODO: MAX INIT TIME
                     break;
                 case IdleState.StartDelay:
                     if (Stats.IsInGame || Stats.IsLoadingWorld)
@@ -198,7 +199,7 @@ namespace YetAnotherRelogger.Helpers.Bot
         private DateTime _fixAttemptTime;
         public bool FixAttemptCounter()
         {
-            if (General.DateSubtract(_fixAttemptTime) > 300)
+            if (General.DateSubtract(_fixAttemptTime) > 420)
                 FixAttempts = 0;
 
             FixAttempts++;
@@ -221,6 +222,7 @@ namespace YetAnotherRelogger.Helpers.Bot
             if (all)
             {
                 IsInitialized = false;
+                InitTime = DateTime.Now;
                 State = IdleState.Initialize;
                 Failed = 0;
                 FailedStartDelay = 0;
