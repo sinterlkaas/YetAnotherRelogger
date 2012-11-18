@@ -205,7 +205,8 @@ namespace YetAnotherRelogger.Helpers.Bot
             _fixAttemptTime = DateTime.Now;
             if (FixAttempts > 3)
             {
-                Parent.Stop();
+                //Parent.Stop();
+                Parent.Restart();
                 return false;
             }
             return true;
