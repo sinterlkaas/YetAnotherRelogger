@@ -39,6 +39,7 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
@@ -63,7 +64,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
-            this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.button4 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -188,6 +189,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Demonbuddy";
             // 
+            // checkBox5
+            // 
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.Location = new System.Drawing.Point(104, 116);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(137, 17);
+            this.checkBox5.TabIndex = 11;
+            this.checkBox5.Text = "Force enable all plugins";
+            this.checkBox5.UseVisualStyleBackColor = true;
+            // 
             // button1
             // 
             this.button1.BackgroundImage = global::YetAnotherRelogger.Properties.Resources.folder;
@@ -298,6 +309,7 @@
             // groupBox3
             // 
             this.groupBox3.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox3.Controls.Add(this.button4);
             this.groupBox3.Controls.Add(this.label7);
             this.groupBox3.Controls.Add(this.comboBox2);
             this.groupBox3.Location = new System.Drawing.Point(431, 90);
@@ -328,7 +340,7 @@
             "Low"});
             this.comboBox2.Location = new System.Drawing.Point(91, 19);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(186, 21);
+            this.comboBox2.Size = new System.Drawing.Size(105, 21);
             this.comboBox2.TabIndex = 0;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
@@ -438,15 +450,15 @@
             this.label13.TabIndex = 0;
             this.label13.Text = "X:";
             // 
-            // checkBox5
+            // button4
             // 
-            this.checkBox5.AutoSize = true;
-            this.checkBox5.Location = new System.Drawing.Point(104, 116);
-            this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(137, 17);
-            this.checkBox5.TabIndex = 11;
-            this.checkBox5.Text = "Force enable all plugins";
-            this.checkBox5.UseVisualStyleBackColor = true;
+            this.button4.Location = new System.Drawing.Point(202, 17);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 3;
+            this.button4.Text = "Affinity";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click_1);
             // 
             // DemonbuddyOptions
             // 
@@ -515,5 +527,6 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
         public System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.Button button4;
     }
 }

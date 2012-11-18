@@ -58,5 +58,10 @@ namespace YetAnotherRelogger.Forms.Wizard
                 textBox5.Enabled = textBox6.Enabled = textBox10.Enabled = textBox11.Enabled = checkBox4.Checked;
         }
 
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            WM.AffinityDemonbuddy.Show();
+        }
+
     }
 }

@@ -74,7 +74,7 @@ namespace YetAnotherRelogger.Helpers
                             {
                                 hostname = Dns.GetHostEntry(ip).HostName;
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 //Logger.Instance.WriteGlobal("ValidConnection: {0}", ex.Message);
                             }

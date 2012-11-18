@@ -1,5 +1,6 @@
 -----------------------
 * Version 0.1.7.1 BETA 
+- Added CPU Affinity support (Thanks tomasd for contributing on github)
 - Changed Version numbereing to v 0.1.inc_new_features.inc_new_test_release
 - Fixed Connection check IP range was not implemented (somehow forgot this sorry...)
 - Fixed Layout problems with schedule and settings on some systems
@@ -8,7 +9,6 @@
 	- Added a new way to fix no pulse
 		* First check if plugin is enabled
 - Fixed Language support for Traditional Chinese
-- Fixed ISBoxer to launch without slot number
 -----------------------
 * Version 0.0.0.6 BETA 
 - Added Internet connection check (using ping to check if internet connection is available)

@@ -377,7 +377,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                 {
                     FileName = Settings.Default.ISBoxerPath,
                     WorkingDirectory = Path.GetDirectoryName(Settings.Default.ISBoxerPath),
-                    Arguments = string.Format("run isboxer -launch{0}", (string.IsNullOrEmpty(DisplaySlot) ? string.Format(" \"{0}\"", CharacterSet) : string.Format("slot \"{0}\" {1}", CharacterSet,DisplaySlot))),
+                    Arguments = string.Format("run isboxer -launchslot \"{0}\" {1}", CharacterSet,DisplaySlot),
                 }
             };
             Logger.Instance.Write(Parent, "Starting InnerSpace: {0}", Settings.Default.ISBoxerPath);

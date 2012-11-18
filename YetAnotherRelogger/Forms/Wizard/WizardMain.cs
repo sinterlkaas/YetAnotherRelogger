@@ -32,6 +32,8 @@ namespace YetAnotherRelogger.Forms.Wizard
         private WeekSchedule _ucWeekSchedule;
         private ProfileSchedule _ucProfileSchedule;
         private Heroes _ucHeroes;
+        public SetAffinity AffinityDiablo;
+        public SetAffinity AffinityDemonbuddy;
 
         private BotClass bot;
         private int index = -1;
@@ -57,6 +59,9 @@ namespace YetAnotherRelogger.Forms.Wizard
             Controls.Add(_ucProfileSchedule);
             _ucDiablo.Visible = _ucWeekSchedule.Visible = _ucProfileSchedule.Visible = _ucHeroes.Visible = false;
             FinishCount = Controls.Count-1; // Get Finish count
+
+            AffinityDiablo = new SetAffinity();
+            AffinityDemonbuddy = new SetAffinity();
 
             if (bot != null)
                 LoadData();
@@ -94,13 +99,14 @@ namespace YetAnotherRelogger.Forms.Wizard
             _ucDiablo.textBox13.Text = bot.Diablo.CharacterSet;
             _ucDiablo.textBox12.Text = bot.Diablo.DisplaySlot;
 
+            // Affinity Diablo
             if (bot.Diablo.CpuCount != Environment.ProcessorCount)
             {
                 bot.Diablo.ProcessorAffinity = bot.Diablo.AllProcessors;
                 bot.Diablo.CpuCount = Environment.ProcessorCount;
             }
 
-            if (_ucDiablo.cpus.Count != bot.Diablo.CpuCount)
+            if (AffinityDiablo.cpus.Count != bot.Diablo.CpuCount)
             {
                 Logger.Instance.Write("For whatever reason Diablo and UI see different number of CPUs, affinity disabled");
             }
@@ -108,7 +114,25 @@ namespace YetAnotherRelogger.Forms.Wizard
             {
                 for (int i = 0; i < bot.Diablo.CpuCount; i++)
                 {
-                    _ucDiablo.cpus[i].Checked = ((bot.Diablo.ProcessorAffinity & (1 << i)) != 0);
+                    AffinityDiablo.cpus[i].Checked = ((bot.Diablo.ProcessorAffinity & (1 << i)) != 0);
+                }
+            }
+            // Affinity Demonbuddy
+            if (bot.Demonbuddy.CpuCount != Environment.ProcessorCount)
+            {
+                bot.Demonbuddy.ProcessorAffinity = bot.Demonbuddy.AllProcessors;
+                bot.Demonbuddy.CpuCount = Environment.ProcessorCount;
+            }
+
+            if (AffinityDemonbuddy.cpus.Count != bot.Demonbuddy.CpuCount)
+            {
+                Logger.Instance.Write("For whatever reason Demonbuddy and UI see different number of CPUs, affinity disabled");
+            }
+            else
+            {
+                for (int i = 0; i < bot.Demonbuddy.CpuCount; i++)
+                {
+                    AffinityDemonbuddy.cpus[i].Checked = ((bot.Demonbuddy.ProcessorAffinity & (1 << i)) != 0);
                 }
             }
 
@@ -183,14 +207,14 @@ namespace YetAnotherRelogger.Forms.Wizard
                 d.CharacterSet = _ucDiablo.textBox13.Text;
                 d.DisplaySlot = _ucDiablo.textBox12.Text;
 
-                // Affinity
+                // Affinity Diablo
                 if (d.CpuCount != Environment.ProcessorCount)
                 {
                     d.ProcessorAffinity = d.AllProcessors;
                     d.CpuCount = Environment.ProcessorCount;
                 }
 
-                if (_ucDiablo.cpus.Count != d.CpuCount)
+                if (AffinityDiablo.cpus.Count != d.CpuCount)
                 {
                     Logger.Instance.Write("For whatever reason Diablo and UI see different number of CPUs, affinity disabled");
                 }
@@ -199,12 +223,36 @@ namespace YetAnotherRelogger.Forms.Wizard
                     int intProcessorAffinity = 0;
                     for (int i = 0; i < d.CpuCount; i++)
                     {
-                        if (_ucDiablo.cpus[i].Checked)
+                        if (AffinityDiablo.cpus[i].Checked)
                             intProcessorAffinity |= (1 << i);
                     }
                     if (intProcessorAffinity == 0)
                         intProcessorAffinity = -1;
                     d.ProcessorAffinity = intProcessorAffinity;
+                }
+
+                // Affinity Demonbuddy
+                if (db.CpuCount != Environment.ProcessorCount)
+                {
+                    db.ProcessorAffinity = db.AllProcessors;
+                    db.CpuCount = Environment.ProcessorCount;
+                }
+
+                if (AffinityDemonbuddy.cpus.Count != db.CpuCount)
+                {
+                    Logger.Instance.Write("For whatever reason Demonbuddy and UI see different number of CPUs, affinity disabled");
+                }
+                else
+                {
+                    int intProcessorAffinity = 0;
+                    for (int i = 0; i < db.CpuCount; i++)
+                    {
+                        if (AffinityDemonbuddy.cpus[i].Checked)
+                            intProcessorAffinity |= (1 << i);
+                    }
+                    if (intProcessorAffinity == 0)
+                        intProcessorAffinity = -1;
+                    db.ProcessorAffinity = intProcessorAffinity;
                 }
 
                 d.ManualPosSize = _ucDiablo.checkBox3.Checked;

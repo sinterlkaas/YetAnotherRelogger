@@ -30,6 +30,14 @@ namespace YetAnotherRelogger.Helpers.Bot
         public bool AutoUpdate { get; set; }
         public bool NoUpdate { get; set; }
         public int Priority { get; set; }
+
+        // Affinity
+        // If CpuCount does not match current machines CpuCount,
+        // the affinity is set to all processor
+        public int CpuCount { get; set; }
+        public int ProcessorAffinity { get; set; }
+
+        [XmlIgnore] public int AllProcessors { get { return 0x7fffffff; } }
         
 
         // Position
@@ -41,6 +49,12 @@ namespace YetAnotherRelogger.Helpers.Bot
         [XmlIgnore] public Rectangle AutoPos;
 
         public bool ForceEnableAllPlugins { get; set; }
+
+        public DemonbuddyClass()
+        {
+            CpuCount = Environment.ProcessorCount;
+            ProcessorAffinity = AllProcessors;
+        }
 
         private DateTime _lastRepsonse;
         public void CrashCheck()
@@ -123,6 +137,16 @@ namespace YetAnotherRelogger.Helpers.Bot
                     Proc.PriorityClass = General.GetPriorityClass(Priority);
                 else
                     Logger.Instance.Write(Parent, "Failed to change priority (No admin rights)");
+               
+                
+                // Set affinity
+                if (CpuCount != Environment.ProcessorCount)
+                {
+                    ProcessorAffinity = AllProcessors; // set it to all ones
+                    CpuCount = Environment.ProcessorCount;
+                }
+                Proc.ProcessorAffinity = (IntPtr)ProcessorAffinity;
+
 
                 Logger.Instance.Write(Parent, "Demonbuddy:{0}: Waiting for process to become ready", Proc.Id);
                 if (!Proc.WaitForInputIdle(30000))

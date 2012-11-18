@@ -109,6 +109,12 @@
     <Compile Include="Forms\SettingsTree\IpHostCheck.Designer.cs">
       <DependentUpon>IpHostCheck.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Wizard\SetAffinity.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Wizard\SetAffinity.Designer.cs">
+      <DependentUpon>SetAffinity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\AutoPosition.cs" />
     <Compile Include="ForegroundChecker.cs" />
     <Compile Include="Forms\MainForm2.cs">
@@ -228,6 +234,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Wizard\ProfileSchedule.resx">
       <DependentUpon>ProfileSchedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Wizard\SetAffinity.resx">
+      <DependentUpon>SetAffinity.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Wizard\WizardMain.resx">
       <DependentUpon>WizardMain.cs</DependentUpon>
