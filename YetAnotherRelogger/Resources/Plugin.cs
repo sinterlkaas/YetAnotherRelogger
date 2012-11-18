@@ -1,5 +1,7 @@
-﻿// VERSION: 0.1.7.1
+﻿// VERSION: 0.1.7.2
 /* Changelog:
+ * VERSION: 0.1.7.2
+ * Added: Sends Coinage to YAR, will be reset after 2 mins of no gold change
  * VERSION: 0.1.7.1
  * Added: Demonbuddy invalid/expired sessions detection
  * Added: Failed to attach detection
@@ -64,7 +66,7 @@ namespace YARPLUGIN
         public string Author { get { return "sinterlkaas"; } }
         public string Description { get { return "Communication plugin for YetAnotherRelogger"; } }
         public string Name { get { return "YAR Comms"; } }
-        public Version Version { get { return new Version(0, 1, 7, 1); } }
+        public Version Version { get { return new Version(0, 1, 7, 2); } }
 
         public Window DisplayWindow { get { return null; } }
         private bool _allPluginsCompiled;
@@ -199,7 +201,17 @@ namespace YARPLUGIN
                 _bs.PluginPulse = DateTime.Now.Ticks;
                 _bs.IsRunning = BotMain.IsRunning;
                 _bs.IsLoadingWorld = ZetaDia.IsLoadingWorld;
-                
+                _bs.Coinage = 0;
+                try
+                {
+                    if (ZetaDia.Me != null)
+                        _bs.Coinage = ZetaDia.Me.Inventory.Coinage;
+                }
+                catch (System.Exception ex)
+                {
+                    _bs.Coinage = -1;
+                }
+
                 if (BotMain.IsPaused || BotMain.IsPausedForStateExecution)
                 {
                     _bs.IsPaused = true;
@@ -379,6 +391,7 @@ namespace YARPLUGIN
                     FixPulse();
                     break;
                 case "Roger!":
+                case "Unknown command!":
                     break;
                 default:
                     Log("Unknown response! \"{0} {1}\"", cmd, data);
@@ -530,6 +543,7 @@ namespace YARPLUGIN
             public bool IsRunning;
             public bool IsInGame;
             public bool IsLoadingWorld;
+            public int Coinage;
         }
 
         private void LoadProfile(string profile)
