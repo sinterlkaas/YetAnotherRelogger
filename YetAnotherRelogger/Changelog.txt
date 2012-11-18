@@ -1,5 +1,7 @@
 -----------------------
 * Version 0.1.7.1 BETA 
+- Added Crash detection for demonbuddy
+- Added Demonbuddy initialize time limit
 - Added CPU Affinity support (Thanks tomasd for contributing on github)
 - Changed Version numbereing to v 0.1.inc_new_features.inc_new_test_release
 - Fixed Connection check IP range was not implemented (somehow forgot this sorry...)
