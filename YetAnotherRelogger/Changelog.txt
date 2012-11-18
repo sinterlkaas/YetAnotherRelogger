@@ -1,8 +1,9 @@
 -----------------------
-* Version 0.1.7.1 BETA 
+* Version 0.1.7 BETA 
+- Added Coinage check (2 minutes w/o gold change => reset) (*tomasd)
 - Added Crash detection for demonbuddy
 - Added Demonbuddy initialize time limit
-- Added CPU Affinity support (Thanks tomasd for contributing on github)
+- Added CPU Affinity support (*tomasd)
 - Changed Version numbereing to v 0.1.inc_new_features.inc_new_test_release
 - Fixed Connection check IP range was not implemented (somehow forgot this sorry...)
 - Fixed Layout problems with schedule and settings on some systems
