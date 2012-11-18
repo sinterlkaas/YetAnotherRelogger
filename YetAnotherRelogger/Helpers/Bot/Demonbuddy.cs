@@ -37,7 +37,16 @@ namespace YetAnotherRelogger.Helpers.Bot
         public int CpuCount { get; set; }
         public int ProcessorAffinity { get; set; }
 
-        [XmlIgnore] public int AllProcessors { get { return 0x7fffffff; } }
+        [XmlIgnore] public int AllProcessors
+        {
+            get
+            {
+                int intProcessorAffinity = 0;
+                for (int i = 0; i < Environment.ProcessorCount; i++)
+                    intProcessorAffinity |= (1 << i);
+                return intProcessorAffinity;
+            }
+        }
         
 
         // Position
