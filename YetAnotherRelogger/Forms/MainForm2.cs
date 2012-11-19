@@ -277,7 +277,6 @@ namespace YetAnotherRelogger.Forms
         }
         private void forceStartToolStripMenuItem_Click(object sender, EventArgs e)
         { // Force Start single bot
-            BotSettings.Instance.Bots.RemoveAt(dataGridView1.CurrentRow.Index);
             BotSettings.Instance.Bots[dataGridView1.CurrentRow.Index].Week.ForceStart = true;
             BotSettings.Instance.Bots[dataGridView1.CurrentRow.Index].IsStarted = true;
         }
