@@ -1,5 +1,6 @@
 -----------------------
 * Version 0.1.7 BETA 
+- Added option to remove window frame on diablo
 - Added Coinage check (2 minutes w/o gold change => reset) (*tomasd)
 - Added Crash detection for demonbuddy
 - Added Demonbuddy initialize time limit

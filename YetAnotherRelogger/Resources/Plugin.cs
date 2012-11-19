@@ -1,4 +1,4 @@
-﻿// VERSION: 0.1.7.2
+﻿// VERSION: 0.1.7.4
 /* Changelog:
  * VERSION: 0.1.7.2
  * Added: Sends Coinage to YAR, will be reset after 2 mins of no gold change
