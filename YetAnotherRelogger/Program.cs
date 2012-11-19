@@ -96,7 +96,15 @@ namespace YetAnotherRelogger
         }
         static public void Stop()
         {
-            mutex.ReleaseMutex();
+            try
+            {
+                mutex.ReleaseMutex();
+            }
+            catch
+            {
+                // Do nothing
+            }
+            
         }
     }
     #endregion
