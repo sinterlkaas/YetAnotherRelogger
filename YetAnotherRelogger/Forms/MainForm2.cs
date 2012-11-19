@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -352,6 +353,11 @@ namespace YetAnotherRelogger.Forms
                 WinAPI.SetForegroundWindow(Handle);
             }
             base.WndProc(ref message);
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9NF2Q47KYGNJL");
         } 
     }
 }
