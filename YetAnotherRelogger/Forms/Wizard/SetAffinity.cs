@@ -10,7 +10,7 @@ namespace YetAnotherRelogger.Forms.Wizard
         public SetAffinity()
         {
             InitializeComponent();
-
+            
             for (var i = 0; i < Environment.ProcessorCount; ++i)
             {
                 CheckBox cpuBox = new CheckBox();
@@ -35,7 +35,7 @@ namespace YetAnotherRelogger.Forms.Wizard
 
         private void button3_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Hide();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -43,5 +43,17 @@ namespace YetAnotherRelogger.Forms.Wizard
             foreach (var box in cpus)
                 box.Checked = true;
         }
+
+        // Disable Close button
+        private const int CP_NOCLOSE_BUTTON = 0x200;
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams myCp = base.CreateParams;
+                myCp.ClassStyle = myCp.ClassStyle | CP_NOCLOSE_BUTTON;
+                return myCp;
+            }
+        } 
     }
 }

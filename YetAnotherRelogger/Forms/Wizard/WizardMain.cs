@@ -235,6 +235,7 @@ namespace YetAnotherRelogger.Forms.Wizard
                         intProcessorAffinity = -1;
                     d.ProcessorAffinity = intProcessorAffinity;
                 }
+                if (AffinityDiablo != null) AffinityDiablo.Dispose();
 
                 // Affinity Demonbuddy
                 if (db.CpuCount != Environment.ProcessorCount)
@@ -260,6 +261,7 @@ namespace YetAnotherRelogger.Forms.Wizard
                         intProcessorAffinity = -1;
                     db.ProcessorAffinity = intProcessorAffinity;
                 }
+                if (AffinityDemonbuddy != null) AffinityDemonbuddy.Dispose();
 
                 d.ManualPosSize = _ucDiablo.checkBox3.Checked;
                 int.TryParse(_ucDiablo.textBox2.Text, out result);
