@@ -41,6 +41,9 @@ namespace YARPLUGIN
 {
     public class YARPLUGIN : IPlugin
     {
+        // Plugin version
+        public Version Version { get { return new Version(0, 1, 7, 4); } }
+
         private const bool _debug = true;
 
         // Compatebility
@@ -63,16 +66,33 @@ namespace YARPLUGIN
                 new Regex(@"Was not able to attach to any running Diablo III process, are you running the bot already\?",RegexOptions.Compiled ), 
             };
 
+        public class BotStats
+        {
+            public int Pid;
+            public long LastRun;
+            public long LastPulse;
+            public long PluginPulse;
+            public long LastGame;
+            public bool IsPaused;
+            public bool IsRunning;
+            public bool IsInGame;
+            public bool IsLoadingWorld;
+            public int Coinage;
+        }
+        #region Plugin information
         public string Author { get { return "sinterlkaas"; } }
         public string Description { get { return "Communication plugin for YetAnotherRelogger"; } }
         public string Name { get { return "YAR Comms"; } }
-        public Version Version { get { return new Version(0, 1, 7, 2); } }
+        public bool Equals(IPlugin other)
+        {
+            return (other.Name == Name) && (other.Version == Version);
+        }
+        #endregion
 
         public Window DisplayWindow { get { return null; } }
         private bool _allPluginsCompiled;
         private Thread _yarThread;
-
-        BotStats _bs;
+        private BotStats _bs;
 
         public static void Log(string str, params object[] args)
         {
@@ -83,6 +103,8 @@ namespace YARPLUGIN
             Logging.Write("[YetAnotherRelogger] Error: {0}", ex.Message);
             if (_debug) Logging.Write("[YetAnotherRelogger] Error: {0}", ex.StackTrace);
         }
+
+        #region Plugin Events
         public void OnInitialize()
         {
             _bs = new BotStats();
@@ -97,7 +119,36 @@ namespace YARPLUGIN
             Send("Initialized");
         }
 
-       
+        public void OnShutdown()
+        {
+            _yarThread.Abort();
+            Logging.OnLogMessage -= new Logging.LogMessageDelegate(Logging_OnLogMessage);
+        }
+
+        public void OnEnabled()
+        {
+            if (_yarThread == null || (_yarThread != null && !_yarThread.IsAlive))
+            {
+                _yarThread = new Thread(YarWorker) { IsBackground = true };
+                _yarThread.Start();
+            }
+            Reset();
+        }
+
+        public void OnDisabled()
+        {
+            Log("Disabled!");
+            _yarThread.Abort();
+        }
+
+        public void OnPulse()
+        {
+            _pulseCheck = true;
+            _bs.LastPulse = DateTime.Now.Ticks;
+        }
+        #endregion
+
+        #region Logging Monitor
         void Logging_OnLogMessage(ReadOnlyCollection<Logging.LogMessage> messages)
         {
             foreach (var lm in messages)
@@ -148,43 +199,7 @@ namespace YARPLUGIN
             }
             return false;
         }
-        public void OnShutdown()
-        {
-            _yarThread.Abort();
-            Logging.OnLogMessage -= new Logging.LogMessageDelegate(Logging_OnLogMessage);
-        }
-
-        public void OnEnabled()
-        {
-            if (_yarThread == null || (_yarThread != null && !_yarThread.IsAlive))
-            {
-                _yarThread = new Thread(YarWorker) {IsBackground = true};
-                _yarThread.Start();
-            }
-            Reset();
-        }
-
-        
-        public void OnDisabled()
-        {
-            Log("Disabled!");
-            _yarThread.Abort();
-        }
-
-        
-
-        public bool Equals(IPlugin other)
-        {
-            return (other.Name == Name) && (other.Version == Version);
-        }
-
-        
-        public void OnPulse()
-        {
-            _pulseCheck = true;
-            _bs.LastPulse = DateTime.Now.Ticks;
-        }
-
+        #endregion
 
         #region Events
         // Nothing here :)
@@ -279,6 +294,7 @@ namespace YARPLUGIN
 
         }
 
+        // Detect if we are booted to login screen or character selection screen
         private void bootTo()
         {
             var timeout = DateTime.Now;
@@ -400,6 +416,7 @@ namespace YARPLUGIN
             _recieved = true;
         }
 
+        #region ForceEnable Plugin(s)
         private void ForceEnableYar()
         {
             // Check if plugin is enabled
@@ -411,7 +428,7 @@ namespace YARPLUGIN
             plugins.Add(Name);
             PluginManager.SetEnabledPlugins(plugins.ToArray());
         }
-
+        
         private void ForceEnableAllPlugins()
         {
             PluginContainer test;
@@ -440,6 +457,7 @@ namespace YARPLUGIN
                 }
             }
         }
+        #endregion
 
         #region FixPulse
 
@@ -530,20 +548,6 @@ namespace YARPLUGIN
             _bs.LastPulse = DateTime.Now.Ticks;
             _bs.LastRun = DateTime.Now.Ticks;
             _bs.LastGame = DateTime.Now.Ticks;
-        }
-
-        public class BotStats
-        {
-            public int Pid;
-            public long LastRun;
-            public long LastPulse;
-            public long PluginPulse;
-            public long LastGame;
-            public bool IsPaused;
-            public bool IsRunning;
-            public bool IsInGame;
-            public bool IsLoadingWorld;
-            public int Coinage;
         }
 
         private void LoadProfile(string profile)
