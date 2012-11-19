@@ -177,6 +177,9 @@ namespace YetAnotherRelogger.Helpers
                     // Calculate diablo position
                     if (!(bot.Diablo.ManualPosSize && !Settings.Default.ForceAutoPos))
                     {
+                        // Dont mess with IsBoxer
+                        if (bot.Diablo.UseIsBoxer) continue;
+
                         var y = (int)(addy * dy); // get next position on Y-Axis of the screen
                         // check if window pos+height does exceed screen working area
                         if ((y + addy) > screen.WorkingArea.Height)
