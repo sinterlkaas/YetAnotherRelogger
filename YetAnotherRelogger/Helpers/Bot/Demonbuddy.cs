@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml.Serialization;
 using System.Diagnostics;
@@ -21,6 +22,8 @@ namespace YetAnotherRelogger.Helpers.Bot
         // Buddy Auth
         public string BuddyAuthUsername { get; set; }
         public string BuddyAuthPassword { get; set; }
+        [XmlIgnore] public DateTime LoginTime { get; set; }
+        [XmlIgnore] public bool FoundLoginTime { get; set; }
         
         // Demonbuddy
         public string Location { get; set; }
@@ -124,6 +127,10 @@ namespace YetAnotherRelogger.Helpers.Bot
                 Logger.Instance.Write("File not found: {0}", Location);
                 return;
             }
+
+            // Get Last login time and kill old session
+            if (GetLastLoginTime) BuddyAuth.Instance.KillSession(Parent);
+
             _isStopped = false;
 
             // Reset AntiIdle;
@@ -276,6 +283,75 @@ namespace YetAnotherRelogger.Helpers.Bot
             Stop(true); // Force DB to stop
             Logger.Instance.Write(Parent, "CrashTender: Starting Demonbuddy without a starting profile");
             Start(noprofile:true);
+        }
+
+        private bool GetLastLoginTime
+        {
+            get
+            {
+                // No info to get from any process
+                if (Proc == null) return false;
+
+                // get log dir
+                var logdir = Path.Combine(Path.GetDirectoryName(Location), "Logs");
+                if (logdir.Length == 0 || !Directory.Exists(logdir))
+                { // Failed to get log dir so exit here
+                    Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to find logdir", Proc.Id);
+                    return false;
+                }
+                // get log file
+                var logfile = string.Empty;
+                var success = false;
+                var starttime = Proc.StartTime;
+                // Loop a few times if log is not found on first attempt and add a minute for each loop
+                for (int i = 0; i <= 3; i++)
+                {
+                    // Test if logfile exists for current process starttime + 1 minute
+                    logfile = string.Format("{0}\\{1} {2}.txt", logdir, Proc.Id, starttime.AddMinutes(i).ToString("yyyy-MM-dd HH.mm"));
+                    if (File.Exists(logfile))
+                    {
+                        success = true;
+                        break;
+                    }
+                }
+                
+                if (success)
+                {
+                    Logger.Instance.Write(Parent, "Demonbuddy:{0}: Found matching log: {1}", Proc.Id, logfile);
+
+                    // Read Log file
+                    // [11:03:21.173 N] Logging in...
+                    try
+                    {
+                        using (var fs = new FileStream(logfile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        {
+                            var reader = new StreamReader(fs);
+                            while (!reader.EndOfStream)
+                            {
+                                var line = reader.ReadLine();
+                                if (line == null) continue;
+                                var m = new Regex(@"^\[([0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}) .\] Logging in\.\.\.$", RegexOptions.Compiled).Match(line);
+                                if (m.Success)
+                                {
+                                    LoginTime = DateTime.Parse(string.Format("{0:yyyy-MM-dd} {1}", starttime.ToUniversalTime(), TimeSpan.Parse(m.Groups[1].Value)));
+                                    Debug.WriteLine("Found login time: {0}", LoginTime);
+                                    return true;
+                                }
+                                Thread.Sleep(1); // Be nice for CPU
+                            }
+                            Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to find login time", Proc.Id);
+                            return false;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Instance.Write(Parent, "Demonbuddy:{0}: Error accured while reading log: {1}", Proc.Id, ex.ToString());
+                    }
+                }
+                // Else print error + return false
+                Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to find matching log", Proc.Id);
+                return false;
+            }
         }
     }
 }

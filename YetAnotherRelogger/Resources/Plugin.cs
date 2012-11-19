@@ -1,4 +1,4 @@
-﻿// VERSION: 0.1.7.4
+﻿// VERSION: 0.1.7.5
 /* Changelog:
  * VERSION: 0.1.7.2
  * Added: Sends Coinage to YAR, will be reset after 2 mins of no gold change
@@ -42,7 +42,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 1, 7, 4); } }
+        public Version Version { get { return new Version(0, 1, 7, 5); } }
 
         private const bool _debug = true;
 

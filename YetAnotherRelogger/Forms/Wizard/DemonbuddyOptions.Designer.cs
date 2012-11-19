@@ -52,6 +52,7 @@
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button4 = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -64,7 +65,6 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -134,7 +134,6 @@
             // 
             // maskedTextBox2
             // 
-            this.maskedTextBox2.Enabled = false;
             this.maskedTextBox2.Location = new System.Drawing.Point(91, 45);
             this.maskedTextBox2.Name = "maskedTextBox2";
             this.maskedTextBox2.PasswordChar = '•';
@@ -143,7 +142,6 @@
             // 
             // textBox9
             // 
-            this.textBox9.Enabled = false;
             this.textBox9.Location = new System.Drawing.Point(91, 19);
             this.textBox9.Name = "textBox9";
             this.textBox9.Size = new System.Drawing.Size(186, 20);
@@ -319,6 +317,16 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Processor";
             // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(202, 17);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 3;
+            this.button4.Text = "Affinity";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click_1);
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -449,16 +457,6 @@
             this.label13.Size = new System.Drawing.Size(17, 13);
             this.label13.TabIndex = 0;
             this.label13.Text = "X:";
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(202, 17);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 3;
-            this.button4.Text = "Affinity";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click_1);
             // 
             // DemonbuddyOptions
             // 

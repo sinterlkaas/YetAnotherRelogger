@@ -174,10 +174,10 @@
       <DependentUpon>WeekSchedule.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Bot\BotStats.cs" />
-    <Compile Include="Helpers\Bot\BuddyAuth.cs" />
     <Compile Include="Helpers\Bot\Heroes.cs" />
     <Compile Include="Helpers\Bot\IdleState.cs" />
     <Compile Include="Helpers\Bot\ProfileSchedule.cs" />
+    <Compile Include="Helpers\BuddyAuth.cs" />
     <Compile Include="Helpers\Communicator.cs" />
     <Compile Include="Helpers\ConnectionCheck.cs" />
     <Compile Include="Helpers\CrashChecker.cs" />
@@ -187,6 +187,9 @@
     <Compile Include="Helpers\PluginVersionCheck.cs" />
     <Compile Include="Helpers\BotSettings.cs" />
     <Compile Include="Helpers\Bot\WeekSchedule.cs" />
+    <Compile Include="Helpers\Tools\CookieAwareWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Helpers\Tools\FindWindow.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
