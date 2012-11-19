@@ -98,6 +98,7 @@ namespace YetAnotherRelogger.Forms.Wizard
             _ucDiablo.checkBox2.Checked = bot.Diablo.UseIsBoxer;
             _ucDiablo.textBox13.Text = bot.Diablo.CharacterSet;
             _ucDiablo.textBox12.Text = bot.Diablo.DisplaySlot;
+            _ucDiablo.checkBox4.Checked = bot.Diablo.NoFrame;
 
             // Affinity Diablo
             if (bot.Diablo.CpuCount != Environment.ProcessorCount)
@@ -206,6 +207,7 @@ namespace YetAnotherRelogger.Forms.Wizard
                 d.UseIsBoxer = _ucDiablo.checkBox2.Checked;
                 d.CharacterSet = _ucDiablo.textBox13.Text;
                 d.DisplaySlot = _ucDiablo.textBox12.Text;
+                d.NoFrame = _ucDiablo.checkBox4.Checked;
 
                 // Affinity Diablo
                 if (d.CpuCount != Environment.ProcessorCount)

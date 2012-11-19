@@ -74,6 +74,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -473,6 +474,7 @@
             // groupBox5
             // 
             this.groupBox5.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox5.Controls.Add(this.checkBox4);
             this.groupBox5.Controls.Add(this.checkBox3);
             this.groupBox5.Controls.Add(this.textBox11);
             this.groupBox5.Controls.Add(this.textBox10);
@@ -484,7 +486,7 @@
             this.groupBox5.Controls.Add(this.label13);
             this.groupBox5.Location = new System.Drawing.Point(431, 178);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(283, 88);
+            this.groupBox5.Size = new System.Drawing.Size(283, 104);
             this.groupBox5.TabIndex = 7;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Position";
@@ -576,6 +578,16 @@
             this.label13.TabIndex = 0;
             this.label13.Text = "X:";
             // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(14, 81);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(134, 17);
+            this.checkBox4.TabIndex = 10;
+            this.checkBox4.Text = "Remove window frame";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            // 
             // DiabloOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -653,5 +665,6 @@
         public System.Windows.Forms.TextBox textBox12;
         public System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Button button4;
+        public System.Windows.Forms.CheckBox checkBox4;
     }
 }

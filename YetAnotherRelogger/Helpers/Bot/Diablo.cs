@@ -35,6 +35,8 @@ namespace YetAnotherRelogger.Helpers.Bot
         public int W { get; set; }
         public int H { get; set; }
         [XmlIgnore] public Rectangle AutoPos; 
+        // Remove frame
+        public bool NoFrame { get; set; }
 
         // Authenticator
         public bool UseAuthenticator { get; set; }
@@ -286,7 +288,10 @@ namespace YetAnotherRelogger.Helpers.Bot
 
             Thread.Sleep(1500);
             if (ManualPosSize)
-                AutoPosition.ManualPositionWindow(MainWindowHandle, X,Y,W,H,Parent);
+            {
+                if (NoFrame) AutoPosition.RemoveWindowFrame(MainWindowHandle, true); // Force remove window frame
+                AutoPosition.ManualPositionWindow(MainWindowHandle, X, Y, W, H, Parent);
+            }
             else if (Settings.Default.UseAutoPos)
                 AutoPosition.PositionWindows();
 

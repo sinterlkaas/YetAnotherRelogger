@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using YetAnotherRelogger.Helpers.Bot;
 using YetAnotherRelogger.Helpers.Tools;
@@ -199,7 +200,12 @@ namespace YetAnotherRelogger.Helpers
                         }
 
                         if (bot.Diablo.MainWindowHandle != IntPtr.Zero)
-                            RepositionWindow(bot.Diablo.MainWindowHandle, x + screen.WorkingArea.X,y + screen.WorkingArea.Y, (int) Settings.Default.AutoPosDiabloW,(int) Settings.Default.AutoPosDiabloH);
+                        {
+                            RemoveWindowFrame(bot.Diablo.MainWindowHandle);
+                            RepositionWindow(bot.Diablo.MainWindowHandle, x + screen.WorkingArea.X,
+                                             y + screen.WorkingArea.Y, (int) Settings.Default.AutoPosDiabloW,
+                                             (int) Settings.Default.AutoPosDiabloH);
+                        }
                         dy++; // move to next Y-Axis "line"
                     }
                 }
@@ -210,7 +216,30 @@ namespace YetAnotherRelogger.Helpers
             }
 
         }
+        public static void RemoveWindowFrame(IntPtr handle, bool force = false)
+        {
+            if (!Settings.Default.AutoPosDiabloNoFrame && !force) return; // Remove Frame is disabled
+            try
+            {
+                // Get current style
+                var style = WinAPI.GetWindowLongPtr(handle, WinAPI.WindowLongFlags.GWL_STYLE);
+                var newstyle = ((WinAPI.WindowStyles)style) & ~(WinAPI.WindowStyles.WS_CAPTION | 
+                                    WinAPI.WindowStyles.WS_THICKFRAME | WinAPI.WindowStyles.WS_MINIMIZE | 
+                                    WinAPI.WindowStyles.WS_MAXIMIZE | WinAPI.WindowStyles.WS_SYSMENU); // Remove Frame from style
+                WinAPI.SetWindowLongPtr(new HandleRef(null, handle), WinAPI.WindowLongFlags.GWL_STYLE, new IntPtr(Convert.ToInt64(newstyle))); // Set new style
 
+                // Get current extended style
+                var exStyle = WinAPI.GetWindowLongPtr(handle, WinAPI.WindowLongFlags.GWL_EXSTYLE);
+                var newExStyle = ((WinAPI.WindowStyles)exStyle) & ~(WinAPI.WindowStyles.WS_EX_DLGMODALFRAME |
+                                    WinAPI.WindowStyles.WS_EX_CLIENTEDGE | WinAPI.WindowStyles.WS_EX_STATICEDGE); // Remove Frame from extended style
+                WinAPI.SetWindowLongPtr(new HandleRef(null, handle), WinAPI.WindowLongFlags.GWL_EXSTYLE, new IntPtr(Convert.ToInt64(newExStyle))); // set new extended style
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.WriteGlobal(ex.ToString());
+            }
+            Thread.Sleep(100); // We need to wait a bit before we can reposition the window
+        }
         private static void RepositionWindow(IntPtr handle,int x,int y, int w, int h)
         {
             // Set window position and size

@@ -142,5 +142,10 @@ namespace YetAnotherRelogger.Forms.SettingsTree
                 Logger.Instance.WriteGlobal(ex.ToString());
             }
         }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.AutoPosDiabloNoFrame = checkBox3.Checked;
+        }
     }
 }
