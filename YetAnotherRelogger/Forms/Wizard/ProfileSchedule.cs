@@ -46,8 +46,6 @@ namespace YetAnotherRelogger.Forms.Wizard
             textBox1.KeyPress += new KeyPressEventHandler(NumericCheck);
             textBox2.KeyPress += new KeyPressEventHandler(NumericCheck);
             comboBox1.SelectedItem = "** Global **";
-
-            
         }
         void NumericCheck(object sender, KeyPressEventArgs e)
         {
@@ -97,6 +95,11 @@ namespace YetAnotherRelogger.Forms.Wizard
                 if (e.Button == MouseButtons.Right)
                     contextMenuStrip1.Show(dataGridView1, new Point(e.X, e.Y));
             }
+        }
+
+        public bool ValidateInput()
+        {
+            return true;
         }
     }
 }

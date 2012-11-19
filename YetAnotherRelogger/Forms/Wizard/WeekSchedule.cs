@@ -194,5 +194,9 @@ namespace YetAnotherRelogger.Forms.Wizard
             }
         }
 
+        public bool ValidateInput()
+        {
+            return true;
+        }
     }
 }

@@ -101,5 +101,14 @@ namespace YetAnotherRelogger.Forms.Wizard
         {
             WM.AffinityDiablo.Show();
         }
+
+        public bool ValidateInput()
+        {
+            return (WM.ValidateTextbox(textBox3) &
+                    WM.ValidateTextbox(textBox1) &
+                    WM.ValidateMaskedTextbox(maskedTextBox1) &
+                    (!checkBox2.Checked || (WM.ValidateTextbox(textBox12) & WM.ValidateTextbox(textBox13)))
+                );
+        }
     }
 }

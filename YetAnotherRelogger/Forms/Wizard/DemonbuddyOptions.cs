@@ -63,5 +63,13 @@ namespace YetAnotherRelogger.Forms.Wizard
             WM.AffinityDemonbuddy.Show();
         }
 
+        public bool ValidateInput()
+        {
+           return (WM.ValidateTextbox(textBox1) & 
+                    WM.ValidateTextbox(textBox2) &
+                    WM.ValidateTextbox(textBox3) &
+                    WM.ValidateTextbox(textBox4) 
+                );
+        }
     }
 }

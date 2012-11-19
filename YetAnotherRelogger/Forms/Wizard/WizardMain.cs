@@ -159,7 +159,8 @@ namespace YetAnotherRelogger.Forms.Wizard
         }
 
         private void button1_Click(object sender, EventArgs e)
-        { // NEXT / finish
+        {
+            // NEXT / finish
             if (_stepCount == FinishCount)
             {
                 int result;
@@ -187,13 +188,13 @@ namespace YetAnotherRelogger.Forms.Wizard
 
                 db.ManualPosSize = _ucDemonbuddy.checkBox4.Checked;
                 int.TryParse(_ucDemonbuddy.textBox6.Text, out result);
-                db.X = result; result = 0;
+                db.X = result;
                 int.TryParse(_ucDemonbuddy.textBox5.Text, out result);
-                db.Y = result; result = 0;
+                db.Y = result;
                 int.TryParse(_ucDemonbuddy.textBox10.Text, out result);
-                db.W = result; result = 0;
+                db.W = result;
                 int.TryParse(_ucDemonbuddy.textBox11.Text, out result);
-                db.H = result; result = 0;
+                db.H = result;
 
                 d.Username = _ucDiablo.textBox3.Text;
                 d.Password = _ucDiablo.maskedTextBox1.Text;
@@ -201,7 +202,8 @@ namespace YetAnotherRelogger.Forms.Wizard
                 d.Language = _ucDiablo.comboBox1.SelectedItem.ToString();
                 d.Region = _ucDiablo.comboBox2.SelectedItem.ToString();
                 d.UseAuthenticator = _ucDiablo.checkBox1.Checked;
-                d.Serial = string.Format("{0}-{1}-{2}-{3}", _ucDiablo.textBox4.Text, _ucDiablo.textBox5.Text, _ucDiablo.textBox7.Text, _ucDiablo.textBox6.Text);
+                d.Serial = string.Format("{0}-{1}-{2}-{3}", _ucDiablo.textBox4.Text, _ucDiablo.textBox5.Text,
+                                         _ucDiablo.textBox7.Text, _ucDiablo.textBox6.Text);
                 d.RestoreCode = _ucDiablo.textBox8.Text;
                 d.Priority = _ucDiablo.comboBox3.SelectedIndex;
                 d.UseIsBoxer = _ucDiablo.checkBox2.Checked;
@@ -218,7 +220,8 @@ namespace YetAnotherRelogger.Forms.Wizard
 
                 if (AffinityDiablo.cpus.Count != d.CpuCount)
                 {
-                    Logger.Instance.Write("For whatever reason Diablo and UI see different number of CPUs, affinity disabled");
+                    Logger.Instance.Write(
+                        "For whatever reason Diablo and UI see different number of CPUs, affinity disabled");
                 }
                 else
                 {
@@ -242,7 +245,8 @@ namespace YetAnotherRelogger.Forms.Wizard
 
                 if (AffinityDemonbuddy.cpus.Count != db.CpuCount)
                 {
-                    Logger.Instance.Write("For whatever reason Demonbuddy and UI see different number of CPUs, affinity disabled");
+                    Logger.Instance.Write(
+                        "For whatever reason Demonbuddy and UI see different number of CPUs, affinity disabled");
                 }
                 else
                 {
@@ -259,13 +263,13 @@ namespace YetAnotherRelogger.Forms.Wizard
 
                 d.ManualPosSize = _ucDiablo.checkBox3.Checked;
                 int.TryParse(_ucDiablo.textBox2.Text, out result);
-                d.X = result; result = 0;
+                d.X = result;
                 int.TryParse(_ucDiablo.textBox9.Text, out result);
-                d.Y = result; result = 0;
+                d.Y = result;
                 int.TryParse(_ucDiablo.textBox10.Text, out result);
-                d.W = result; result = 0;
+                d.W = result;
                 int.TryParse(_ucDiablo.textBox11.Text, out result);
-                d.H = result; result = 0;
+                d.H = result;
 
                 w.GenerateNewSchedule();
                 w.Shuffle = _ucWeekSchedule.checkBox1.Checked;
@@ -280,7 +284,7 @@ namespace YetAnotherRelogger.Forms.Wizard
                 b.Demonbuddy = db;
                 b.Diablo = d;
                 b.ProfileSchedule = ps;
-                
+
 
 
                 if (bot != null && index >= 0)
@@ -298,7 +302,7 @@ namespace YetAnotherRelogger.Forms.Wizard
                     b.Diablo.MainWindowHandle = BotSettings.Instance.Bots[index].Diablo.MainWindowHandle;
                     b.AntiIdle = BotSettings.Instance.Bots[index].AntiIdle;
                     b.Week.ForceStart = BotSettings.Instance.Bots[index].Week.ForceStart;
-                    
+
                     BotSettings.Instance.Bots[index] = b;
                 }
                 else
@@ -315,17 +319,65 @@ namespace YetAnotherRelogger.Forms.Wizard
                 return;
             }
 
-
-            Controls[_stepCount].Visible = false; // Hide old
-            _stepCount++;
-            Controls[_stepCount].Visible = true; // Show new
-            
+            if (ValidateControl(Controls[_stepCount]))
+            {
+                Controls[_stepCount].Visible = false; // Hide old
+                _stepCount++;
+                Controls[_stepCount].Visible = true; // Show new
+            }
+         
             if (_stepCount > _mainCount)
                 button2.Enabled = true;
             if (_stepCount == FinishCount)
                 button1.Text = "Save!";
+
         }
 
+        #region Validate User Input
+        private bool ValidateControl(object control)
+        {
+            if (control.GetType() == typeof(DemonbuddyOptions))
+                return ((DemonbuddyOptions) control).ValidateInput();
+            
+            if (control.GetType() == typeof(DiabloOptions))
+                return ((DiabloOptions)control).ValidateInput();
+
+            if (control.GetType() == typeof(ProfileSchedule))
+                return ((ProfileSchedule)control).ValidateInput();
+            
+            if (control.GetType() == typeof(WeekSchedule))
+                return ((WeekSchedule)control).ValidateInput();
+
+            // Else always return true
+            return true;
+        }
+
+        private readonly Color _invalidColor = Color.FromArgb(255, 0, 0);
+        private readonly Color _validColor = Color.White;
+
+        public bool ValidateTextbox(TextBox test)
+        {
+            if (test.Text.Length == 0)
+            {
+                test.BackColor = _invalidColor;
+                return false;
+            }
+
+            test.BackColor = _validColor;
+            return true;
+        }
+        public bool ValidateMaskedTextbox(MaskedTextBox test)
+        {
+            if (test.Text.Length == 0)
+            {
+                test.BackColor = _invalidColor;
+                return false;
+            }
+
+            test.BackColor = _validColor;
+            return true;
+        }
+        #endregion
         private void button2_Click(object sender, EventArgs e)
         { // BACK
             
