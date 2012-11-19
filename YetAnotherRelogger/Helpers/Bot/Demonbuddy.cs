@@ -70,14 +70,13 @@ namespace YetAnotherRelogger.Helpers.Bot
         {
             get
             {
-                if (General.DateSubtract(Parent.AntiIdle.InitTime) > 180)
+                if (!Parent.AntiIdle.IsInitialized && General.DateSubtract(Parent.AntiIdle.InitTime) > 180)
                 {
                     Parent.AntiIdle.FailedInitCount++;
                     if (Parent.AntiIdle.FailedInitCount > 3)
                     {
                         Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to initialize more than 3 times", Parent.Demonbuddy.Proc.Id);
                         Parent.Stop();
-
                     }
                     else
                     {
