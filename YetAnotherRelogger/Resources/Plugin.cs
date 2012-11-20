@@ -93,6 +93,7 @@ namespace YARPLUGIN
         private bool _allPluginsCompiled;
         private Thread _yarThread;
         private BotStats _bs;
+        private bool _pulseFix;
 
         public static void Log(string str, params object[] args)
         {
@@ -138,7 +139,15 @@ namespace YARPLUGIN
         public void OnDisabled()
         {
             Log("Disabled!");
-            _yarThread.Abort();
+
+            // Pulsefix disabled plugin
+            if (_pulseFix)
+            {
+                _pulseFix = false;
+                return; // Stop here to prevent Thread abort
+            }
+            // user disabled plugin abort Thread
+            _yarThread.Abort(); 
         }
 
         public void OnPulse()
@@ -471,6 +480,7 @@ namespace YARPLUGIN
             if (plugin != null && plugin.Enabled)
             {
                 Log("PulseFix: Plugin is already enabled -> Disable it for now");
+                _pulseFix = true; // Prevent our thread from begin aborted
                 plugin.Enabled = false;
                 timeout = DateTime.Now;
                 while (plugin.Enabled)
