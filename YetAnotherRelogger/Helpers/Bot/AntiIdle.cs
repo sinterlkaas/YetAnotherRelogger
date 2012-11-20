@@ -181,7 +181,8 @@ namespace YetAnotherRelogger.Helpers.Bot
                 }
 
                 // If we are w/o gold change for 2 minutes, send reset, but at max every 45s
-                if (General.DateSubtract(LastCoinageIncrease) > 120)
+                if (YetAnotherRelogger.Properties.Settings.Default.UseGoldTimer &&
+                    General.DateSubtract(LastCoinageIncrease) > (double)YetAnotherRelogger.Properties.Settings.Default.GoldTimer)
                 {
                     if(General.DateSubtract(LastCoinageReset) < 45) // we still give it a chance
                         return "Roger!";

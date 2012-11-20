@@ -282,10 +282,6 @@ namespace YetAnotherRelogger.Forms
             BotSettings.Instance.Bots[dataGridView1.CurrentRow.Index].IsStarted = true;
         }
         #region Settings Tree
-        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-
-        }
 
         private UserControl _ucSetting = new UserControl(); // holds current settings user control
         void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -307,6 +303,9 @@ namespace YetAnotherRelogger.Forms
                     break;
                 case "IpHostCheck": // Auto postion
                     tmp = new SettingsTree.IpHostCheck();
+                    break;
+                case "AntiIdle":
+                    tmp = new SettingsTree.AntiIdle();
                     break;
             }
 
