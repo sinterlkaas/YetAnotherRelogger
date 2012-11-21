@@ -174,21 +174,27 @@ namespace YetAnotherRelogger.Helpers.Bot
                 {
                     if (General.DateSubtract(LastCoinageBugReported) > 30)
                     {
-                        Logger.Instance.Write(Parent, "Demonbuddy:{0}: has not gained any gold in {1} seconds and counting",
-                            Parent.Demonbuddy.Proc.Id, General.DateSubtract(LastCoinageIncrease));
+                        if (Properties.Settings.Default.UseGoldTimer)
+                            Logger.Instance.Write(Parent, "Demonbuddy:{0}: has not gained any gold in {1} seconds, limit {2}",
+                                Parent.Demonbuddy.Proc.Id, (int)General.DateSubtract(LastCoinageIncrease),
+                                (int)Properties.Settings.Default.GoldTimer);
+                        else
+                            Logger.Instance.Write(Parent, "Demonbuddy:{0}: has not gained any gold in {1} seconds, limit NONE",
+                                Parent.Demonbuddy.Proc.Id, (int)General.DateSubtract(LastCoinageIncrease));
                         LastCoinageBugReported = DateTime.Now;
                     }
                 }
 
                 // If we are w/o gold change for 2 minutes, send reset, but at max every 45s
-                if (YetAnotherRelogger.Properties.Settings.Default.UseGoldTimer &&
-                    General.DateSubtract(LastCoinageIncrease) > (double)YetAnotherRelogger.Properties.Settings.Default.GoldTimer)
+                if (Properties.Settings.Default.UseGoldTimer &&
+                    General.DateSubtract(LastCoinageIncrease) > (double)Properties.Settings.Default.GoldTimer)
                 {
                     if(General.DateSubtract(LastCoinageReset) < 45) // we still give it a chance
                         return "Roger!";
 					// When we give up, it sends false, we send Roger and kill DB
                     if (!FixAttemptCounter()) return "Roger!";
-					Logger.Instance.Write(Parent, "Demonbuddy:{0}: has not gained any gold in 2 minutes", Parent.Demonbuddy.Proc.Id);
+					Logger.Instance.Write(Parent, "Demonbuddy:{0}: has not gained any gold in {1} seconds, trying reset", Parent.Demonbuddy.Proc.Id,
+                        (int)General.DateSubtract(LastCoinageIncrease));
                     LastCoinageReset = DateTime.Now;
                     return "Restart";
                 }
