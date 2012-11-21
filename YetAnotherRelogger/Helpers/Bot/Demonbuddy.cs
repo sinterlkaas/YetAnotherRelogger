@@ -149,7 +149,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                 if (File.Exists(profilepath))
                     arguments += string.Format(" -profile=\"{0}\"", profilepath);
             }
-            else
+            else if (!noprofile)
                 Logger.Instance.Write("Warning: Launching Demonbuddy without a starting profile (Add a profile to the profilescheduler for this bot)");
 
             if (NoFlash) arguments += " -noflash";
@@ -158,7 +158,6 @@ namespace YetAnotherRelogger.Helpers.Bot
 
             if (ForceEnableAllPlugins)
                 arguments += " -YarEnableAll";
-            //arguments += " -YARENABLE";
 
             Debug.WriteLine("DB Arguments: {0}", arguments);
 
