@@ -1,5 +1,7 @@
-﻿// VERSION: 0.1.7.5
+﻿// VERSION: 0.1.7.6
 /* Changelog:
+ * VERSION: 0.1.7.6
+ * Added: Support for Atom 2.0.15+ "Take a break"
  * VERSION: 0.1.7.2
  * Added: Sends Coinage to YAR, will be reset after 2 mins of no gold change
  * VERSION: 0.1.7.1
@@ -42,17 +44,19 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 1, 7, 5); } }
+        public Version Version { get { return new Version(0, 1, 7, 6); } }
 
         private const bool _debug = true;
 
-        // Compatebility
-        private static readonly Regex[] RePatterns =
+        // Compatibility
+        private static readonly Regex[] ReCompatibility =
             {
                 /* BuddyStats Remote control action */
                 new Regex(@"Stop command from BuddyStats", RegexOptions.Compiled), // stop command
                 /* Emergency Stop: You need to stash an item but no valid space could be found. Stash is full? Stopping the bot to prevent infinite town-run loop. */
                 new Regex(@".+Emergency Stop: .+", RegexOptions.Compiled), // Emergency stop
+                /* Atom 2.0.15+ "Take a break" */
+                new Regex(@".*Atom.*Will Stop the bot for .+ minutes\.$", RegexOptions.Compiled), // Take a break
             };
 
         // CrashTender
@@ -179,7 +183,7 @@ namespace YARPLUGIN
                     continue;
                 }
 
-                if (RePatterns.Any(re => re.IsMatch(msg)))
+                if (ReCompatibility.Any(re => re.IsMatch(msg)))
                 {
                     Send("ThirdpartyStop");
                 }

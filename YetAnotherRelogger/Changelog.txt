@@ -1,5 +1,8 @@
 -----------------------
 * Version 0.1.7 BETA 
+- Added Support for Atom 2.0.15 "Take a break"
+- Added Option to start with windows
+- Added Option to minimize on start
 - Added Buddy Auth Session killer
 - Added option to remove window frame on diablo
 - Added Coinage check (2 minutes w/o gold change => reset) (*tomasd)

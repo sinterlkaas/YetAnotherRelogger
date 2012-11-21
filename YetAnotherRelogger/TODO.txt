@@ -1,7 +1,6 @@
-Add Atom breaktaker compatibility
 Add Allowed IP / Hosts check
-Add option to always force window size
 Add Global hot keys
 Add monsterpower selection in profile schedule
 Add option to add Registry identity for multiple launch on D3
 Add Profile schedule randomize profile selection
+Make a plugin compatibility format
