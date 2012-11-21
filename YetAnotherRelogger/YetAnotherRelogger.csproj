@@ -109,6 +109,12 @@
     <Compile Include="Forms\SettingsTree\IpHostCheck.Designer.cs">
       <DependentUpon>IpHostCheck.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SettingsTree\AntiIdle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsTree\AntiIdle.Designer.cs">
+      <DependentUpon>AntiIdle.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Wizard\SetAffinity.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -210,6 +216,9 @@
     <Compile Include="Updater\Updater.cs" />
     <EmbeddedResource Include="Forms\MainForm2.resx">
       <DependentUpon>MainForm2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsTree\AntiIdle.resx">
+      <DependentUpon>AntiIdle.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsTree\AutoPosition.resx">
       <DependentUpon>AutoPosition.cs</DependentUpon>
