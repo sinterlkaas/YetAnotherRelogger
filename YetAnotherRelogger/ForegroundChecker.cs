@@ -67,9 +67,21 @@ namespace YetAnotherRelogger
                             _lastDiablo = bot.Diablo.Proc.MainWindowHandle;
                             _lastDemonbuddy = bot.Demonbuddy.Proc.MainWindowHandle;
                             Logger.Instance.WriteGlobal("<{0}> Diablo:{1}: has focus. Bring attached Demonbuddy to front", bot.Name, bot.Diablo.Proc.Id);
-                                    
+                            // Bring demonbuddy to front
                             WinAPI.ShowWindow(_lastDemonbuddy, WinAPI.WindowShowStyle.ShowNormal);
                             WinAPI.SetForegroundWindow(_lastDemonbuddy);
+                            var timeout = DateTime.Now;
+                            while (WinAPI.GetForegroundWindow() != _lastDemonbuddy)
+                            {
+                                // if
+                                if (General.DateSubtract(timeout) > 3)
+                                {
+                                    Logger.Instance.WriteGlobal("<{0}> Failed to bring Demonbuddy to fron", bot.Name);
+                                    break;
+                                }
+                                Thread.Sleep(100); // Dont hog all cpu resources
+                            }
+                            // Switch back to diablo
                             WinAPI.ShowWindow(_lastDiablo, WinAPI.WindowShowStyle.ShowNormal);
                             WinAPI.SetForegroundWindow(_lastDiablo);
                         }
