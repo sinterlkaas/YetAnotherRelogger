@@ -298,10 +298,10 @@ namespace YetAnotherRelogger.Forms
                     tmp = new SettingsTree.AutoPosition();
                     break;
                 case "PingCheck":
-                case "ConnectionCheck": // Auto postion
+                case "ConnectionCheck":
                     tmp = new SettingsTree.ConnectionCheck();
                     break;
-                case "IpHostCheck": // Auto postion
+                case "IpHostCheck":
                     tmp = new SettingsTree.IpHostCheck();
                     break;
                 case "AntiIdle":
