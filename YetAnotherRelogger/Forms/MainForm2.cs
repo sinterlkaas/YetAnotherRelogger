@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 using YetAnotherRelogger.Helpers;
@@ -24,12 +23,24 @@ namespace YetAnotherRelogger.Forms
 
         private void MainForm2_Load(object sender, EventArgs e)
         {
+            
             this.Text = string.Format("Yet Another Relogger [{0}] BETA", Program.VERSION);
 
             Logger.Instance.WriteGlobal("Yet Another Relogger Version {0}", Program.VERSION);
             // Check if we are run as admin
             if (!Program.IsRunAsAdmin)
                 Logger.Instance.WriteGlobal("WE DON'T HAVE ADMIN RIGHTS!!");
+
+            // Check if current application path is the same as last saved path
+            // this is used for Windows autostart in a sutation where user moved/renamed the relogger
+            if (Settings.Default.StartWithWindows && !Settings.Default.Location.Equals(Application.ExecutablePath))
+            {
+                Logger.Instance.WriteGlobal("Application current path does not match last saved path. Updating registy key.");
+                // Update to current location
+                Settings.Default.Location = Application.ExecutablePath;
+                // Update Regkey
+                RegistryClass.WindowsAutoStartAdd();
+            }
 
             this.Resize += new EventHandler(MainForm2_Resize);
 
@@ -52,6 +63,18 @@ namespace YetAnotherRelogger.Forms
             m_menu.MenuItems.Add(1, new MenuItem("Hide", new EventHandler(Hide_Click)));
             m_menu.MenuItems.Add(2, new MenuItem("Exit", new EventHandler(Exit_Click)));
             TrayIcon.ContextMenu = m_menu;
+
+            // Minimize on start
+            if (Settings.Default.MinimizeOnStart)
+            {
+                WindowState = FormWindowState.Minimized;
+                if (Settings.Default.MinimizeToTray)
+                {
+                    HideMe();
+                    ToggleIcon();
+                    ShowNotification("Yet Another Relogger", "Minimize on start");
+                }
+            }
         }
 
         protected void MainForm2_Closing(object sender, CancelEventArgs e)
@@ -59,7 +82,7 @@ namespace YetAnotherRelogger.Forms
             if (!bClose && Properties.Settings.Default.CloseToTray)
             {
                 e.Cancel = true;
-                this.Hide();
+                HideMe();
                 ToggleIcon();
                 ShowNotification("Yet Another Relogger", "Is still running");
                 
@@ -87,19 +110,32 @@ namespace YetAnotherRelogger.Forms
         {
             ToggleIcon();
             ShowNotification("Yet Another Relogger", "Is still running");
-            this.Hide();
+            HideMe();
         }
         protected void Show_Click(Object sender, EventArgs e)
         {
-            this.Show();
+            ShowMe();
             WinAPI.ShowWindow(this.Handle, WinAPI.WindowShowStyle.ShowNormal);
             ToggleIcon();
         }
         void TrayIcon_DoubleClick(object sender, EventArgs e)
         {
-            this.Show();
+            ShowMe();
             WinAPI.ShowWindow(this.Handle, WinAPI.WindowShowStyle.ShowNormal);
             ToggleIcon();
+        }
+
+        void ShowMe()
+        {
+            ShowInTaskbar = true;
+            Visible = true;
+            Show();
+        }
+        void HideMe()
+        {
+            ShowInTaskbar = false;
+            Visible = false;
+            Hide();
         }
         #endregion
 

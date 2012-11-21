@@ -1,9 +1,53 @@
-﻿using Microsoft.Win32;
+﻿using System;
+using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace YetAnotherRelogger.Helpers.Tools
 {
     public static class RegistryClass
     {
+        public static bool WindowsAutoStartAdd()
+        {
+            try
+            {
+                var key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
+                if (key == null)
+                {
+                    Logger.Instance.WriteGlobal("Failed to get registry key \"Software\\Microsoft\\Windows\\CurrentVersion\\Run\"");
+                    return false;
+                }
+                key.SetValue("YetAnotherRelogger", string.Format("\"{0}\" -winstart",Application.ExecutablePath));
+                key.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.WriteGlobal("Failed to add/change registry key: {0}", ex);
+                return false;
+            }
+        }
+        public static bool WindowsAutoStartDel()
+        {
+            try
+            {
+                var key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
+                if (key == null)
+                {
+                    Logger.Instance.WriteGlobal("Failed to get registry key \"Software\\Microsoft\\Windows\\CurrentVersion\\Run\"");
+                    return false;
+                }
+                if (key.GetValue("YetAnotherRelogger") != null)
+                    key.DeleteValue("YetAnotherRelogger");
+                key.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.WriteGlobal("Failed to delete registry key: {0}", ex);
+                return false;
+            }
+        }
+
         public static bool ChangeLocale(string Language)
         {
             try

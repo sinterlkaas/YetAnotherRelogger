@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using YetAnotherRelogger.Helpers.Tools;
 using YetAnotherRelogger.Properties;
 
 namespace YetAnotherRelogger.Forms.SettingsTree
@@ -93,6 +94,15 @@ namespace YetAnotherRelogger.Forms.SettingsTree
                 ForegroundChecker.Instance.Start();
             else
                 ForegroundChecker.Instance.Stop();
+        }
+
+        private void checkBox7_CheckedChanged(object sender, EventArgs e)
+        {
+            // Add/Remove registry key at windows startup
+            if (checkBox7.Checked)
+                RegistryClass.WindowsAutoStartAdd();
+            else
+                RegistryClass.WindowsAutoStartDel();
         }
     }
 }

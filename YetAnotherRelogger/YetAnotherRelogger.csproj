@@ -184,6 +184,7 @@
     <Compile Include="Helpers\Bot\IdleState.cs" />
     <Compile Include="Helpers\Bot\ProfileSchedule.cs" />
     <Compile Include="Helpers\BuddyAuth.cs" />
+    <Compile Include="Helpers\CommandLineArgs.cs" />
     <Compile Include="Helpers\Communicator.cs" />
     <Compile Include="Helpers\ConnectionCheck.cs" />
     <Compile Include="Helpers\CrashChecker.cs" />

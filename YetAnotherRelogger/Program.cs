@@ -33,6 +33,9 @@ namespace YetAnotherRelogger
             // Run as admin check
             IsRunAsAdmin = (new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator));
             
+            // Get Commandline args
+            CommandLineArgs.Get();
+
             // Load settings
             BotSettings.Instance.Load();
             Settings.Default.Reload();

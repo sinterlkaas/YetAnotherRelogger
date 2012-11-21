@@ -6,6 +6,7 @@ using System.Diagnostics;
 using YetAnotherRelogger.Helpers;
 using YetAnotherRelogger.Helpers.Bot;
 using YetAnotherRelogger.Helpers.Tools;
+using YetAnotherRelogger.Properties;
 
 namespace YetAnotherRelogger
 {
@@ -46,9 +47,25 @@ namespace YetAnotherRelogger
             _isStopped = true;
             _threadRelogger.Abort();
         }
+
         public BotClass CurrentBot;
+        private bool _autoStartDone;
         private void ReloggerWorker()
         {
+            // Check if we are launched by windows RUN
+            if (CommandLineArgs.WindowsAutoStart && !_autoStartDone)
+            {
+                _autoStartDone = true;
+                Logger.Instance.WriteGlobal("Windows auto start delaying with {0} seconds", Settings.Default.StartDelay);
+                Thread.Sleep((int)Settings.Default.StartDelay*1000);
+                foreach (var bot in BotSettings.Instance.Bots.Where(c => c.IsEnabled = true))
+                {
+                    bot.AntiIdle.Reset(freshstart: true); // Reset AntiIdle
+                    bot.IsStarted = true;
+                    bot.Status = "Auto Start...";
+                }
+            }
+
             Logger.Instance.WriteGlobal("Relogger Thread Starting!");
             while (true)
             {
