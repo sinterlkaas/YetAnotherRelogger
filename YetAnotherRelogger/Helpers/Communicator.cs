@@ -181,7 +181,11 @@ namespace YetAnotherRelogger.Helpers
                                 Logger.Instance.Write(b, "Runs completed {0}", b.ProfileSchedule.Count);
 
                             if (b.ProfileSchedule.IsDone)
-                                Send("LoadProfile " + b.ProfileSchedule.GetProfile);
+                            {
+                                var newprofile = b.ProfileSchedule.GetProfile;
+                                Logger.Instance.Write("Next profile: {0}", newprofile);
+                                Send("LoadProfile " + newprofile);
+                            }
                             else
                                 Send("Roger!");
                             break;

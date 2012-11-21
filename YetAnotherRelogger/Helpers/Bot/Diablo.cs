@@ -287,11 +287,9 @@ namespace YetAnotherRelogger.Helpers.Bot
             _lastRepsonse = DateTime.Now;
 
             Thread.Sleep(1500);
+            if (NoFrame) AutoPosition.RemoveWindowFrame(MainWindowHandle, true); // Force remove window frame
             if (ManualPosSize)
-            {
-                if (NoFrame) AutoPosition.RemoveWindowFrame(MainWindowHandle, true); // Force remove window frame
                 AutoPosition.ManualPositionWindow(MainWindowHandle, X, Y, W, H, Parent);
-            }
             else if (Settings.Default.UseAutoPos)
                 AutoPosition.PositionWindows();
 

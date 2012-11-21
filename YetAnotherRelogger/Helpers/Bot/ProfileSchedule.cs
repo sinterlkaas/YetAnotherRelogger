@@ -59,7 +59,7 @@ namespace YetAnotherRelogger.Helpers.Bot
         {
             get
             {
-                if ((Current.Runs > 0 && Count > Current.Runs + _addRuns) || (Current.Minutes > 0 && DateTime.Now.Subtract(StartTime).TotalMinutes > Current.Minutes + _addTime))
+                if ((Current.Runs > 0 && Count >= Current.Runs + _addRuns) || (Current.Minutes > 0 && DateTime.Now.Subtract(StartTime).TotalMinutes > Current.Minutes + _addTime))
                 {
                     Current.IsDone = true;
                     return true;

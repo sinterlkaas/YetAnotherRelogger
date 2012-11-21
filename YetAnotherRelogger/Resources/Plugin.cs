@@ -1,5 +1,7 @@
-﻿// VERSION: 0.1.7.6
+﻿// VERSION: 0.1.7.7
 /* Changelog:
+ * VERSION: 0.1.7.7
+ * improved profile loading
  * VERSION: 0.1.7.6
  * Added: Support for Atom 2.0.15+ "Take a break"
  * VERSION: 0.1.7.2
@@ -44,7 +46,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 1, 7, 6); } }
+        public Version Version { get { return new Version(0, 1, 7, 7); } }
 
         private const bool _debug = true;
 
@@ -567,15 +569,17 @@ namespace YARPLUGIN
         private void LoadProfile(string profile)
         {
             BotMain.Stop(false, "YetAnotherRelogger -> Load new profile");
-
             if (ZetaDia.IsInGame)
             {
                 ZetaDia.Service.Games.LeaveGame();
                 while (ZetaDia.IsInGame)
                     Thread.Sleep(1000);
             }
+            
+            Thread.Sleep(2000);
             Log("Loading profile: {0}", profile);
-            ProfileManager.Load(profile);
+            ProfileManager.Load(profile.Trim());
+            Thread.Sleep(5000);
             BotMain.Start();
         }       
     }
