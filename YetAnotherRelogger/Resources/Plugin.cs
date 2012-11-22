@@ -1,4 +1,4 @@
-﻿// VERSION: 0.1.7.7
+﻿// VERSION: 0.1.8.0
 /* Changelog:
  * VERSION: 0.1.7.7
  * improved profile loading
@@ -46,7 +46,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 1, 7, 7); } }
+        public Version Version { get { return new Version(0, 1, 8, 0); } }
 
         private const bool _debug = true;
 

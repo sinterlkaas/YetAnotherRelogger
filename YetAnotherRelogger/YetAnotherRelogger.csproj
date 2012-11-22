@@ -198,6 +198,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Helpers\Tools\FindWindow.cs" />
+    <Compile Include="Helpers\Tools\MersenneTwister.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

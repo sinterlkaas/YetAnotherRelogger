@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Xml.Serialization;
 using System.ComponentModel;
+using YetAnotherRelogger.Helpers.Tools;
 
 
 namespace YetAnotherRelogger.Helpers.Bot
@@ -18,6 +19,7 @@ namespace YetAnotherRelogger.Helpers.Bot
         public int MaxRandomRuns { get; set; }
         public int MaxRandomTime { get; set; }
         public BindingList<Profile> Profiles { get; set; }
+        public bool Random { get; set; }
         
 
         [XmlIgnore] public Profile Current;
@@ -33,18 +35,21 @@ namespace YetAnotherRelogger.Helpers.Bot
         {
             get
             {
-                var rnd = new Random();
-                Current = Profiles.FirstOrDefault(x => x.IsDone == false);
-                if (Current == null)
+                // Check if current profile is done
+                if (!Current.IsDone) return Current.Location;
+
+                var rnd = new MersenneTwister();
+
+                var listcount = Profiles.Count(x => !x.IsDone);
+                // Check if we need to reset list
+                if (listcount == 0)
                 {
                     Logger.Instance.Write("All profiles are done resetting cycle");
-                    foreach (var p in Profiles)
-                        p.IsDone = false;
-
-                    Current = Profiles[0];
+                    foreach (var p in Profiles) p.IsDone = false; // reset each profile in list
+                    listcount = Profiles.Count();
                 }
-
-                Count = 0;
+                Count = 0; // Reset run counter
+                Current = Random ? Profiles[rnd.Next(0, listcount - 1)] : Profiles.FirstOrDefault(x => !x.IsDone);
                 StartTime = DateTime.Now;
                 _addRuns = rnd.Next(0, MaxRandomRuns);
                 _addTime = rnd.Next(0, MaxRandomTime);

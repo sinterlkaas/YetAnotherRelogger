@@ -149,7 +149,11 @@ namespace YetAnotherRelogger.Forms.Wizard
             _ucDiablo.textBox10.Text = bot.Diablo.W.ToString();
             _ucDiablo.textBox11.Text = bot.Diablo.H.ToString();
 
+            // Profile Schedule
             _ucProfileSchedule.Profiles = bot.ProfileSchedule.Profiles;
+            _ucProfileSchedule.textBox1.Text = bot.ProfileSchedule.MaxRandomTime.ToString();
+            _ucProfileSchedule.textBox2.Text = bot.ProfileSchedule.MaxRandomRuns.ToString();
+            _ucProfileSchedule.checkBox1.Checked = bot.ProfileSchedule.Random;
 
             // Load Weekschedule
             _ucWeekSchedule.textBox1.Text = bot.Week.MinRandom.ToString();
@@ -281,6 +285,7 @@ namespace YetAnotherRelogger.Forms.Wizard
                 ps.Profiles = _ucProfileSchedule.Profiles;
                 ps.MaxRandomTime = Convert.ToInt32(_ucProfileSchedule.textBox1.Text);
                 ps.MaxRandomRuns = Convert.ToInt32(_ucProfileSchedule.textBox2.Text);
+                ps.Random = _ucProfileSchedule.checkBox1.Checked;
 
                 b.Week = w;
                 b.Demonbuddy = db;

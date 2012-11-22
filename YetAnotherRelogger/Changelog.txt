@@ -1,4 +1,7 @@
 -----------------------
+* Version 0.1.8 BETA 
+- Added Random profile selection
+-----------------------
 * Version 0.1.7 BETA 
 - Added Support for Atom 2.0.15 "Take a break"
 - Added Option to start with windows
