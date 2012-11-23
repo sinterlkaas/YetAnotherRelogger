@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
-
+using YetAnotherRelogger.Forms.SettingsTree;
 using YetAnotherRelogger.Helpers;
 using YetAnotherRelogger.Helpers.Tools;
 using YetAnotherRelogger.Properties;
@@ -342,6 +342,9 @@ namespace YetAnotherRelogger.Forms
                     break;
                 case "AntiIdle":
                     tmp = new SettingsTree.AntiIdle();
+                    break;
+                case "ProfileKickstart":
+                    tmp = new SettingsTree.ProfileKickstart();
                     break;
             }
 

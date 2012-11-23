@@ -40,7 +40,8 @@
             treeNode1,
             treeNode2,
             treeNode5});
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("AntiIdle");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Profile Kickstart");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Anti Idle");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm2));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -248,11 +249,14 @@
             treeNode6.Checked = true;
             treeNode6.Name = "Node0";
             treeNode6.Text = "Relogger";
-            treeNode7.Name = "AntiIdle";
-            treeNode7.Text = "AntiIdle";
+            treeNode7.Name = "ProfileKickstart";
+            treeNode7.Text = "Profile Kickstart";
+            treeNode8.Name = "AntiIdle";
+            treeNode8.Text = "Anti Idle";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode6,
-            treeNode7});
+            treeNode7,
+            treeNode8});
             this.treeView1.Size = new System.Drawing.Size(173, 395);
             this.treeView1.TabIndex = 3;
             // 
