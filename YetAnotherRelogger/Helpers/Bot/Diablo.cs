@@ -310,7 +310,7 @@ namespace YetAnotherRelogger.Helpers.Bot
         {
             if (reset)
                 _timeStartTime = DateTime.Now;
-            else if (General.DateSubtract(_timeStartTime) > 60)
+            else if (General.DateSubtract(_timeStartTime) > (int)Settings.Default.DiabloStartTimeLimit)
             {
                 Logger.Instance.Write("Diablo:{0}: Starting diablo timed out!", Proc.Id);
                 Parent.Restart();
