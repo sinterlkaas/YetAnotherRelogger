@@ -115,6 +115,12 @@
     <Compile Include="Forms\SettingsTree\AntiIdle.Designer.cs">
       <DependentUpon>AntiIdle.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SettingsTree\ProfileKickstart.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsTree\ProfileKickstart.Designer.cs">
+      <DependentUpon>ProfileKickstart.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Wizard\SetAffinity.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -182,6 +188,7 @@
     <Compile Include="Helpers\Bot\BotStats.cs" />
     <Compile Include="Helpers\Bot\Heroes.cs" />
     <Compile Include="Helpers\Bot\IdleState.cs" />
+    <Compile Include="Helpers\ProfileKickstart.cs" />
     <Compile Include="Helpers\Bot\ProfileSchedule.cs" />
     <Compile Include="Helpers\BuddyAuth.cs" />
     <Compile Include="Helpers\CommandLineArgs.cs" />
@@ -236,6 +243,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsTree\IpHostCheck.resx">
       <DependentUpon>IpHostCheck.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsTree\ProfileKickstart.resx">
+      <DependentUpon>ProfileKickstart.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Wizard\DemonbuddyOptions.resx">
       <DependentUpon>DemonbuddyOptions.cs</DependentUpon>

@@ -550,5 +550,41 @@ namespace YetAnotherRelogger.Properties {
                 this["DiabloStartTimeLimit"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseKickstart {
+            get {
+                return ((bool)(this["UseKickstart"]));
+            }
+            set {
+                this["UseKickstart"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public decimal KickstartDelay {
+            get {
+                return ((decimal)(this["KickstartDelay"]));
+            }
+            set {
+                this["KickstartDelay"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool KickstartAlwaysGenerateNew {
+            get {
+                return ((bool)(this["KickstartAlwaysGenerateNew"]));
+            }
+            set {
+                this["KickstartAlwaysGenerateNew"] = value;
+            }
+        }
     }
 }

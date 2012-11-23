@@ -1,6 +1,8 @@
 -----------------------
 * Version 0.1.8 BETA 
+- Added Profile "Kickstart" (will load a profile with 1 custom profile tag to prevent DB from choking in deeply nested custom profile tags)
 - Added Random profile selection
+- Added Customize-able Diablo start time limit
 -----------------------
 * Version 0.1.7 BETA 
 - Added Support for Atom 2.0.15 "Take a break"

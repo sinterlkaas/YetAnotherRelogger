@@ -3,6 +3,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using System.ComponentModel;
 using YetAnotherRelogger.Helpers.Tools;
+using YetAnotherRelogger.Properties;
 
 
 namespace YetAnotherRelogger.Helpers.Bot
@@ -35,9 +36,6 @@ namespace YetAnotherRelogger.Helpers.Bot
         {
             get
             {
-                // Check if current profile is done
-                if (!Current.IsDone) return Current.Location;
-
                 var rnd = new MersenneTwister();
 
                 var listcount = Profiles.Count(x => !x.IsDone);
@@ -55,7 +53,8 @@ namespace YetAnotherRelogger.Helpers.Bot
                 _addTime = rnd.Next(0, MaxRandomTime);
 
                 Logger.Instance.Write("Current profile: \"{0}\" Runs:{1} Time:{2} mintues ({3})", Current.Name, MaxRuns, MaxTime, Current.Location);
-                return Current.Location;
+
+                return Settings.Default.UseKickstart ? ProfileKickstart.GenerateKickstart(Current) : Current.Location;
             }
         }
 

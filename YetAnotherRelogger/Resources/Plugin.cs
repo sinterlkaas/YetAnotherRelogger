@@ -1,5 +1,7 @@
-﻿// VERSION: 0.1.8.0
+﻿// VERSION: 0.1.8.1
 /* Changelog:
+ * VERSION: 0.1.8.1
+ * Added: Kickstart custom profiletag
  * VERSION: 0.1.7.7
  * improved profile loading
  * VERSION: 0.1.7.6
@@ -38,7 +40,9 @@ using Zeta;
 using Zeta.Common;
 using Zeta.Common.Plugins;
 using Zeta.CommonBot;
+using Zeta.CommonBot.Profile;
 using Zeta.Internals;
+using Zeta.TreeSharp;
 using UIElement = Zeta.Internals.UIElement;
 
 namespace YARPLUGIN
@@ -46,7 +50,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 1, 8, 0); } }
+        public Version Version { get { return new Version(0, 1, 8, 1); } }
 
         private const bool _debug = true;
 
@@ -655,4 +659,56 @@ namespace YARPLUGIN
         }
     }
     #endregion
+
+    
 }
+#region Kickstart Custom Profile Behavior tag
+namespace YARPLUGIN
+{
+    using Zeta.XmlEngine;
+    using Action = Zeta.TreeSharp.Action;
+
+    
+    [XmlElement("Kickstart")]
+    public class Kickstart : ProfileBehavior
+    {
+        public Kickstart()
+        {
+            _time = DateTime.Now; // used for delay
+        }
+
+        private DateTime _time;
+
+        [XmlAttribute("Delay")]
+        private string Delay { get; set; }
+
+        [XmlAttribute("Profile")]
+        private string Profile { get; set; }
+
+        protected override Composite CreateBehavior()
+        {
+            return new Action((x) =>
+                                  {
+                                      if (DateTime.Now.Subtract(_time).TotalSeconds > Convert.ToInt32(Delay))
+                                      {
+                                          Logging.Write("[YAR Kickstart] Load profile: {0}", Profile);
+                                          ProfileManager.Load(Profile);
+                                          _isdone = true;
+                                      }
+                                  });
+        }
+
+        private bool _isdone;
+        public override bool IsDone
+        {
+            get { return _isdone; }
+        }
+        public override void ResetCachedDone()
+        {
+            _isdone = false;
+            base.ResetCachedDone();
+        }
+    }
+ 
+}
+#endregion
