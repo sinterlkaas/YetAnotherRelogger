@@ -586,5 +586,17 @@ namespace YetAnotherRelogger.Properties {
                 this["KickstartAlwaysGenerateNew"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool GoldInfoLogging {
+            get {
+                return ((bool)(this["GoldInfoLogging"]));
+            }
+            set {
+                this["GoldInfoLogging"] = value;
+            }
+        }
     }
 }

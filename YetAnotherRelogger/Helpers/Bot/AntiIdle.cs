@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using YetAnotherRelogger.Helpers.Tools;
+using YetAnotherRelogger.Properties;
 
 namespace YetAnotherRelogger.Helpers.Bot
 {
@@ -170,7 +171,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                 }
 
                 // Prints a warning about gold error
-                if (General.DateSubtract(LastCoinageIncrease) > 30)
+                if (Settings.Default.GoldInfoLogging && General.DateSubtract(LastCoinageIncrease) > 30)
                 {
                     if (General.DateSubtract(LastCoinageBugReported) > 30)
                     {
