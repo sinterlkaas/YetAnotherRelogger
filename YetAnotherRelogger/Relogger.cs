@@ -58,7 +58,7 @@ namespace YetAnotherRelogger
                 _autoStartDone = true;
                 Logger.Instance.WriteGlobal("Windows auto start delaying with {0} seconds", Settings.Default.StartDelay);
                 Thread.Sleep((int)Settings.Default.StartDelay*1000);
-                foreach (var bot in BotSettings.Instance.Bots.Where(c => c.IsEnabled = true))
+                foreach (var bot in BotSettings.Instance.Bots.Where(c => c.IsEnabled))
                 {
                     bot.AntiIdle.Reset(freshstart: true); // Reset AntiIdle
                     bot.IsStarted = true;
@@ -69,7 +69,7 @@ namespace YetAnotherRelogger
             if (CommandLineArgs.AutoStart && !_autoStartDone)
             {
                 _autoStartDone = true;
-                foreach (var bot in BotSettings.Instance.Bots.Where(c => c.IsEnabled = true))
+                foreach (var bot in BotSettings.Instance.Bots.Where(c => c.IsEnabled))
                 {
                     bot.AntiIdle.Reset(freshstart: true); // Reset AntiIdle
                     bot.IsStarted = true;
