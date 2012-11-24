@@ -88,6 +88,7 @@ namespace YetAnotherRelogger
                     foreach (var bot in BotSettings.Instance.Bots.Where(bot => bot != null))
                     {
                         if (Program.Pause) break;
+                        var time = DateTime.Now; // set current time to calculate sleep time at end of loop
                         CurrentBot = bot;
                         Debug.WriteLine(bot.Name + ":" + ":" + bot.IsRunning);
                         Debug.WriteLine("State=" + bot.AntiIdle.State);
@@ -147,6 +148,10 @@ namespace YetAnotherRelogger
                             }
 
                         } // else if (bot.isRunning)
+                        
+                        // calculate sleeptime
+                        var sleep = (int) (Program.Sleeptime - DateTime.Now.Subtract(time).TotalMilliseconds);
+                        if (sleep > 0) Thread.Sleep(sleep);
                     }
                 } // try
                 catch (InvalidOperationException iox)

@@ -59,6 +59,7 @@ namespace YetAnotherRelogger
                         _lastDemonbuddy = _lastDiablo = IntPtr.Zero;
                         foreach (var bot in bots)
                         {
+                            var time = DateTime.Now;
                             if (!bot.IsStarted || !bot.IsRunning || !bot.Diablo.IsRunning || !bot.Demonbuddy.IsRunning)
                                 continue;
                             if (bot.Diablo.Proc.MainWindowHandle != hwnd) 
@@ -84,6 +85,10 @@ namespace YetAnotherRelogger
                             // Switch back to diablo
                             WinAPI.ShowWindow(_lastDiablo, WinAPI.WindowShowStyle.ShowNormal);
                             WinAPI.SetForegroundWindow(_lastDiablo);
+
+                            // calculate sleeptime
+                            var sleep = (int)(Program.Sleeptime - DateTime.Now.Subtract(time).TotalMilliseconds);
+                            if (sleep > 0) Thread.Sleep(sleep);
                         }
                     }
                     Thread.Sleep(1000);

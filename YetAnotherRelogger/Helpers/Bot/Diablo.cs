@@ -247,7 +247,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                         timedout = LimitStartTime();
                         break;
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(500);
             }
             if (timedout) return;
 
@@ -353,7 +353,6 @@ namespace YetAnotherRelogger.Helpers.Bot
                         d3StarterSuccess = true;
                         break;
                     }
-                    Thread.Sleep(100);
                 }
             }
             catch (Exception ex)
@@ -412,7 +411,7 @@ namespace YetAnotherRelogger.Helpers.Bot
             var timeout = DateTime.Now;
             while (General.DateSubtract(timeout) < 20)
             {
-                Thread.Sleep(100);
+                Thread.Sleep(250);
                 var p = Process.GetProcesses().FirstOrDefault(x => x.ProcessName.Equals(exeName) && 
                     // Find Diablo inside relogger
                     BotSettings.Instance.Bots.FirstOrDefault(z => z.Diablo.Proc != null && !z.Diablo.Proc.HasExited && z.Diablo.Proc.Id == x.Id) == null && 

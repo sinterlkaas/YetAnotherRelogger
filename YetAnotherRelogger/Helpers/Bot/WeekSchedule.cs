@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Xml.Serialization;
+using YetAnotherRelogger.Helpers.Tools;
 
 namespace YetAnotherRelogger.Helpers.Bot
 {
@@ -121,7 +122,7 @@ namespace YetAnotherRelogger.Helpers.Bot
 
         private void GenerateNewRandom()
         {
-            var rnd = new Random();
+            var rnd = new MersenneTwister();
             _currentRandom = rnd.Next(MinRandom, MaxRandom);
         }
         

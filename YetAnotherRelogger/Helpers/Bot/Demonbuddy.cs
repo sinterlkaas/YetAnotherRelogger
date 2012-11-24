@@ -336,7 +336,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                                     Debug.WriteLine("Found login time: {0}", LoginTime);
                                     return true;
                                 }
-                                Thread.Sleep(1); // Be nice for CPU
+                                Thread.Sleep(200); // Be nice for CPU
                             }
                             Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to find login time", Proc.Id);
                             return false;

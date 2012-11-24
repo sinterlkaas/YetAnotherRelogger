@@ -166,6 +166,7 @@ namespace YetAnotherRelogger.Helpers
 
                 foreach (var bot in bots)
                 {
+                    var time = DateTime.Now;
                     var screen = workingScreens[sc]; // set current screen 
 
                     // Calculate demonbuddy position
@@ -211,6 +212,10 @@ namespace YetAnotherRelogger.Helpers
                         }
                         dy++; // move to next Y-Axis "line"
                     }
+
+                    // calculate sleeptime
+                    var sleep = (int)(Program.Sleeptime - DateTime.Now.Subtract(time).TotalMilliseconds);
+                    if (sleep > 0) Thread.Sleep(sleep);
                 }
             }
             catch (Exception ex)
