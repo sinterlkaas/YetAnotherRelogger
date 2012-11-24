@@ -65,6 +65,17 @@ namespace YetAnotherRelogger
                     bot.Status = "Auto Start...";
                 }
             }
+            // Check if we are launched with the autostart
+            if (CommandLineArgs.AutoStart && !_autoStartDone)
+            {
+                _autoStartDone = true;
+                foreach (var bot in BotSettings.Instance.Bots.Where(c => c.IsEnabled = true))
+                {
+                    bot.AntiIdle.Reset(freshstart: true); // Reset AntiIdle
+                    bot.IsStarted = true;
+                    bot.Status = "Auto Start...";
+                }
+            }
 
             Logger.Instance.WriteGlobal("Relogger Thread Starting!");
             while (true)
