@@ -118,7 +118,7 @@ namespace YetAnotherRelogger.Helpers.Bot
             }
         }
 
-        public void Start(bool noprofile = false)
+        public void Start(bool noprofile = false, string profilepath = null)
         {
             if (!Parent.IsStarted || !Parent.Diablo.IsRunning)
                 return;
@@ -143,11 +143,17 @@ namespace YetAnotherRelogger.Helpers.Bot
             arguments += string.Format(" -bnetaccount=\"{0}\"", Parent.Diablo.Username);
             arguments += string.Format(" -bnetpassword=\"{0}\"", Parent.Diablo.Password);
 
-            if (Parent.ProfileSchedule.Profiles.Count > 0 && !noprofile)
+            if (profilepath != null)
             {
-                var profilepath = Parent.ProfileSchedule.GetProfile;
-                if (File.Exists(profilepath))
-                    arguments += string.Format(" -profile=\"{0}\"", profilepath);
+                var profile = new Profile() {Location = profilepath};
+                var path = ProfileKickstart.GenerateKickstart(profile);
+                arguments += string.Format(" -profile=\"{0}\"", path);
+            }
+            else if (Parent.ProfileSchedule.Profiles.Count > 0 && !noprofile)
+            {
+                var path = Parent.ProfileSchedule.GetProfile;
+                if (File.Exists(path))
+                    arguments += string.Format(" -profile=\"{0}\"", path);
             }
             else if (!noprofile)
                 Logger.Instance.Write("Warning: Launching Demonbuddy without a starting profile (Add a profile to the profilescheduler for this bot)");
@@ -276,12 +282,17 @@ namespace YetAnotherRelogger.Helpers.Bot
             }
         }
 
-        public void CrashTender()
+        public void CrashTender(string profilepath = null)
         {
             Logger.Instance.Write(Parent, "CrashTender: Stopping Demonbuddy:{0}", Proc.Id);
             Stop(true); // Force DB to stop
             Logger.Instance.Write(Parent, "CrashTender: Starting Demonbuddy without a starting profile");
-            Start(noprofile:true);
+
+
+            if (profilepath != null)
+                Start(profilepath:profilepath);
+            else
+                Start(noprofile: true);
         }
 
         private bool GetLastLoginTime

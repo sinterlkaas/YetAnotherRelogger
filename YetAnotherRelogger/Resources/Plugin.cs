@@ -1,5 +1,7 @@
-﻿// VERSION: 0.1.8.1
+﻿// VERSION: 0.1.8.2
 /* Changelog:
+ * VERSION: 0.1.8.2
+ * Added: Crashtender now uses Kickstart profile
  * VERSION: 0.1.8.1
  * Added: Kickstart custom profiletag
  * VERSION: 0.1.7.7
@@ -50,7 +52,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 1, 8, 1); } }
+        public Version Version { get { return new Version(0, 1, 8, 2); } }
 
         private const bool _debug = true;
 
@@ -177,7 +179,7 @@ namespace YARPLUGIN
 
                 if (ReCrashTender.Any(re => re.IsMatch(msg)))
                 {
-                    Send("CrashTender"); // tell relogger to "crash tender" :)
+                    Send("CrashTender " + ProfileManager.CurrentProfile.Path); // tell relogger to "crash tender" :)
                     break;
                 }
                 if (!_allPluginsCompiled && FindPluginsCompiled(msg)) continue;

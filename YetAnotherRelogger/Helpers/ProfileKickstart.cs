@@ -22,16 +22,16 @@ It is used to ensure a profile starts without causing DB to choken it -->
     <KillMonsters>True</KillMonsters>
     <PickupLoot>True</PickupLoot>
 </Profile>";
-        public static string GenerateKickstart(Profile profile)
+        public static string GenerateKickstart(Profile profile, bool tmpkickstart = false)
         {
             try
             {
                 
-                var path = Path.Combine(Path.GetDirectoryName(profile.Location), "YAR_Kickstart.xml");
+                var path = Path.Combine(Path.GetDirectoryName(profile.Location), string.Format("YAR{0}_Kickstart.xml", tmpkickstart ? "_TMP" : ""));
                 
                 if (File.Exists(path))
                 {
-                    if (Settings.Default.KickstartAlwaysGenerateNew)
+                    if (Settings.Default.KickstartAlwaysGenerateNew || tmpkickstart)
                     {
                         Logger.Instance.Write("Delete old Kickstart profile: {0}", path);
                         File.Delete(path);

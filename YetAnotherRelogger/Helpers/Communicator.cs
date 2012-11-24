@@ -7,6 +7,7 @@ using System.Threading;
 using System.Xml.Serialization;
 using YetAnotherRelogger.Helpers.Bot;
 using YetAnotherRelogger.Helpers.Tools;
+using YetAnotherRelogger.Properties;
 
 namespace YetAnotherRelogger.Helpers
 {
@@ -217,7 +218,10 @@ namespace YetAnotherRelogger.Helpers
                             Send(b.Demonbuddy.ForceEnableAllPlugins ? "ForceEnableAll" : "ForceEnableYar");
                             break;
                         case "CrashTender":
-                            b.Demonbuddy.CrashTender();
+                            if (Settings.Default.UseKickstart && File.Exists(msg))
+                                b.Demonbuddy.CrashTender(msg);
+                            else
+                                b.Demonbuddy.CrashTender();
                             Send("Roger!");
                             break;
                         case "CheckConnection":

@@ -1,5 +1,10 @@
 -----------------------
-* Version 0.1.8 BETA 
+* Version 0.1.8 BETA
+- Added CrashTender now uses profile Kickstart when enabled 
+- Added -autostart launch argument
+- Added Option to disable Coinage 30 second log
+- Added Bot running time
+- Added Added delays inside possible CPU consuming loops
 - Added Profile "Kickstart" (will load a profile with 1 custom profile tag to prevent DB from choking in deeply nested custom profile tags)
 - Added Random profile selection
 - Added Customize-able Diablo start time limit
