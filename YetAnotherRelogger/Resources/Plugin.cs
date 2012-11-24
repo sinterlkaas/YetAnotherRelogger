@@ -1,4 +1,4 @@
-﻿// VERSION: 0.1.8.2
+﻿// VERSION: 0.1.8.3
 /* Changelog:
  * VERSION: 0.1.8.2
  * Added: Crashtender now uses Kickstart profile
@@ -52,7 +52,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 1, 8, 2); } }
+        public Version Version { get { return new Version(0, 1, 8, 3); } }
 
         private const bool _debug = true;
 

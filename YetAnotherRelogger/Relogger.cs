@@ -162,9 +162,6 @@ namespace YetAnotherRelogger
                         else
                             bot.StartTime = DateTime.Now;
                         
-                        // Update bot uptime
-                        bot.RunningTime = string.Format("{0}", DateTime.Now.Subtract(bot.StartTime));
-
                         // calculate sleeptime
                         var sleep = (int) (Program.Sleeptime - DateTime.Now.Subtract(time).TotalMilliseconds);
                         if (sleep > 0) Thread.Sleep(sleep);

@@ -14,7 +14,7 @@ namespace YetAnotherRelogger
 {
     static class Program
     {
-        public const string VERSION = "0.1.8.2";
+        public const string VERSION = "0.1.8.3";
         public const int Sleeptime = 10;
         /// <summary>
         /// The main entry point for the application.
@@ -45,8 +45,9 @@ namespace YetAnotherRelogger
             if (Settings.Default.D3StarterPath.Equals(string.Empty) || Settings.Default.D3StarterPath.Equals(""))
                 Settings.Default.D3StarterPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "ThirdParty\\D3Starter.exe");
 
-            // Start background thread
+            // Start background threads
             Relogger.Instance.Start();
+            StatsUpdater.Instance.Start();
             
             if (Settings.Default.FocusCheck)
                 ForegroundChecker.Instance.Start();

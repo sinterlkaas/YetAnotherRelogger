@@ -215,6 +215,7 @@
     <None Include="Properties\app.manifest" />
     <Resource Include="Resources\Plugin.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="StatsUpdater.cs" />
     <Compile Include="Updater\CRC.cs" />
     <Compile Include="Helpers\Tools\General.cs" />
     <Compile Include="Helpers\Tools\Registry.cs" />

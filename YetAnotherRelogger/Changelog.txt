@@ -1,5 +1,6 @@
 -----------------------
 * Version 0.1.8 BETA
+- Added New thread for stats
 - Added CrashTender now uses profile Kickstart when enabled 
 - Added -autostart launch argument
 - Added Option to disable Coinage 30 second log
