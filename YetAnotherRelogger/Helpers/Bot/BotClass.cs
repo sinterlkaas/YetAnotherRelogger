@@ -78,7 +78,9 @@ namespace YetAnotherRelogger.Helpers.Bot
         [XmlIgnore] private string _status;
         [XmlIgnore] public string Status { get { return _status; } set { SetField(ref _status, value, "Status"); } }
 
-        
+        [XmlIgnore] public DateTime StartTime { get; set; }
+        [XmlIgnore] private string _runningtime;
+        [XmlIgnore] public string RunningTime { get { return _runningtime; } set { SetField(ref _runningtime, value, "RunningTime"); } }
 
         public void Stop()
         {

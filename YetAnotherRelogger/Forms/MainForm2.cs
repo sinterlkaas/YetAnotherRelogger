@@ -201,7 +201,7 @@ namespace YetAnotherRelogger.Forms
             dataGridView1.Columns["isStarted"].Visible = false;
             dataGridView1.Columns["profileSchedule"].Visible = false;
             dataGridView1.Columns["AntiIdle"].Visible = false;
-
+            dataGridView1.Columns["StartTime"].Visible = false;
 
             dataGridView1.Columns["isEnabled"].DisplayIndex = 1;
             dataGridView1.Columns["isEnabled"].HeaderText = "Enabled";
@@ -211,10 +211,11 @@ namespace YetAnotherRelogger.Forms
             dataGridView1.Columns["Name"].ReadOnly = true;
 
             dataGridView1.Columns["Description"].DisplayIndex = 3;
-            dataGridView1.Columns["Description"].Width = 300;
+            dataGridView1.Columns["Description"].Width = 200;
             dataGridView1.Columns["Description"].ReadOnly = true;
 
             dataGridView1.Columns["Status"].ReadOnly = true;
+
 
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
