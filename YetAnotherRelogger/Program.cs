@@ -55,11 +55,12 @@ namespace YetAnotherRelogger
             var comms = new Communicator();
             comms.Start();
 
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
             // Create Keyboard hooks
             GlobalHotkeys.Instance.Load();
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
             Mainform = new MainForm2();
             Application.Run(Mainform);
 
