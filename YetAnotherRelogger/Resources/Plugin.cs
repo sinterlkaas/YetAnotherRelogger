@@ -1,5 +1,8 @@
-﻿// VERSION: 0.1.8.3
+﻿// VERSION: 0.1.8.4
 /* Changelog:
+ * VERSION: 0.1.8.4
+ * Changed: Delay between stats reports to yar from 1 second to 3 seconds
+ * Added: Some delay in possible intensive loops (make it nicer for CPU)
  * VERSION: 0.1.8.2
  * Added: Crashtender now uses Kickstart profile
  * VERSION: 0.1.8.1
@@ -52,7 +55,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 1, 8, 3); } }
+        public Version Version { get { return new Version(0, 1, 8, 4); } }
 
         private const bool _debug = true;
 
@@ -71,9 +74,9 @@ namespace YARPLUGIN
         private static readonly Regex[] ReCrashTender =
             {
                 /* Invalid Session */
-                new Regex(@"^Session is invalid!$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+                new Regex(@"Session is invalid!", RegexOptions.Compiled | RegexOptions.IgnoreCase),
                 /* Session expired */
-                new Regex(@"^Session is expired", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+                new Regex(@"Session is expired", RegexOptions.Compiled | RegexOptions.IgnoreCase),
                 /* Failed to attach to D3*/
                 new Regex(@"Was not able to attach to any running Diablo III process, are you running the bot already\?",RegexOptions.Compiled ), 
             };
@@ -175,8 +178,6 @@ namespace YARPLUGIN
             foreach (var lm in messages)
             {
                 var msg = lm.Message;
-
-
                 if (ReCrashTender.Any(re => re.IsMatch(msg)))
                 {
                     Send("CrashTender " + ProfileManager.CurrentProfile.Path); // tell relogger to "crash tender" :)
@@ -195,6 +196,7 @@ namespace YARPLUGIN
                 {
                     Send("ThirdpartyStop");
                 }
+                Thread.Sleep(1);
             }
         }
         public bool FindStartDelay(string msg)
@@ -274,7 +276,7 @@ namespace YARPLUGIN
 
                 // Send stats
                 Send("XML:" + _bs.ToXmlString(), xml:true);
-                Thread.Sleep(1000);
+                Thread.Sleep(3000);
             }
         }
         #endregion
@@ -378,7 +380,11 @@ namespace YARPLUGIN
 
                                 var temp = sr.ReadLine();
 
-                                if (temp == null) continue;
+                                if (temp == null)
+                                {
+                                    Thread.Sleep(5);
+                                    continue;
+                                }
 
                                 HandleResponse(temp);
                                 success = true;

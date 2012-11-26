@@ -70,7 +70,11 @@ namespace YetAnotherRelogger.Helpers
                     while (_stream.IsConnected)
                     {
                         var temp = _reader.ReadLine();
-                        if (temp == null) continue;
+                        if (temp == null)
+                        {
+                            Thread.Sleep(5);
+                            continue;
+                        }
                         if (temp.Equals("END"))
                         {
                             HandleXml(xml);
@@ -88,12 +92,12 @@ namespace YetAnotherRelogger.Helpers
                         }
                         else
                             HandleMsg(temp);
+                        Thread.Sleep(5);
                     }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-
                 }
                 if (_stream != null)
                     _stream.Dispose();
