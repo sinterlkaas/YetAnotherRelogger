@@ -59,6 +59,21 @@ namespace YetAnotherRelogger.Properties
                 this["AutoPosScreens"] = value;
             }
         }
+
+        [UserScopedSettingAttribute]
+        [SettingsSerializeAs(SettingsSerializeAs.Binary)]
+        [DefaultSettingValueAttribute(null)]
+        public List<Hotkey> HotKeys
+        {
+            get
+            {
+                return ((List<Hotkey>)this["HotKeys"]);
+            }
+            set
+            {
+                this["HotKeys"] = value;
+            }
+        }
     }
 
   

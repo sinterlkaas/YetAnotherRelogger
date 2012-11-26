@@ -127,6 +127,7 @@
     <Compile Include="Forms\Wizard\SetAffinity.Designer.cs">
       <DependentUpon>SetAffinity.cs</DependentUpon>
     </Compile>
+    <Compile Include="GlobalHotkeys.cs" />
     <Compile Include="Helpers\AutoPosition.cs" />
     <Compile Include="ForegroundChecker.cs" />
     <Compile Include="Forms\MainForm2.cs">
@@ -206,6 +207,7 @@
     </Compile>
     <Compile Include="Helpers\Tools\FindWindow.cs" />
     <Compile Include="Helpers\Tools\MersenneTwister.cs" />
+    <Compile Include="Helpers\Tools\KeyboardHook.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

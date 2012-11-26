@@ -14,7 +14,7 @@ namespace YetAnotherRelogger
 {
     static class Program
     {
-        public const string VERSION = "0.1.8.3";
+        public const string VERSION = "0.1.8.4";
         public const int Sleeptime = 10;
         /// <summary>
         /// The main entry point for the application.
@@ -54,6 +54,9 @@ namespace YetAnotherRelogger
             
             var comms = new Communicator();
             comms.Start();
+
+            // Create Keyboard hooks
+            GlobalHotkeys.Instance.Load();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
