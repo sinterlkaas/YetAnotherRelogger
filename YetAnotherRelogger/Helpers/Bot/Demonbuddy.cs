@@ -145,6 +145,11 @@ namespace YetAnotherRelogger.Helpers.Bot
 
             if (profilepath != null)
             {
+                // Check if current profile path is Kickstart
+                var file = Path.GetFileName(profilepath);
+                if (file == null || (file.Equals("YAR_Kickstart.xml") || file.Equals("YAR_TMP_Kickstart.xml")))
+                    profilepath = Parent.ProfileSchedule.GetProfile;
+
                 var profile = new Profile() {Location = profilepath};
                 var path = ProfileKickstart.GenerateKickstart(profile);
                 arguments += string.Format(" -profile=\"{0}\"", path);
@@ -292,7 +297,13 @@ namespace YetAnotherRelogger.Helpers.Bot
             if (profilepath != null)
                 Start(profilepath:profilepath);
             else
+<<<<<<< HEAD
+                Start(noprofile: true, crashtenderstart: true);
+
+            _crashTenderRestart = false;
+=======
                 Start(noprofile: true);
+>>>>>>> parent of ba2b766... Fixed CrashTender restarter
         }
 
         private bool GetLastLoginTime
