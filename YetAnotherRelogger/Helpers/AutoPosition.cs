@@ -233,7 +233,7 @@ namespace YetAnotherRelogger.Helpers
                 var style = WinAPI.GetWindowLongPtr(handle, WinAPI.WindowLongFlags.GWL_STYLE);
                 var newstyle = ((WinAPI.WindowStyles)style) & ~(WinAPI.WindowStyles.WS_CAPTION | 
                                     WinAPI.WindowStyles.WS_THICKFRAME | WinAPI.WindowStyles.WS_MINIMIZE | 
-                                    WinAPI.WindowStyles.WS_MAXIMIZE | WinAPI.WindowStyles.WS_SYSMENU); // Remove Frame from style
+                                    WinAPI.WindowStyles.WS_MAXIMIZE /*| WinAPI.WindowStyles.WS_SYSMENU */); // Remove Frame from style
                 WinAPI.SetWindowLongPtr(new HandleRef(null, handle), WinAPI.WindowLongFlags.GWL_STYLE, new IntPtr(Convert.ToInt64(newstyle))); // Set new style
 
                 // Get current extended style
