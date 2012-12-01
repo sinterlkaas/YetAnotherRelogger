@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -29,7 +30,6 @@ namespace YetAnotherRelogger
                 SingleInstance.ShowFirstInstance();
                 return;
             }
-
             // Run as admin check
             IsRunAsAdmin = (new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator));
             
@@ -40,6 +40,7 @@ namespace YetAnotherRelogger
             BotSettings.Instance.Load();
             Settings.Default.Reload();
 
+            
             if (Settings.Default.AutoPosScreens == null || (Settings.Default.AutoPosScreens != null && Settings.Default.AutoPosScreens.Count == 0))
                 AutoPosition.UpdateScreens();
             if (Settings.Default.D3StarterPath.Equals(string.Empty) || Settings.Default.D3StarterPath.Equals(""))
@@ -57,10 +58,6 @@ namespace YetAnotherRelogger
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            // Create Keyboard hooks
-            GlobalHotkeys.Instance.Load();
-
             Mainform = new MainForm2();
             Application.Run(Mainform);
 

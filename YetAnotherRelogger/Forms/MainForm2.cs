@@ -3,8 +3,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
-using YetAnotherRelogger.Forms.SettingsTree;
 using YetAnotherRelogger.Helpers;
+using YetAnotherRelogger.Helpers.Hotkeys;
 using YetAnotherRelogger.Helpers.Tools;
 using YetAnotherRelogger.Properties;
 
@@ -75,6 +75,9 @@ namespace YetAnotherRelogger.Forms
                     ShowNotification("Yet Another Relogger", "Minimize on start");
                 }
             }
+
+            // Load global hotkeys
+            GlobalHotkeys.Instance.Load();
         }
 
         protected void MainForm2_Closing(object sender, CancelEventArgs e)
@@ -320,7 +323,7 @@ namespace YetAnotherRelogger.Forms
         }
         #region Settings Tree
 
-        private UserControl _ucSetting = new UserControl(); // holds current settings user control
+        public UserControl UcSetting = new UserControl(); // holds current settings user control
         void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
@@ -347,18 +350,21 @@ namespace YetAnotherRelogger.Forms
                 case "ProfileKickstart":
                     tmp = new SettingsTree.ProfileKickstart();
                     break;
+                case "HotKeys":
+                    tmp = new SettingsTree.HotKeys();
+                    break;
             }
 
             // Check if new user control should be displayed
-            if (!tmp.Name.Equals(_ucSetting.Name))
+            if (!tmp.Name.Equals(UcSetting.Name))
             {
                 //var c = tabControl1.TabPages[1].Controls;
                 var c = SettingsPanel.Controls;
-                if (c.Contains(_ucSetting)) c.Remove(_ucSetting);
+                if (c.Contains(UcSetting)) c.Remove(UcSetting);
                 
-                _ucSetting = tmp;
+                UcSetting = tmp;
                 //_ucSetting.Left = 180;
-                c.Add(_ucSetting);
+                c.Add(UcSetting);
             }
         }
         #endregion

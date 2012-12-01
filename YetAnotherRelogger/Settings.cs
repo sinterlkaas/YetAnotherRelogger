@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
-using System.Net.Mime;
-using System.Windows.Forms;
 using YetAnotherRelogger.Helpers;
+using YetAnotherRelogger.Helpers.Hotkeys;
 
 namespace YetAnotherRelogger.Properties
 {
@@ -28,11 +24,12 @@ namespace YetAnotherRelogger.Properties
             // this.SettingsSaving += this.SettingsSavingEventHandler;
             //
             this.SettingsLoaded += new System.Configuration.SettingsLoadedEventHandler(Settings_SettingsLoaded);
+            
         }
 
         private void Settings_SettingsLoaded(object sender, System.Configuration.SettingsLoadedEventArgs e)
         {
-            
+            if (HotKeys == null) HotKeys = new List<Hotkey>();
         }
 
         private void Settings_SettingChanging(object sender, System.Configuration.SettingChangingEventArgs e)
@@ -62,7 +59,6 @@ namespace YetAnotherRelogger.Properties
 
         [UserScopedSettingAttribute]
         [SettingsSerializeAs(SettingsSerializeAs.Binary)]
-        [DefaultSettingValueAttribute(null)]
         public List<Hotkey> HotKeys
         {
             get

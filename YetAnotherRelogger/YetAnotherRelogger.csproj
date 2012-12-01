@@ -103,6 +103,12 @@
     <Compile Include="Forms\SettingsTree\FocusCheck.Designer.cs">
       <DependentUpon>FocusCheck.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SettingsTree\HotKeys.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsTree\HotKeys.Designer.cs">
+      <DependentUpon>HotKeys.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SettingsTree\IpHostCheck.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -127,7 +133,22 @@
     <Compile Include="Forms\Wizard\SetAffinity.Designer.cs">
       <DependentUpon>SetAffinity.cs</DependentUpon>
     </Compile>
-    <Compile Include="GlobalHotkeys.cs" />
+    <Compile Include="Helpers\Hotkeys\ActionContainer.cs" />
+    <Compile Include="Helpers\Hotkeys\Actions\RepositionCurrent.cs" />
+    <Compile Include="Helpers\Hotkeys\CatchHotkey.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Helpers\Hotkeys\CatchHotkey.Designer.cs">
+      <DependentUpon>CatchHotkey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\Hotkeys\Hotkey.cs" />
+    <Compile Include="Helpers\Hotkeys\NewHotkey.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Helpers\Hotkeys\NewHotkey.Designer.cs">
+      <DependentUpon>NewHotkey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\Hotkeys\GlobalHotkeys.cs" />
     <Compile Include="Helpers\AutoPosition.cs" />
     <Compile Include="ForegroundChecker.cs" />
     <Compile Include="Forms\MainForm2.cs">
@@ -189,6 +210,13 @@
     <Compile Include="Helpers\Bot\BotStats.cs" />
     <Compile Include="Helpers\Bot\Heroes.cs" />
     <Compile Include="Helpers\Bot\IdleState.cs" />
+    <Compile Include="Helpers\Hotkeys\IHotkeyAction.cs" />
+    <Compile Include="Helpers\Hotkeys\SelectAction.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Helpers\Hotkeys\SelectAction.Designer.cs">
+      <DependentUpon>SelectAction.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\ProfileKickstart.cs" />
     <Compile Include="Helpers\Bot\ProfileSchedule.cs" />
     <Compile Include="Helpers\BuddyAuth.cs" />
@@ -208,6 +236,7 @@
     <Compile Include="Helpers\Tools\FindWindow.cs" />
     <Compile Include="Helpers\Tools\MersenneTwister.cs" />
     <Compile Include="Helpers\Tools\KeyboardHook.cs" />
+    <Compile Include="Helpers\Hotkeys\Actions\RepositionAll.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -244,6 +273,9 @@
     <EmbeddedResource Include="Forms\SettingsTree\General.resx">
       <DependentUpon>General.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsTree\HotKeys.resx">
+      <DependentUpon>HotKeys.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsTree\IpHostCheck.resx">
       <DependentUpon>IpHostCheck.cs</DependentUpon>
     </EmbeddedResource>
@@ -270,6 +302,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Wizard\WeekSchedule.resx">
       <DependentUpon>WeekSchedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\Hotkeys\CatchHotkey.resx">
+      <DependentUpon>CatchHotkey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\Hotkeys\NewHotkey.resx">
+      <DependentUpon>NewHotkey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\Hotkeys\SelectAction.resx">
+      <DependentUpon>SelectAction.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
