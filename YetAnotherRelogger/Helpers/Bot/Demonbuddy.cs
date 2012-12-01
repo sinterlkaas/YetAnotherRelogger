@@ -60,6 +60,8 @@ namespace YetAnotherRelogger.Helpers.Bot
         public int H { get; set; }
         [XmlIgnore] public Rectangle AutoPos;
 
+        [XmlIgnore] private bool _crashTenderRestart;
+
         public bool ForceEnableAllPlugins { get; set; }
 
         public DemonbuddyClass()
@@ -118,10 +120,9 @@ namespace YetAnotherRelogger.Helpers.Bot
             }
         }
 
-        public void Start(bool noprofile = false, string profilepath = null)
+        public void Start(bool noprofile = false, string profilepath = null, bool crashtenderstart = false)
         {
-            if (!Parent.IsStarted || !Parent.Diablo.IsRunning)
-                return;
+            if (!Parent.IsStarted || !Parent.Diablo.IsRunning || (_crashTenderRestart && !crashtenderstart)) return;
             if (!File.Exists(Location))
             {
                 Logger.Instance.Write("File not found: {0}", Location);
@@ -289,21 +290,17 @@ namespace YetAnotherRelogger.Helpers.Bot
 
         public void CrashTender(string profilepath = null)
         {
+            _crashTenderRestart = true;
             Logger.Instance.Write(Parent, "CrashTender: Stopping Demonbuddy:{0}", Proc.Id);
             Stop(true); // Force DB to stop
             Logger.Instance.Write(Parent, "CrashTender: Starting Demonbuddy without a starting profile");
 
 
             if (profilepath != null)
-                Start(profilepath:profilepath);
+                Start(profilepath:profilepath, crashtenderstart: true);
             else
-<<<<<<< HEAD
                 Start(noprofile: true, crashtenderstart: true);
-
             _crashTenderRestart = false;
-=======
-                Start(noprofile: true);
->>>>>>> parent of ba2b766... Fixed CrashTender restarter
         }
 
         private bool GetLastLoginTime
