@@ -1,6 +1,5 @@
 Add Support for multiple windows users
 Add Allowed IP / Hosts check
-Add Global hot keys
 Add CPU/GPU/RAM Stats on mainform
 Add dph xph gph Stats to mainform botlist
 Add monsterpower selection in profile schedule

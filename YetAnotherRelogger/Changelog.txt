@@ -1,5 +1,7 @@
 -----------------------
 * Version 0.1.8 BETA
+- Added Hotkeys
+- Changed Log file extension from .log to .txt to match Demonbuddy logging
 - Added New thread for stats
 - Added CrashTender now uses profile Kickstart when enabled 
 - Added -autostart launch argument

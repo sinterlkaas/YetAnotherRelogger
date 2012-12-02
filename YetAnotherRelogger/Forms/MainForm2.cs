@@ -195,8 +195,8 @@ namespace YetAnotherRelogger.Forms
 
         public void UpdateGridView()
         {
-            dataGridView1.DataSource = null;
             dataGridView1.DataSource = BotSettings.Instance.Bots;
+            dataGridView1.Refresh();
             dataGridView1.Columns["week"].Visible = false;
             dataGridView1.Columns["demonbuddy"].Visible = false;
             dataGridView1.Columns["diablo"].Visible = false;
@@ -247,7 +247,7 @@ namespace YetAnotherRelogger.Forms
         {
             // Open new bot wizard
             var wm = new Wizard.WizardMain {TopMost = true};
-            wm.Show();
+            wm.ShowDialog();
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -257,7 +257,7 @@ namespace YetAnotherRelogger.Forms
                 return;
             var wm = new Wizard.WizardMain(dataGridView1.CurrentRow.Index) {TopMost = true};
 
-            wm.Show();
+            wm.ShowDialog();
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -314,7 +314,7 @@ namespace YetAnotherRelogger.Forms
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {// Edit bot
             var wm = new Wizard.WizardMain(dataGridView1.CurrentRow.Index) {TopMost = true};
-            wm.Show();
+            wm.ShowDialog();
         }
         private void forceStartToolStripMenuItem_Click(object sender, EventArgs e)
         { // Force Start single bot

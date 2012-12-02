@@ -65,8 +65,8 @@ namespace YetAnotherRelogger
                             if (bot.Diablo.Proc.MainWindowHandle != hwnd) 
                                 continue;
 
-                            _lastDiablo = bot.Diablo.Proc.MainWindowHandle;
-                            _lastDemonbuddy = bot.Demonbuddy.Proc.MainWindowHandle;
+                            _lastDiablo = bot.Diablo.MainWindowHandle;
+                            _lastDemonbuddy = bot.Demonbuddy.MainWindowHandle;
                             Logger.Instance.WriteGlobal("<{0}> Diablo:{1}: has focus. Bring attached Demonbuddy to front", bot.Name, bot.Diablo.Proc.Id);
                             // Bring demonbuddy to front
                             WinAPI.ShowWindow(_lastDemonbuddy, WinAPI.WindowShowStyle.ShowNormal);

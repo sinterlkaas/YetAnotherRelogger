@@ -1,4 +1,4 @@
-﻿// VERSION: 0.1.8.4
+﻿// VERSION: 0.1.8.5
 /* Changelog:
  * VERSION: 0.1.8.4
  * Changed: Delay between stats reports to yar from 1 second to 3 seconds
@@ -55,7 +55,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 1, 8, 4); } }
+        public Version Version { get { return new Version(0, 1, 8, 5); } }
 
         private const bool _debug = true;
 

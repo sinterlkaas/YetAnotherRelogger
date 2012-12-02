@@ -37,7 +37,7 @@ namespace YetAnotherRelogger.Helpers
         private void Initialize()
         {
             var filename = string.Format("{0:yyyy-MM-dd HH.mm}", DateTime.Now);
-            _logfile = string.Format(@"{0}\Logs\{1}.log", Path.GetDirectoryName(Application.ExecutablePath), filename);
+            _logfile = string.Format(@"{0}\Logs\{1}.txt", Path.GetDirectoryName(Application.ExecutablePath), filename);
             Debug.WriteLine(_logfile);
             
             try
