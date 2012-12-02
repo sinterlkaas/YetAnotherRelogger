@@ -8,6 +8,6 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
         string Author { get; }
         string Description { get; }
         Version Version { get; }
-        void OnPressed();
+        void OnPressed(Hotkey hotkey);
     }
 }

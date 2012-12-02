@@ -46,8 +46,12 @@ namespace YetAnotherRelogger.Forms.SettingsTree
 
         public void UpdateGridview()
         {
-            dataGridView1.DataSource = null;
             dataGridView1.DataSource = Settings.Default.HotKeys;
+            dataGridView1.Refresh();
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.MultiSelect = false;
+            foreach (DataGridViewColumn column in dataGridView1.Columns)
+                column.ReadOnly = true;
         }
     }
 }

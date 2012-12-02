@@ -134,6 +134,8 @@
       <DependentUpon>SetAffinity.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Hotkeys\ActionContainer.cs" />
+    <Compile Include="Helpers\Hotkeys\Actions\ResizeCurrent.cs" />
+    <Compile Include="Helpers\Hotkeys\Actions\FullScreen.cs" />
     <Compile Include="Helpers\Hotkeys\Actions\RepositionCurrent.cs" />
     <Compile Include="Helpers\Hotkeys\CatchHotkey.cs">
       <SubType>Form</SubType>
@@ -362,6 +364,9 @@
     <None Include="Images\YAR_LOGO_small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"$(ProgramFiles)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe" -manifest "$(ProjectDir)Properties\app.manifest"  -outputresource:"$(TargetDir)$(TargetFileName)"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

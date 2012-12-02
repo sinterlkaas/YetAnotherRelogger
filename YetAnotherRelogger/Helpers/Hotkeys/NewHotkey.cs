@@ -36,7 +36,18 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
         private void NewHotkey_Load(object sender, EventArgs e)
         { // Load
             Closed += new EventHandler(NewHotkey_Closed);
-            UpdateGridview();
+            UpdateDataGridview();
+        }
+
+        public void UpdateDataGridview()
+        {
+            dataGridView1.DataSource = HotkeyNew.Actions;
+            dataGridView1.Columns["Order"].Visible = false;
+
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.MultiSelect = false;
+            foreach (DataGridViewColumn column in dataGridView1.Columns)
+                column.ReadOnly = true;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -65,7 +76,6 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
                 GlobalHotkeys.Instance.Remove(hk.HookId);
                 GlobalHotkeys.Instance.Add(HotkeyNew);
             }
-
             Close();
         }
 
@@ -81,15 +91,9 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
         }
 
         private void button4_Click(object sender, EventArgs e)
-        { // New Action
+        { // Edit
             var action = new SelectAction(HotkeyNew);
             action.ShowDialog(this);
-        }
-
-        public void UpdateGridview()
-        {
-            dataGridView1.DataSource = null;
-            dataGridView1.DataSource = HotkeyNew.Actions;
         }
     }
 }

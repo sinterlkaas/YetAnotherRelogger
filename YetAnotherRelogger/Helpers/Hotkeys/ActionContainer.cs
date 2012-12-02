@@ -5,7 +5,7 @@ using YetAnotherRelogger.Helpers.Hotkeys.Actions;
 
 namespace YetAnotherRelogger.Helpers.Hotkeys
 {
-    public static class ActionContainer
+    public class ActionContainer
     {
         static ActionContainer()
         {
@@ -13,16 +13,27 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
             // Create list
             ActionList.Add(new RepositionAll());
             ActionList.Add(new RepositionCurrent());
+            ActionList.Add(new FullScreen());
+            ActionList.Add(new ResizeCurrent());
+        }
+        public ActionContainer()
+        {
+            ActionList = new HashSet<IHotkeyAction>();
+            // Create list
+            ActionList.Add(new RepositionAll());
+            ActionList.Add(new RepositionCurrent());
+            ActionList.Add(new FullScreen());
+            ActionList.Add(new ResizeCurrent());
 
             // Create Name and Version list
             Actions = new List<Action>();
             foreach (var a in ActionList)
             {
-                var action = new Action {Name = a.Name, Version = a.Version, Description =  a.Description};
+                var action = new Action { Name = a.Name, Version = a.Version, Description = a.Description };
                 Actions.Add(action);
             }
         }
-        private static readonly HashSet<IHotkeyAction> ActionList;
+        private static HashSet<IHotkeyAction> ActionList;
 
         /// <summary>
         /// Get Action by name and version
@@ -36,6 +47,6 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
             return ret;
         }
 
-        public static List<Action> Actions { get; private set; }
+        public List<Action> Actions { get; private set; }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 using YetAnotherRelogger.Helpers.Tools;
 using YetAnotherRelogger.Properties;
 
@@ -52,10 +50,20 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
         /// <returns>True on success</returns>
         public bool Add(Hotkey hotkey)
         {
+            int id = 0;
             // Add hotkey to settings
-            Settings.Default.HotKeys.Add(hotkey);
-            Logger.Instance.WriteGlobal("Register hotkey: {0} - {1}+{2}", hotkey.Name, hotkey.Modifier.ToString().Replace(", ", "+"), hotkey.Key);
-            var id = _keyboardHook.RegisterHotKey(hotkey.Modifier, hotkey.Key);
+            try
+            {
+                Settings.Default.HotKeys.Add(hotkey);
+                Logger.Instance.WriteGlobal("Register hotkey: {0} - {1}+{2}", hotkey.Name,
+                                            hotkey.Modifier.ToString().Replace(", ", "+"), hotkey.Key);
+                id = _keyboardHook.RegisterHotKey(hotkey.Modifier, hotkey.Key);
+                hotkey.HookId = id;
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.WriteGlobal("Failed to register hotkey with message: " + ex.Message);
+            }
             return id >= 1;
         }
 
@@ -84,7 +92,7 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
                 foreach (var action in hk.Actions)
                 {
                     Debug.WriteLine("Calling Hotkey Onpress Event for: {0} {1}", action.Name, action.Version);
-                    ActionContainer.GetAction(action.Name, action.Version).OnPressed();
+                    ActionContainer.GetAction(action.Name, action.Version).OnPressed(hk);
                 }
             }
         }

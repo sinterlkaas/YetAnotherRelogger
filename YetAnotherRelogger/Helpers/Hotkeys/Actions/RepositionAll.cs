@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 
 namespace YetAnotherRelogger.Helpers.Hotkeys.Actions
 {
@@ -10,10 +9,10 @@ namespace YetAnotherRelogger.Helpers.Hotkeys.Actions
         public string Description { get { return "Reposition All Windows"; } }
         public Version Version { get { return new Version(1,0,0); } }
 
-        public void OnPressed()
+        public void OnPressed(Hotkey hotkey)
         {
-            // Hotkey pressed
-            MessageBox.Show("Hello World!");
+            Logger.Instance.WriteGlobal("Hotkey pressed: {0}+{1} : {2}", hotkey.Modifier.ToString().Replace(", ", "+"), hotkey.Key ,Name );
+            AutoPosition.PositionWindows();
         }
 
         public bool Equals(IHotkeyAction other)
@@ -22,15 +21,3 @@ namespace YetAnotherRelogger.Helpers.Hotkeys.Actions
         }
     }
 }
-/*
-        // Position and Sizing
-        RepositionAll = 0,
-        Reposition,  // Reposition/Resize current diablo 
-        Maximize,    // Reposition/Resize current diablo to preset 
-        FullScreen,  // Make current diablo fullscreen
-        // Bot Control
-        PauseResumeAll,
-        PauseResumeCurrent,
-        // Misc
-        PlaySound
-*/

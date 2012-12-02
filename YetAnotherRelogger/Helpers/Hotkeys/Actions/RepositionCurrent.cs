@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows.Forms;
+using System.Linq;
+using YetAnotherRelogger.Helpers.Tools;
 
 namespace YetAnotherRelogger.Helpers.Hotkeys.Actions
 {
@@ -10,10 +11,30 @@ namespace YetAnotherRelogger.Helpers.Hotkeys.Actions
         public string Description { get { return "Reposition Current Window"; } }
         public Version Version { get { return new Version(1,0,0); } }
 
-        public void OnPressed()
+        public void OnPressed(Hotkey hotkey)
         {
-            // Hotkey pressed
-            MessageBox.Show("Hello World!");
+            Logger.Instance.WriteGlobal("Hotkey pressed: {0}+{1} : {2}", hotkey.Modifier.ToString().Replace(", ", "+"), hotkey.Key, Name);
+            
+            // Get active window
+            var hwnd = WinAPI.GetForegroundWindow();
+
+            var test = BotSettings.Instance.Bots.FirstOrDefault(x => x.Diablo.MainWindowHandle == hwnd);
+            if (test != null)
+            {
+                var diablo = test.Diablo;
+                if (diablo == null) return;
+                AutoPosition.ManualPositionWindow(hwnd, diablo.X,diablo.Y,diablo.W,diablo.H);
+                return;
+            }
+            test = BotSettings.Instance.Bots.FirstOrDefault(x => x.Demonbuddy.MainWindowHandle == hwnd);
+            if (test != null)
+            {
+                var demonbuddy = test.Demonbuddy;
+                if (demonbuddy == null) return;
+                AutoPosition.ManualPositionWindow(hwnd, demonbuddy.X, demonbuddy.Y, demonbuddy.W, demonbuddy.H);
+                return;
+            }
+            Logger.Instance.WriteGlobal("Reposition Current Failed");
         }
 
         public bool Equals(IHotkeyAction other)
