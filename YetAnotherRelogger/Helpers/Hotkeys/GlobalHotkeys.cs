@@ -59,6 +59,13 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
                                             hotkey.Modifier.ToString().Replace(", ", "+"), hotkey.Key);
                 id = _keyboardHook.RegisterHotKey(hotkey.Modifier, hotkey.Key);
                 hotkey.HookId = id;
+
+                foreach (var action in hotkey.Actions)
+                {
+                    Debug.WriteLine("Initialize Hotkey: {0} {1}", action.Name, action.Version);
+                    ActionContainer.GetAction(action.Name, action.Version).OnInitialize(hotkey);
+                }
+
             }
             catch (Exception ex)
             {
@@ -78,6 +85,11 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
             if (hk != null)
             {
                 _keyboardHook.UnregisterHotkey(id);
+                foreach (var action in hk.Actions)
+                {
+                    Debug.WriteLine("Dispose Hotkey: {0} {1}", action.Name, action.Version);
+                    ActionContainer.GetAction(action.Name, action.Version).OnDispose();
+                }
                 return Settings.Default.HotKeys.Remove(hk);
             }
             return false;
@@ -92,7 +104,7 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
                 foreach (var action in hk.Actions)
                 {
                     Debug.WriteLine("Calling Hotkey Onpress Event for: {0} {1}", action.Name, action.Version);
-                    ActionContainer.GetAction(action.Name, action.Version).OnPressed(hk);
+                    ActionContainer.GetAction(action.Name, action.Version).OnPressed();
                 }
             }
         }

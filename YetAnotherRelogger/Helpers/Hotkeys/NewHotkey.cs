@@ -13,7 +13,8 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
         public NewHotkey()
         {
             InitializeComponent();
-            HotkeyNew = new Hotkey();
+            HotkeyNew = new Hotkey {UniqueId = Guid.NewGuid()};
+            
         }
 
         public NewHotkey(Hotkey hotkey)
@@ -43,6 +44,7 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
         {
             dataGridView1.DataSource = HotkeyNew.Actions;
             dataGridView1.Columns["Order"].Visible = false;
+            dataGridView1.Columns["UniqueId"].Visible = false;
 
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.MultiSelect = false;
@@ -94,6 +96,19 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
         { // Edit
             var action = new SelectAction(HotkeyNew);
             action.ShowDialog(this);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        { // Open config window
+            if (dataGridView1.CurrentRow == null || dataGridView1.CurrentRow.Index < 0)
+                return;
+            var selected = dataGridView1.CurrentRow;
+            var action = ActionContainer.GetAction((string)selected.Cells["Name"].Value, (Version)selected.Cells["Version"].Value);
+            if (action != null)
+            {
+                if (action.ConfigWindow != null)
+                    action.ConfigWindow.ShowDialog(this);
+            }
         }
     }
 }

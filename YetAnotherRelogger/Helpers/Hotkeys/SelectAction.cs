@@ -126,7 +126,10 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
             dataGridView1.Refresh();
             dataGridView2.Refresh();
             dataGridView1.Columns["Order"].Visible = false;
+            dataGridView1.Columns["UniqueId"].Visible = false;
             dataGridView2.Columns["Order"].Visible = false;
+            dataGridView2.Columns["UniqueId"].Visible = false;
+            
             
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.MultiSelect = false;

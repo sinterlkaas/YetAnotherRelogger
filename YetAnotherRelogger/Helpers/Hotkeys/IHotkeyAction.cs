@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace YetAnotherRelogger.Helpers.Hotkeys
 {
@@ -8,6 +9,9 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
         string Author { get; }
         string Description { get; }
         Version Version { get; }
-        void OnPressed(Hotkey hotkey);
+        Form ConfigWindow { get; }
+        void OnInitialize(Hotkey hotkey);
+        void OnDispose();
+        void OnPressed();
     }
 }

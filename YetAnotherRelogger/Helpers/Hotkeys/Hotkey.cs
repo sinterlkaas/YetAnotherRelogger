@@ -17,6 +17,7 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
             Actions = new BindingList<Action>();
         }
         [XmlIgnore] public int HookId { get; set; }
+        public Guid UniqueId { get; set; }
         public string Name { get; set; }
         public ModifierKeys Modifier { get; set; }
         public Keys Key { get; set; }
