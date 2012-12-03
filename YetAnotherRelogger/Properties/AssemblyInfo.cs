@@ -7,14 +7,14 @@ using YetAnotherRelogger;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("YetAnotherRelogger")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("YetAnotherRelogger")]
-[assembly: AssemblyCopyright("Copyright ©  2012")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+[assembly: AssemblyTitle(null)]
+[assembly: AssemblyDescription(null)]
+[assembly: AssemblyConfiguration(null)]
+[assembly: AssemblyCompany(null)]
+[assembly: AssemblyProduct(null)]
+[assembly: AssemblyCopyright(null)]
+[assembly: AssemblyTrademark(null)]
+[assembly: AssemblyCulture(null)]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
