@@ -75,7 +75,7 @@ namespace YetAnotherRelogger.Helpers.Bot
         {
             get
             {
-                if ((!Parent.AntiIdle.IsInitialized && General.DateSubtract(Parent.AntiIdle.InitTime) > 15) || !IsRunning)
+                if ((!Parent.AntiIdle.IsInitialized && General.DateSubtract(Parent.AntiIdle.InitTime) > 180) || !IsRunning)
                 {
                     Parent.AntiIdle.FailedInitCount++;
                     if (Parent.AntiIdle.FailedInitCount > 3)
@@ -245,6 +245,7 @@ namespace YetAnotherRelogger.Helpers.Bot
 
                 // We are ready to go
                 Logger.Instance.Write(Parent, "Demonbuddy:{0}: Initialized! We are ready to go", Proc.Id);
+                Parent.AntiIdle.FailedInitCount = 0; // only reset counter
                 break; 
             }
         }
