@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using System.ComponentModel;
@@ -30,6 +31,7 @@ namespace YetAnotherRelogger.Helpers.Bot
         [XmlIgnore] public DateTime StartTime;
         [XmlIgnore] private int _addRuns;
         [XmlIgnore] private int _addTime;
+        [XmlIgnore] private int _randomMS;
 
         [XmlIgnore]
         public string GetProfile
@@ -47,10 +49,13 @@ namespace YetAnotherRelogger.Helpers.Bot
                     listcount = Profiles.Count();
                 }
                 Count = 0; // Reset run counter
-                Current = Random ? Profiles[rnd.Next(0, listcount - 1)] : Profiles.FirstOrDefault(x => !x.IsDone);
-                StartTime = DateTime.Now;
+                StartTime = DateTime.Now; // Reset Start time
+                var filtered = from x in Profiles.Where(x => !x.IsDone).Select((item, index) => new { item, index }) where x.index % 2 == rnd.Next(0, listcount - 1) select x.item;
+                var enumerable = filtered as List<Profile> ?? filtered.ToList();
+                Current = Random && enumerable.FirstOrDefault() != null ? enumerable.FirstOrDefault() : Profiles.FirstOrDefault(x => !x.IsDone);
                 _addRuns = rnd.Next(0, MaxRandomRuns);
                 _addTime = rnd.Next(0, MaxRandomTime);
+                _randomMS = rnd.Next(0, 59000);
 
                 Logger.Instance.Write("Current profile: \"{0}\" Runs:{1} Time:{2} mintues ({3})", Current.Name, MaxRuns, MaxTime, Current.Location);
 
@@ -63,7 +68,10 @@ namespace YetAnotherRelogger.Helpers.Bot
         {
             get
             {
-                if ((Current.Runs > 0 && Count >= Current.Runs + _addRuns) || (Current.Minutes > 0 && DateTime.Now.Subtract(StartTime).TotalMinutes > Current.Minutes + _addTime))
+                var maxminutes = (Current.Minutes > 59 ? 59 : Current.Minutes) + _addTime;
+                maxminutes = (maxminutes > 59 ? 59 : maxminutes);
+
+                if ((Current.Runs > 0 && Count >= Current.Runs + _addRuns) || (Current.Minutes > 0 && DateTime.Now.Subtract(StartTime).TotalMinutes > maxminutes))
                 {
                     Current.IsDone = true;
                     return true;
