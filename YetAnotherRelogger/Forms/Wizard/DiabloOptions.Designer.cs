@@ -65,6 +65,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.textBox11 = new System.Windows.Forms.TextBox();
             this.textBox10 = new System.Windows.Forms.TextBox();
@@ -74,7 +75,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.button5 = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -491,6 +492,16 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Position";
             // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(14, 81);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(134, 17);
+            this.checkBox4.TabIndex = 10;
+            this.checkBox4.Text = "Remove window frame";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            // 
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
@@ -578,15 +589,15 @@
             this.label13.TabIndex = 0;
             this.label13.Text = "X:";
             // 
-            // checkBox4
+            // button5
             // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(14, 81);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(134, 17);
-            this.checkBox4.TabIndex = 10;
-            this.checkBox4.Text = "Remove window frame";
-            this.checkBox4.UseVisualStyleBackColor = true;
+            this.button5.Location = new System.Drawing.Point(324, 243);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 8;
+            this.button5.Text = "Advanced";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // DiabloOptions
             // 
@@ -594,6 +605,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::YetAnotherRelogger.Properties.Resources.Diablo3;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox1);
@@ -666,5 +678,6 @@
         public System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Button button4;
         public System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.Button button5;
     }
 }

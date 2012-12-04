@@ -99,7 +99,7 @@ namespace YetAnotherRelogger.Forms.Wizard
 
         private void button4_Click(object sender, EventArgs e)
         {
-            WM.AffinityDiablo.Show();
+            WM.AffinityDiablo.ShowDialog(this);
         }
 
         public bool ValidateInput()
@@ -109,6 +109,11 @@ namespace YetAnotherRelogger.Forms.Wizard
                     WM.ValidateMaskedTextbox(maskedTextBox1) &
                     (!checkBox2.Checked || (WM.ValidateTextbox(textBox12) & WM.ValidateTextbox(textBox13)))
                 );
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

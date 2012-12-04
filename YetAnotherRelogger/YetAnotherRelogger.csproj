@@ -127,6 +127,12 @@
     <Compile Include="Forms\SettingsTree\ProfileKickstart.Designer.cs">
       <DependentUpon>ProfileKickstart.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Wizard\DiabloAdvanced.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Wizard\DiabloAdvanced.Designer.cs">
+      <DependentUpon>DiabloAdvanced.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Wizard\SetAffinity.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -286,6 +292,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Wizard\DemonbuddyOptions.resx">
       <DependentUpon>DemonbuddyOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Wizard\DiabloAdvanced.resx">
+      <DependentUpon>DiabloAdvanced.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Wizard\DiabloOptions.resx">
       <DependentUpon>DiabloOptions.cs</DependentUpon>

@@ -60,7 +60,7 @@ namespace YetAnotherRelogger.Forms.Wizard
 
         private void button4_Click_1(object sender, EventArgs e)
         {
-            WM.AffinityDemonbuddy.Show();
+            WM.AffinityDemonbuddy.ShowDialog(this);
         }
 
         public bool ValidateInput()
