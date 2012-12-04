@@ -17,7 +17,6 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
             Actions = new BindingList<Action>();
         }
         [XmlIgnore] public int HookId { get; set; }
-        public Guid UniqueId { get; set; }
         public string Name { get; set; }
         public ModifierKeys Modifier { get; set; }
         public Keys Key { get; set; }
@@ -26,6 +25,10 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
     [Serializable]
     public class Action : INotifyPropertyChanged
     {
+        public Action()
+        {
+            UniqueId = Guid.NewGuid(); // Generate new UniqueId
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
@@ -40,6 +43,7 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
             return true;
         }
 
+        public Guid UniqueId { get; set; }
         [XmlIgnore] private int _order;
         public int Order { get { return _order; } set { SetField(ref _order, value, "Order"); } }
         [XmlIgnore] private string _name;

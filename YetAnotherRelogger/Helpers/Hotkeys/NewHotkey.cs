@@ -13,7 +13,7 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
         public NewHotkey()
         {
             InitializeComponent();
-            HotkeyNew = new Hotkey {UniqueId = Guid.NewGuid()};
+            HotkeyNew = new Hotkey ();
             
         }
 
