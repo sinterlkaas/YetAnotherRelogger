@@ -237,6 +237,7 @@ namespace YetAnotherRelogger.Helpers.Bot
             }
             if (freshstart)
             {
+                FailedInitCount = 0;
                 FixAttempts = 0;
             }
         }

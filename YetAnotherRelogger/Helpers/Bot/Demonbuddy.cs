@@ -75,7 +75,7 @@ namespace YetAnotherRelogger.Helpers.Bot
         {
             get
             {
-                if (!Parent.AntiIdle.IsInitialized && General.DateSubtract(Parent.AntiIdle.InitTime) > 180)
+                if ((!Parent.AntiIdle.IsInitialized && General.DateSubtract(Parent.AntiIdle.InitTime) > 15) || !IsRunning)
                 {
                     Parent.AntiIdle.FailedInitCount++;
                     if (Parent.AntiIdle.FailedInitCount > 3)
@@ -85,10 +85,8 @@ namespace YetAnotherRelogger.Helpers.Bot
                     }
                     else
                     {
-                        Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to initialize", Parent.Demonbuddy.Proc.Id);
+                        Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to initialize {1}/3", Parent.Demonbuddy.Proc.Id, Parent.AntiIdle.FailedInitCount);
                         Parent.Demonbuddy.Stop(true);
-                        Thread.Sleep(2000);
-                        Parent.Demonbuddy.Start();
                     }
                     return false;
                 }
@@ -129,118 +127,126 @@ namespace YetAnotherRelogger.Helpers.Bot
                 return;
             }
 
-            // Get Last login time and kill old session
-            if (GetLastLoginTime) BuddyAuth.Instance.KillSession(Parent);
-
-            _isStopped = false;
-
-            // Reset AntiIdle;
-            Parent.AntiIdle.Reset(true);
-
-            var arguments = "-pid=" + Parent.Diablo.Proc.Id;
-            arguments += " -key=" + Key;
-            arguments += " -autostart";
-            arguments += string.Format(" -routine=\"{0}\"", CombatRoutine);
-            arguments += string.Format(" -bnetaccount=\"{0}\"", Parent.Diablo.Username);
-            arguments += string.Format(" -bnetpassword=\"{0}\"", Parent.Diablo.Password);
-
-            if (profilepath != null)
+            while (true)
             {
-                // Check if current profile path is Kickstart
-                var file = Path.GetFileName(profilepath);
-                if (file == null || (file.Equals("YAR_Kickstart.xml") || file.Equals("YAR_TMP_Kickstart.xml")))
-                    profilepath = Parent.ProfileSchedule.GetProfile;
+                // Get Last login time and kill old session
+                if (GetLastLoginTime) BuddyAuth.Instance.KillSession(Parent);
 
-                var profile = new Profile() {Location = profilepath};
-                var path = ProfileKickstart.GenerateKickstart(profile);
-                arguments += string.Format(" -profile=\"{0}\"", path);
-            }
-            else if (Parent.ProfileSchedule.Profiles.Count > 0 && !noprofile)
-            {
-                var path = Parent.ProfileSchedule.GetProfile;
-                if (File.Exists(path))
+                _isStopped = false;
+
+                // Reset AntiIdle;
+                Parent.AntiIdle.Reset(true);
+
+                var arguments = "-pid=" + Parent.Diablo.Proc.Id;
+                arguments += " -key=" + Key;
+                arguments += " -autostart";
+                arguments += string.Format(" -routine=\"{0}\"", CombatRoutine);
+                arguments += string.Format(" -bnetaccount=\"{0}\"", Parent.Diablo.Username);
+                arguments += string.Format(" -bnetpassword=\"{0}\"", Parent.Diablo.Password);
+
+                if (profilepath != null)
+                {
+                    // Check if current profile path is Kickstart
+                    var file = Path.GetFileName(profilepath);
+                    if (file == null || (file.Equals("YAR_Kickstart.xml") || file.Equals("YAR_TMP_Kickstart.xml")))
+                        profilepath = Parent.ProfileSchedule.GetProfile;
+
+                    var profile = new Profile() {Location = profilepath};
+                    var path = ProfileKickstart.GenerateKickstart(profile);
                     arguments += string.Format(" -profile=\"{0}\"", path);
-            }
-            else if (!noprofile)
-                Logger.Instance.Write("Warning: Launching Demonbuddy without a starting profile (Add a profile to the profilescheduler for this bot)");
-
-            if (NoFlash) arguments += " -noflash";
-            if (AutoUpdate) arguments += " -autoupdate";
-            if (NoUpdate) arguments += " -noupdate";
-
-            if (ForceEnableAllPlugins)
-                arguments += " -YarEnableAll";
-
-            Debug.WriteLine("DB Arguments: {0}", arguments);
-
-            var p = new ProcessStartInfo(Location, arguments) {WorkingDirectory = Path.GetDirectoryName(Location)};
-            
-            // Check/Install latest Communicator plugin
-            var plugin = string.Format("{0}\\Plugins\\YAR\\Plugin.cs", p.WorkingDirectory);
-            if (!PluginVersionCheck.Check(plugin)) PluginVersionCheck.Install(plugin);
-
-
-            try // Try to start Demonbuddy
-            {
-                Parent.Status = "Starting Demonbuddy"; // Update Status
-                Proc = Process.Start(p);
-
-                if (Program.IsRunAsAdmin)
-                    Proc.PriorityClass = General.GetPriorityClass(Priority);
-                else
-                    Logger.Instance.Write(Parent, "Failed to change priority (No admin rights)");
-               
-                
-                // Set affinity
-                if (CpuCount != Environment.ProcessorCount)
-                {
-                    ProcessorAffinity = AllProcessors; // set it to all ones
-                    CpuCount = Environment.ProcessorCount;
                 }
-                Proc.ProcessorAffinity = (IntPtr)ProcessorAffinity;
-
-
-                Logger.Instance.Write(Parent, "Demonbuddy:{0}: Waiting for process to become ready", Proc.Id);
-                if (!Proc.WaitForInputIdle(30000))
+                else if (Parent.ProfileSchedule.Profiles.Count > 0 && !noprofile)
                 {
-                    Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to start!", Proc.Id);
-                    Parent.Restart();
-                    return;
+                    var path = Parent.ProfileSchedule.GetProfile;
+                    if (File.Exists(path))
+                        arguments += string.Format(" -profile=\"{0}\"", path);
+                }
+                else if (!noprofile)
+                    Logger.Instance.Write(
+                        "Warning: Launching Demonbuddy without a starting profile (Add a profile to the profilescheduler for this bot)");
+
+                if (NoFlash) arguments += " -noflash";
+                if (AutoUpdate) arguments += " -autoupdate";
+                if (NoUpdate) arguments += " -noupdate";
+
+                if (ForceEnableAllPlugins)
+                    arguments += " -YarEnableAll";
+
+                Debug.WriteLine("DB Arguments: {0}", arguments);
+
+                var p = new ProcessStartInfo(Location, arguments) {WorkingDirectory = Path.GetDirectoryName(Location)};
+
+                // Check/Install latest Communicator plugin
+                var plugin = string.Format("{0}\\Plugins\\YAR\\Plugin.cs", p.WorkingDirectory);
+                if (!PluginVersionCheck.Check(plugin)) PluginVersionCheck.Install(plugin);
+
+
+                try // Try to start Demonbuddy
+                {
+                    Parent.Status = "Starting Demonbuddy"; // Update Status
+                    Proc = Process.Start(p);
+
+                    if (Program.IsRunAsAdmin)
+                        Proc.PriorityClass = General.GetPriorityClass(Priority);
+                    else
+                        Logger.Instance.Write(Parent, "Failed to change priority (No admin rights)");
+
+
+                    // Set affinity
+                    if (CpuCount != Environment.ProcessorCount)
+                    {
+                        ProcessorAffinity = AllProcessors; // set it to all ones
+                        CpuCount = Environment.ProcessorCount;
+                    }
+                    Proc.ProcessorAffinity = (IntPtr) ProcessorAffinity;
+
+
+                    Logger.Instance.Write(Parent, "Demonbuddy:{0}: Waiting for process to become ready", Proc.Id);
+                    if (!Proc.WaitForInputIdle(30000))
+                    {
+                        Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to start!", Proc.Id);
+                        Parent.Restart();
+                        return;
+                    }
+
+                    if (_isStopped) return;
+
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.Write(ex.ToString());
+                    Parent.Stop();
                 }
 
-                if (_isStopped) return;
-                
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.Write(ex.ToString());
-                Parent.Stop();
-            }
-
-            var timeout = DateTime.Now;
-            while (!FindMainWindow())
-            {
-                if (General.DateSubtract(timeout) > 30)
+                var timeout = DateTime.Now;
+                while (!FindMainWindow())
                 {
-                    MainWindowHandle = Proc.MainWindowHandle;
-                    break;
+                    if (General.DateSubtract(timeout) > 30)
+                    {
+                        MainWindowHandle = Proc.MainWindowHandle;
+                        break;
+                    }
+                    Thread.Sleep(500);
                 }
-                Thread.Sleep(500);
-            }
 
-            // Window postion & resizing
-            if (ManualPosSize)
-                AutoPosition.ManualPositionWindow(MainWindowHandle, X, Y, W, H, Parent);
-            Logger.Instance.Write(Parent, "Demonbuddy:{0}: Process is ready", Proc.Id);
+                // Window postion & resizing
+                if (ManualPosSize)
+                    AutoPosition.ManualPositionWindow(MainWindowHandle, X, Y, W, H, Parent);
+                Logger.Instance.Write(Parent, "Demonbuddy:{0}: Process is ready", Proc.Id);
 
-            // Wait for demonbuddy to be Initialized (this means we are logged in)
-            // If we don't wait here the Region changeing for diablo fails!
-            Logger.Instance.Write(Parent, "Demonbuddy:{0}: Waiting for demonbuddy to log into Diablo", Proc.Id);
+                // Wait for demonbuddy to be Initialized (this means we are logged in)
+                // If we don't wait here the Region changeing for diablo fails!
+                Logger.Instance.Write(Parent, "Demonbuddy:{0}: Waiting for demonbuddy to log into Diablo", Proc.Id);
+                while (!IsInitialized && !_isStopped)
+                    Thread.Sleep(1000);
+                // We made to many attempts break here
+                if (Parent.AntiIdle.FailedInitCount > 3) break;
+                if (!Parent.AntiIdle.IsInitialized) continue; // Retry
 
-            while(!IsInitialized && !_isStopped)
-                Thread.Sleep(1000);
-            if (IsInitialized)
+                // We are ready to go
                 Logger.Instance.Write(Parent, "Demonbuddy:{0}: Initialized! We are ready to go", Proc.Id);
+                break; 
+            }
         }
 
         private bool FindMainWindow()
