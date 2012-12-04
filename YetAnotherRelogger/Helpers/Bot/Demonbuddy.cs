@@ -231,8 +231,16 @@ namespace YetAnotherRelogger.Helpers.Bot
             // Window postion & resizing
             if (ManualPosSize)
                 AutoPosition.ManualPositionWindow(MainWindowHandle, X, Y, W, H, Parent);
-
             Logger.Instance.Write(Parent, "Demonbuddy:{0}: Process is ready", Proc.Id);
+
+            // Wait for demonbuddy to be Initialized (this means we are logged in)
+            // If we don't wait here the Region changeing for diablo fails!
+            Logger.Instance.Write(Parent, "Demonbuddy:{0}: Waiting for demonbuddy to log into Diablo", Proc.Id);
+
+            while(!IsInitialized && !_isStopped)
+                Thread.Sleep(1000);
+            if (IsInitialized)
+                Logger.Instance.Write(Parent, "Demonbuddy:{0}: Initialized! We are ready to go", Proc.Id);
         }
 
         private bool FindMainWindow()
