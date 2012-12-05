@@ -203,7 +203,7 @@ namespace YARPLUGIN
                 {
                     Send("ThirdpartyStop");
                 }
-                Thread.Sleep(1);
+                Thread.Sleep(10);
             }
         }
         public bool FindStartDelay(string msg)

@@ -42,9 +42,8 @@ namespace YetAnotherRelogger.Helpers
                 catch (Exception ex)
                 {
                     Logger.Instance.WriteGlobal(ex.Message);
-                    Thread.Sleep(1000);
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(Program.Sleeptime);
             }
         }
 
@@ -72,7 +71,7 @@ namespace YetAnotherRelogger.Helpers
                         var temp = _reader.ReadLine();
                         if (temp == null)
                         {
-                            Thread.Sleep(5);
+                            Thread.Sleep(Program.Sleeptime);
                             continue;
                         }
                         if (temp.Equals("END"))
@@ -92,15 +91,14 @@ namespace YetAnotherRelogger.Helpers
                         }
                         else
                             HandleMsg(temp);
-                        Thread.Sleep(5);
+                        Thread.Sleep(Program.Sleeptime);
                     }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
-                if (_stream != null)
-                    _stream.Dispose();
+                Dispose();
             }
 
             private void HandleXml(string data)
