@@ -127,7 +127,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                 return;
             }
 
-            while (true)
+            while (Parent.IsStarted)
             {
                 // Get Last login time and kill old session
                 if (GetLastLoginTime) BuddyAuth.Instance.KillSession(Parent);
