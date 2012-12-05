@@ -1,5 +1,8 @@
-﻿// VERSION: 0.1.9.0
+﻿// VERSION: 0.1.9.1
 /* Changelog:
+ * VERSION: 0.1.9.1
+ * Added: Monsterpower
+ * Added: Support for RadsAtom
  * VERSION: 0.1.8.4
  * Changed: Delay between stats reports to yar from 1 second to 3 seconds
  * Added: Some delay in possible intensive loops (make it nicer for CPU)
@@ -46,6 +49,7 @@ using Zeta.Common;
 using Zeta.Common.Plugins;
 using Zeta.CommonBot;
 using Zeta.CommonBot.Profile;
+using Zeta.CommonBot.Settings;
 using Zeta.Internals;
 using Zeta.TreeSharp;
 using UIElement = Zeta.Internals.UIElement;
@@ -55,7 +59,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 1, 9, 0); } }
+        public Version Version { get { return new Version(0, 1, 9, 1); } }
 
         private const bool _debug = true;
 
@@ -68,6 +72,8 @@ namespace YARPLUGIN
                 new Regex(@".+Emergency Stop: .+", RegexOptions.Compiled), // Emergency stop
                 /* Atom 2.0.15+ "Take a break" */
                 new Regex(@".*Atom.*Will Stop the bot for .+ minutes\.$", RegexOptions.Compiled), // Take a break
+                /* RadsAtom "Take a break" */
+                new Regex(@"\[RadsAtom\].+ minutes to next break, the break will last for .+ minutes."), 
             };
 
         // CrashTender
@@ -148,6 +154,7 @@ namespace YARPLUGIN
                 _yarThread = new Thread(YarWorker) { IsBackground = true };
                 _yarThread.Start();
             }
+            Send("NewMonsterPowerLevel", true); // Request Monsterpower level
             Reset();
         }
 
@@ -270,7 +277,10 @@ namespace YARPLUGIN
                 else
                 {
                     if (_bs.IsInGame)
+                    {
                         Send("GameLeft", true);
+                        Send("NewMonsterPowerLevel", true); // Request Monsterpower level
+                    }
                     _bs.IsInGame = false;
                 }
 
@@ -382,7 +392,7 @@ namespace YARPLUGIN
 
                                 if (temp == null)
                                 {
-                                    Thread.Sleep(5);
+                                    Thread.Sleep(10);
                                     continue;
                                 }
 
@@ -401,6 +411,7 @@ namespace YARPLUGIN
                 {
                     LogException(ex);
                 }
+                Thread.Sleep(100);
             }
             _recieved = true;
         }
@@ -423,6 +434,9 @@ namespace YARPLUGIN
                     break;
                 case "LoadProfile":
                     LoadProfile(data);
+                    break;
+                case "MonsterPower":
+                    CharacterSettings.Instance.MonsterPowerLevel = Convert.ToInt32(data.Trim());
                     break;
                 case "ForceEnableAll":
                     ForceEnableAllPlugins();

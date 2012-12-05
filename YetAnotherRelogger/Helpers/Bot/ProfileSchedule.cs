@@ -13,7 +13,7 @@ namespace YetAnotherRelogger.Helpers.Bot
     {
         public ProfileScheduleClass()
         {
-            Current = new Profile();
+            Current = new Profile() { IsDone = true };
             Profiles = new BindingList<Profile>();
         }
 
@@ -31,13 +31,15 @@ namespace YetAnotherRelogger.Helpers.Bot
         [XmlIgnore] public DateTime StartTime;
         [XmlIgnore] private int _addRuns;
         [XmlIgnore] private int _addTime;
-        [XmlIgnore] private int _randomMS;
 
         [XmlIgnore]
         public string GetProfile
         {
             get
             {
+                // Stay on same profile when not ready yet
+                if (!Current.IsDone) return Current.Location;
+
                 var rnd = new MersenneTwister();
 
                 var listcount = Profiles.Count(x => !x.IsDone);
@@ -55,7 +57,6 @@ namespace YetAnotherRelogger.Helpers.Bot
                 Current = Random && enumerable.FirstOrDefault() != null ? enumerable.FirstOrDefault() : Profiles.FirstOrDefault(x => !x.IsDone);
                 _addRuns = rnd.Next(0, MaxRandomRuns);
                 _addTime = rnd.Next(0, MaxRandomTime);
-                _randomMS = rnd.Next(0, 59000);
 
                 Logger.Instance.Write("Current profile: \"{0}\" Runs:{1} Time:{2} mintues ({3})", Current.Name, MaxRuns, MaxTime, Current.Location);
 
@@ -89,6 +90,7 @@ namespace YetAnotherRelogger.Helpers.Bot
         public string Location { get; set; }
         public int Runs { get; set; }
         public int Minutes { get; set; }
+        public int MonsterPower { get; set; }
         [XmlIgnore] public bool IsDone { get; set; }
     }
 }

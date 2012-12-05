@@ -232,6 +232,9 @@ namespace YetAnotherRelogger.Helpers
                             ConnectionCheck.CheckValidConnection(silent: true);
                             Send("Roger!");
                             break;
+                        case "NewMonsterPowerLevel":
+                            Send("MonsterPower " + b.ProfileSchedule.Current.MonsterPower);
+                            break;
                         // Unknown command reply
                         default:
                             Send("Unknown command!");
