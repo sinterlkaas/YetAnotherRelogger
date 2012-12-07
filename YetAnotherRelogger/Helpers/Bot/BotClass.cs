@@ -82,6 +82,15 @@ namespace YetAnotherRelogger.Helpers.Bot
         [XmlIgnore] private string _runningtime;
         [XmlIgnore] public string RunningTime { get { return _runningtime; } set { SetField(ref _runningtime, value, "RunningTime"); } }
 
+        // Windows User
+        public bool UseWindowsUser { get; set; }
+        public bool CreateWindowsUser { get; set; }
+        public string WindowsUserName { get; set; }
+        public string WindowsUserPassword { get; set; }
+
+        // D3Prefs
+        public string D3PrefsLocation { get; set; }
+
         public void Stop()
         {
             Logger.Instance.Write(this, "Stopping");

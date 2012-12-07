@@ -8,8 +8,6 @@ namespace YetAnotherRelogger.Forms.Wizard
 {
     public partial class DiabloOptions : UserControl
     {
-        
-
         public DiabloOptions(WizardMain parent)
         {
             WM = parent;
@@ -112,6 +110,11 @@ namespace YetAnotherRelogger.Forms.Wizard
         }
 
         private void button5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }

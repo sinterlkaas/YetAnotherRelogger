@@ -81,6 +81,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -127,11 +128,11 @@
     <Compile Include="Forms\SettingsTree\ProfileKickstart.Designer.cs">
       <DependentUpon>ProfileKickstart.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Wizard\DiabloAdvanced.cs">
-      <SubType>Form</SubType>
+    <Compile Include="Forms\Wizard\Advanced.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\Wizard\DiabloAdvanced.Designer.cs">
-      <DependentUpon>DiabloAdvanced.cs</DependentUpon>
+    <Compile Include="Forms\Wizard\Advanced.Designer.cs">
+      <DependentUpon>Advanced.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Wizard\SetAffinity.cs">
       <SubType>Form</SubType>
@@ -242,9 +243,11 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Helpers\Tools\FindWindow.cs" />
+    <Compile Include="Helpers\Tools\Impersonator.cs" />
     <Compile Include="Helpers\Tools\MersenneTwister.cs" />
     <Compile Include="Helpers\Tools\KeyboardHook.cs" />
     <Compile Include="Helpers\Hotkeys\Actions\RepositionAll.cs" />
+    <Compile Include="Helpers\Tools\UserAccount.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -290,11 +293,11 @@
     <EmbeddedResource Include="Forms\SettingsTree\ProfileKickstart.resx">
       <DependentUpon>ProfileKickstart.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Wizard\Advanced.resx">
+      <DependentUpon>Advanced.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Wizard\DemonbuddyOptions.resx">
       <DependentUpon>DemonbuddyOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Wizard\DiabloAdvanced.resx">
-      <DependentUpon>DiabloAdvanced.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Wizard\DiabloOptions.resx">
       <DependentUpon>DiabloOptions.cs</DependentUpon>
@@ -375,7 +378,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"$(ProgramFiles)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe" -manifest "$(ProjectDir)Properties\app.manifest"  -outputresource:"$(TargetDir)$(TargetFileName)"
-"$(ProjectDir)\..\ThirdParty\PETool\PETool.exe" "$(TargetDir)$(TargetFileName)" /DeStamp /VerChange "OriginalFilename" "" /VerChange "InternalName" "" /VerChange "FileVersion" "" /VerChange "ProductVersion" "" /VerChange "Assembly Version" ""</PostBuildEvent>
+if “$(ConfigurationName)”==”Release” "$(ProjectDir)\..\ThirdParty\PETool\PETool.exe" "$(TargetDir)$(TargetFileName)" /DeStamp /VerChange "OriginalFilename" "" /VerChange "InternalName" "" /VerChange "FileVersion" "" /VerChange "ProductVersion" "" /VerChange "Assembly Version" ""</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

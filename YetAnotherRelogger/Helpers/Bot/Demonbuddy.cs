@@ -126,7 +126,6 @@ namespace YetAnotherRelogger.Helpers.Bot
                 Logger.Instance.Write("File not found: {0}", Location);
                 return;
             }
-
             while (Parent.IsStarted)
             {
                 // Get Last login time and kill old session
@@ -175,12 +174,14 @@ namespace YetAnotherRelogger.Helpers.Bot
                 Debug.WriteLine("DB Arguments: {0}", arguments);
 
                 var p = new ProcessStartInfo(Location, arguments) {WorkingDirectory = Path.GetDirectoryName(Location)};
+                p = UserAccount.ImpersonateStartInfo(p, Parent);
 
                 // Check/Install latest Communicator plugin
                 var plugin = string.Format("{0}\\Plugins\\YAR\\Plugin.cs", p.WorkingDirectory);
                 if (!PluginVersionCheck.Check(plugin)) PluginVersionCheck.Install(plugin);
 
 
+                DateTime timeout;
                 try // Try to start Demonbuddy
                 {
                     Parent.Status = "Starting Demonbuddy"; // Update Status
@@ -202,11 +203,26 @@ namespace YetAnotherRelogger.Helpers.Bot
 
 
                     Logger.Instance.Write(Parent, "Demonbuddy:{0}: Waiting for process to become ready", Proc.Id);
-                    if (!Proc.WaitForInputIdle(30000))
+
+                    timeout = DateTime.Now;
+                    while (true)
                     {
-                        Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to start!", Proc.Id);
-                        Parent.Restart();
-                        return;
+                        if (General.DateSubtract(timeout) > 30)
+                        {
+                            Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to start!", Proc.Id);
+                            Parent.Restart();
+                            return;
+                        }
+                        Thread.Sleep(500);
+                        try
+                        {
+                            Proc.Refresh();
+                            if (Proc.WaitForInputIdle(100) || CrashChecker.IsResponding(MainWindowHandle))
+                                break;
+                        }
+                        catch
+                        {
+                        }
                     }
 
                     if (_isStopped) return;
@@ -218,7 +234,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                     Parent.Stop();
                 }
 
-                var timeout = DateTime.Now;
+                timeout = DateTime.Now;
                 while (!FindMainWindow())
                 {
                     if (General.DateSubtract(timeout) > 30)

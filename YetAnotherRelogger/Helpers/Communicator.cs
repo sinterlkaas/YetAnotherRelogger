@@ -264,18 +264,36 @@ namespace YetAnotherRelogger.Helpers
                 //Free managed resources
                 if (_reader != null)
                 {
-                    _reader.Dispose();
-                    _reader = null;
+                    try
+                    {
+                        _reader.Dispose();
+                        _reader = null;
+                    }
+                    catch
+                    {
+                    }
                 }
                 if (_writer != null)
                 {
-                    _writer.Dispose();
-                    _writer = null;
+                    try
+                    {
+                        _writer.Dispose();
+                        _writer = null;
+                    }
+                    catch
+                    {
+                    }
                 }
                 if (_stream != null)
                 {
-                    _stream.Dispose();
-                    _stream = null;
+                    try
+                    {
+                        _stream.Dispose();
+                        _stream = null;
+                    }
+                    catch
+                    {
+                    }
                 }
             }
         }

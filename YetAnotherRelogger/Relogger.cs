@@ -95,10 +95,11 @@ namespace YetAnotherRelogger
                         Thread.Sleep(1000);
                         continue;
                     }
-                    
+
                     foreach (var bot in BotSettings.Instance.Bots.Where(bot => bot != null))
                     {
                         if (Program.Pause) break;
+
                         var time = DateTime.Now; // set current time to calculate sleep time at end of loop
                         CurrentBot = bot;
                         Debug.WriteLine(bot.Name + ":" + ":" + bot.IsRunning);

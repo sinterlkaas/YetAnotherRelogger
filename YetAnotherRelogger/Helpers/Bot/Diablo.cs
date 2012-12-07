@@ -120,7 +120,6 @@ namespace YetAnotherRelogger.Helpers.Bot
             }
 
             _isStopped = false;
-
             // Ping check
             while (Settings.Default.ConnectionCheckPing && !ConnectionCheck.PingCheck() && !_isStopped)
             {
@@ -138,7 +137,7 @@ namespace YetAnotherRelogger.Helpers.Bot
             }
 
             Parent.Status = "Prepare Diablo"; // Update Status
-
+            
             // Prepare D3 for launch
             var agentDBPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\Battle.net\Agent\agent.db";
             if (File.Exists(agentDBPath))
@@ -153,6 +152,44 @@ namespace YetAnotherRelogger.Helpers.Bot
                     Logger.Instance.Write("Failed to delete! Exception: {0}", ex.ToString());
                 }
             }
+
+            var imp = new Impersonator();
+            if (Parent.UseWindowsUser)
+                imp.Impersonate(Parent.WindowsUserName,"localhost",Parent.WindowsUserPassword);
+
+            // Copy D3Prefs
+            var currentprefs = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\Diablo III\D3Prefs.txt";
+            if (File.Exists(Parent.D3PrefsLocation) && Directory.Exists(Path.GetDirectoryName(currentprefs)))
+            {
+                Logger.Instance.Write("Copy custom D3Prefs file to: {0}", currentprefs);
+                try
+                {
+                    File.Copy(Parent.D3PrefsLocation, currentprefs, true);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.Write("Failed to copy d3prefs file: {0}", ex);
+                    
+                }
+            }
+            if (imp != null)
+                imp.Dispose();
+
+            var defaultprefs = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments) + @"\Diablo III\D3Prefs.txt";
+            if (File.Exists(Parent.D3PrefsLocation) && Directory.Exists(Path.GetDirectoryName(defaultprefs)))
+            {
+                Logger.Instance.Write("Copy custom D3Prefs file to: {0}", defaultprefs);
+                try
+                {
+                    File.Copy(Parent.D3PrefsLocation, defaultprefs, true);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.Write("Failed to copy d3prefs file: {0}", ex);
+
+                }
+            }
+
 
             General.AgentKiller(); // Kill all Agent.exe processes
 
@@ -169,11 +206,10 @@ namespace YetAnotherRelogger.Helpers.Bot
                 {
                     var arguments = "-launch";
                     var pi = new ProcessStartInfo(Location, arguments) { WorkingDirectory = Path.GetDirectoryName(Location) };
+                    pi = UserAccount.ImpersonateStartInfo(pi, Parent);
                     // Set working directory to executable location
                     Parent.Status = "Starting Diablo"; // Update Status
                     Proc = Process.Start(pi);
-
-
                 }
                 catch (Exception ex)
                 {
@@ -258,27 +294,24 @@ namespace YetAnotherRelogger.Helpers.Bot
             // Continue after launching stuff
             Logger.Instance.Write("Diablo:{0}: Waiting for process to become ready", Proc.Id);
 
-
-           /*if (!Proc.WaitForInputIdle(30000)) // Timeout after 30 secs
-            {
-                Logger.Instance.Write("Diablo:{0}: Failed to start!", Proc.Id);
-                Parent.Restart();
-                return;
-            }*/
-
             var timeout = DateTime.Now;
             while (true)
             {
-                Thread.Sleep(500);
-                Proc.Refresh();
-                if (Proc.WaitForInputIdle(100) || CrashChecker.IsResponding(MainWindowHandle))
-                    break;
-                
                 if (General.DateSubtract(timeout) > 30)
                 {
                     Logger.Instance.Write("Diablo:{0}: Failed to start!", Proc.Id);
                     Parent.Restart();
                     return;
+                }
+                Thread.Sleep(500);
+                try
+                {
+                    Proc.Refresh();
+                    if (Proc.WaitForInputIdle(100) || CrashChecker.IsResponding(MainWindowHandle))
+                        break;
+                }
+                catch
+                {
                 }
             }
 
@@ -337,6 +370,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                                               WindowStyle = ProcessWindowStyle.Hidden
                                           }
                                   };
+                starter.StartInfo = UserAccount.ImpersonateStartInfo(starter.StartInfo, Parent);
                 starter.Start();
 
                 Match m;
@@ -393,6 +427,7 @@ namespace YetAnotherRelogger.Helpers.Bot
             };
             Logger.Instance.Write(Parent, "Starting InnerSpace: {0}", Settings.Default.ISBoxerPath);
             Logger.Instance.Write(Parent, "With arguments: {0}", isboxer.StartInfo.Arguments);
+            isboxer.StartInfo = UserAccount.ImpersonateStartInfo(isboxer.StartInfo, Parent);
             isboxer.Start();
 
             

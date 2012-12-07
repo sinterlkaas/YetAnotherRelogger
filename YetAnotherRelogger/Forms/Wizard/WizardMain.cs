@@ -32,8 +32,10 @@ namespace YetAnotherRelogger.Forms.Wizard
         private WeekSchedule _ucWeekSchedule;
         private ProfileSchedule _ucProfileSchedule;
         private Heroes _ucHeroes;
+        private Advanced _ucAdvanced;
         public SetAffinity AffinityDiablo;
         public SetAffinity AffinityDemonbuddy;
+        
 
         private BotClass bot;
         private int index = -1;
@@ -50,6 +52,7 @@ namespace YetAnotherRelogger.Forms.Wizard
             _ucWeekSchedule = new WeekSchedule(this);
             _ucHeroes = new Heroes(this);
             _ucProfileSchedule = new ProfileSchedule(this);
+            _ucAdvanced = new Advanced(this);
 
             
             Controls.Add(_ucDemonbuddy);
@@ -57,7 +60,8 @@ namespace YetAnotherRelogger.Forms.Wizard
             Controls.Add(_ucWeekSchedule);
             //Controls.Add(ucHeroes);
             Controls.Add(_ucProfileSchedule);
-            _ucDiablo.Visible = _ucWeekSchedule.Visible = _ucProfileSchedule.Visible = _ucHeroes.Visible = false;
+            Controls.Add(_ucAdvanced);
+            _ucDiablo.Visible = _ucWeekSchedule.Visible = _ucProfileSchedule.Visible = _ucHeroes.Visible = _ucAdvanced.Visible = false;
             FinishCount = Controls.Count-1; // Get Finish count
 
             AffinityDiablo = new SetAffinity();
@@ -71,6 +75,11 @@ namespace YetAnotherRelogger.Forms.Wizard
             // Load data
             _ucDemonbuddy.textBox1.Text = bot.Name;
             _ucDemonbuddy.textBox2.Text = bot.Description;
+            _ucAdvanced.checkBox2.Checked = bot.CreateWindowsUser;
+            _ucAdvanced.checkBox1.Checked = bot.UseWindowsUser;
+            _ucAdvanced.textBox1.Text = bot.WindowsUserName;
+            _ucAdvanced.maskedTextBox1.Text = bot.WindowsUserPassword;
+            _ucAdvanced.textBox3.Text = bot.D3PrefsLocation;
 
             _ucDemonbuddy.textBox4.Text = bot.Demonbuddy.Location;
             _ucDemonbuddy.textBox3.Text = bot.Demonbuddy.Key;
@@ -177,6 +186,11 @@ namespace YetAnotherRelogger.Forms.Wizard
 
                 b.Name = _ucDemonbuddy.textBox1.Text;
                 b.Description = _ucDemonbuddy.textBox2.Text;
+                b.CreateWindowsUser = _ucAdvanced.checkBox2.Checked;
+                b.UseWindowsUser = _ucAdvanced.checkBox1.Checked;
+                b.WindowsUserName = _ucAdvanced.textBox1.Text;
+                b.WindowsUserPassword = _ucAdvanced.maskedTextBox1.Text;
+                b.D3PrefsLocation = _ucAdvanced.textBox3.Text;
 
                 db.Location = _ucDemonbuddy.textBox4.Text;
                 db.Key = _ucDemonbuddy.textBox3.Text;
@@ -309,6 +323,7 @@ namespace YetAnotherRelogger.Forms.Wizard
                     b.Diablo.MainWindowHandle = BotSettings.Instance.Bots[index].Diablo.MainWindowHandle;
                     b.AntiIdle = BotSettings.Instance.Bots[index].AntiIdle;
                     b.Week.ForceStart = BotSettings.Instance.Bots[index].Week.ForceStart;
+                    b.RunningTime = BotSettings.Instance.Bots[index].RunningTime;
 
                     BotSettings.Instance.Bots[index] = b;
                 }
