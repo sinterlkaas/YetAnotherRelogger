@@ -436,7 +436,9 @@ namespace YARPLUGIN
                     LoadProfile(data);
                     break;
                 case "MonsterPower":
-                    CharacterSettings.Instance.MonsterPowerLevel = Convert.ToInt32(data.Trim());
+                    var powerlevel = Convert.ToInt32(data.Trim());
+                    if (powerlevel >= 0)
+                    CharacterSettings.Instance.MonsterPowerLevel = powerlevel;
                     break;
                 case "ForceEnableAll":
                     ForceEnableAllPlugins();
