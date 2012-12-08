@@ -10,14 +10,34 @@ namespace YetAnotherRelogger.Forms.Wizard
 {
     public partial class ProfileSchedule : UserControl
     {
+        private WizardMain WM;
         public BindingList<Profile> Profiles { get; set; }
         public ProfileSchedule(WizardMain parent)
         {
             WM = parent;
             InitializeComponent();
+
+            var col = new DataGridViewComboBoxColumn
+            {
+                Name = "Monster Power",
+                DataSource = Enum.GetValues(typeof(MonsterPower)),
+                ValueType = typeof(MonsterPower),
+            };
+            dataGridView1.Columns.Add(col);
+
             dataGridView1.CellClick += new DataGridViewCellEventHandler(dataGridView1_CellClick);
+            dataGridView1.CellValueChanged += new DataGridViewCellEventHandler(dataGridView1_CellValueChanged);
         }
-        private WizardMain WM;
+
+        void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            if (dataGridView1.Columns[e.ColumnIndex].Name.Equals("Monster Power"))
+            {
+                Profiles[e.RowIndex].MonsterPowerLevel = (MonsterPower)dataGridView1.Rows[e.RowIndex].Cells["Monster Power"].Value;
+            }
+        }
 
         void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -27,15 +47,19 @@ namespace YetAnotherRelogger.Forms.Wizard
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     //dataGridView1.Rows.Add(Path.GetFileName(ofd.FileName), ofd.FileName, 0, 0);
-                    var p = new Profile();
-                    p.Location = ofd.FileName;
-                    p.Name = Path.GetFileName(ofd.FileName);
-                    p.Runs = 0;
-                    p.Minutes = 0;
+                    var p = new Profile
+                                {
+                                    Location = ofd.FileName, 
+                                    Name = Path.GetFileName(ofd.FileName), 
+                                    Runs = 0, 
+                                    Minutes = 0,
+                                    MonsterPowerLevel = MonsterPower.Disabled
+                                };
                     dataGridView1.DataSource = null;
                     Profiles.Add(p);
                     dataGridView1.DataSource = Profiles;
                     dataGridView1.Columns["isDone"].Visible = false;
+                    UpdateGridview();
                 }
             }
         }
@@ -57,11 +81,7 @@ namespace YetAnotherRelogger.Forms.Wizard
             if (this.Visible)
             {
                 WM.NextStep("Profile Settings");
-                if (Profiles == null)
-                    Profiles = new BindingList<Profile>();
-                dataGridView1.DataSource = Profiles;
-                dataGridView1.ReadOnly = false;
-                dataGridView1.Columns["isDone"].Visible = false;
+                UpdateGridview();
             }
         }
 
@@ -100,6 +120,24 @@ namespace YetAnotherRelogger.Forms.Wizard
         public bool ValidateInput()
         {
             return true;
+        }
+        public void UpdateGridview()
+        {
+            if (Profiles == null)
+                Profiles = new BindingList<Profile>();
+
+            dataGridView1.DataSource = Profiles;
+            dataGridView1.Refresh();
+            dataGridView1.ReadOnly = false;
+            dataGridView1.Columns["isDone"].Visible = false;
+            dataGridView1.Columns["MonsterPowerLevel"].Visible = false;
+
+            // MonsterPowerLevel
+            for (int i = 0; i < Profiles.Count; i++)
+            {
+                var pl = Profiles[i].MonsterPowerLevel;
+                dataGridView1.Rows[i].Cells["Monster Power"].Value = pl;
+            }
         }
     }
 }

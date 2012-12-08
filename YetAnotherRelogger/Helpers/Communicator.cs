@@ -231,7 +231,7 @@ namespace YetAnotherRelogger.Helpers
                             Send("Roger!");
                             break;
                         case "NewMonsterPowerLevel":
-                            Send("MonsterPower " + b.ProfileSchedule.Current.MonsterPower);
+                            Send("MonsterPower " + (int)b.ProfileSchedule.Current.MonsterPowerLevel);
                             break;
                         // Unknown command reply
                         default:

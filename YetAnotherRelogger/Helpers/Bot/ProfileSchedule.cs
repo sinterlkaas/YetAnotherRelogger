@@ -85,13 +85,29 @@ namespace YetAnotherRelogger.Helpers.Bot
     {
         public Profile()
         {
-            MonsterPower = -1;
+            MonsterPowerLevel = MonsterPower.Disabled;
         }
         public string Name { get; set; }
         public string Location { get; set; }
         public int Runs { get; set; }
         public int Minutes { get; set; }
-        public int MonsterPower { get; set; }
+        public MonsterPower MonsterPowerLevel { get; set; }
         [XmlIgnore] public bool IsDone { get; set; }
+    }
+
+    public enum MonsterPower
+    {
+        Disabled = -1,
+        Level0,
+        Level1,
+        Level2,
+        Level3,
+        Level4,
+        Level5,
+        Level6,
+        Level7,
+        Level8,
+        Level9,
+        Level10,
     }
 }
