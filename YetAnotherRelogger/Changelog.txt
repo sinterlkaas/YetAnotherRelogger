@@ -1,4 +1,12 @@
 -----------------------
+* Version 0.1.9 BETA
+- Fixed diablo region selection when using multiple diablos on different regions and languages
+- Fixed Random profile schedule not always selection the right profile
+- Fixed BuddyAuth Session killer
+- Added Monsterpower selection in profile schedule
+- Added Advanced settings to launch diablo as a different windows user
+  * Remove window frame wont be working anymore when using this
+-----------------------
 * Version 0.1.8 BETA
 - Added Hotkeys
 - Changed Log file extension from .log to .txt to match Demonbuddy logging
