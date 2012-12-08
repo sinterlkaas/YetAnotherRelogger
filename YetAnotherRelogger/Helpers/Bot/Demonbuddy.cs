@@ -75,6 +75,13 @@ namespace YetAnotherRelogger.Helpers.Bot
         {
             get
             {
+                // If diablo is no longer running close db and return false
+                if (Parent.Diablo.IsRunning)
+                {
+                    Parent.Demonbuddy.Stop(true);
+                    return false;
+                }
+
                 if ((!Parent.AntiIdle.IsInitialized && General.DateSubtract(Parent.AntiIdle.InitTime) > 180) || !IsRunning)
                 {
                     Parent.AntiIdle.FailedInitCount++;
@@ -126,7 +133,8 @@ namespace YetAnotherRelogger.Helpers.Bot
                 Logger.Instance.Write("File not found: {0}", Location);
                 return;
             }
-            while (Parent.IsStarted)
+
+            while (Parent.IsStarted && Parent.Diablo.IsRunning)
             {
                 // Get Last login time and kill old session
                 if (GetLastLoginTime) BuddyAuth.Instance.KillSession(Parent);
@@ -262,8 +270,8 @@ namespace YetAnotherRelogger.Helpers.Bot
                 // We are ready to go
                 Logger.Instance.Write(Parent, "Demonbuddy:{0}: Initialized! We are ready to go", Proc.Id);
                 Parent.AntiIdle.FailedInitCount = 0; // only reset counter
-                break; 
-            }
+                break;
+            } // while (Parent.IsStarted && Parent.Diablo.IsRunning)
         }
 
         private bool FindMainWindow()

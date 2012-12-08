@@ -83,7 +83,8 @@ namespace YetAnotherRelogger.Forms.Wizard
 
             _ucDemonbuddy.textBox4.Text = bot.Demonbuddy.Location;
             _ucDemonbuddy.textBox3.Text = bot.Demonbuddy.Key;
-            _ucDemonbuddy.comboBox1.SelectedItem = bot.Demonbuddy.CombatRoutine;
+            
+            _ucDemonbuddy.comboBox1.Text = bot.Demonbuddy.CombatRoutine;
             _ucDemonbuddy.checkBox1.Checked = bot.Demonbuddy.NoFlash;
             _ucDemonbuddy.checkBox2.Checked = bot.Demonbuddy.AutoUpdate;
             _ucDemonbuddy.checkBox3.Checked = bot.Demonbuddy.NoUpdate;
@@ -194,7 +195,7 @@ namespace YetAnotherRelogger.Forms.Wizard
 
                 db.Location = _ucDemonbuddy.textBox4.Text;
                 db.Key = _ucDemonbuddy.textBox3.Text;
-                db.CombatRoutine = _ucDemonbuddy.comboBox1.SelectedItem.ToString();
+                db.CombatRoutine = _ucDemonbuddy.comboBox1.SelectedItem != null ? _ucDemonbuddy.comboBox1.SelectedItem.ToString() : _ucDemonbuddy.comboBox1.Text ;
                 db.NoFlash = _ucDemonbuddy.checkBox1.Checked;
                 db.AutoUpdate = _ucDemonbuddy.checkBox2.Checked;
                 db.NoUpdate = _ucDemonbuddy.checkBox3.Checked;

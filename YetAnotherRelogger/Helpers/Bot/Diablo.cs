@@ -137,7 +137,9 @@ namespace YetAnotherRelogger.Helpers.Bot
             }
 
             Parent.Status = "Prepare Diablo"; // Update Status
-            
+
+            General.AgentKiller(); // Kill all Agent.exe processes
+
             // Prepare D3 for launch
             var agentDBPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\Battle.net\Agent\agent.db";
             if (File.Exists(agentDBPath))
@@ -153,46 +155,11 @@ namespace YetAnotherRelogger.Helpers.Bot
                 }
             }
 
-            var imp = new Impersonator();
-            if (Parent.UseWindowsUser)
-                imp.Impersonate(Parent.WindowsUserName,"localhost",Parent.WindowsUserPassword);
-
             // Copy D3Prefs
-            var currentprefs = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\Diablo III\D3Prefs.txt";
-            if (File.Exists(Parent.D3PrefsLocation) && Directory.Exists(Path.GetDirectoryName(currentprefs)))
-            {
-                Logger.Instance.Write("Copy custom D3Prefs file to: {0}", currentprefs);
-                try
-                {
-                    File.Copy(Parent.D3PrefsLocation, currentprefs, true);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Write("Failed to copy d3prefs file: {0}", ex);
-                    
-                }
-            }
-            if (imp != null)
-                imp.Dispose();
+            if (Parent.D3PrefsLocation.Length > 0)
+                D3Prefs();
 
-            var defaultprefs = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments) + @"\Diablo III\D3Prefs.txt";
-            if (File.Exists(Parent.D3PrefsLocation) && Directory.Exists(Path.GetDirectoryName(defaultprefs)))
-            {
-                Logger.Instance.Write("Copy custom D3Prefs file to: {0}", defaultprefs);
-                try
-                {
-                    File.Copy(Parent.D3PrefsLocation, defaultprefs, true);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Write("Failed to copy d3prefs file: {0}", ex);
-
-                }
-            }
-
-
-            General.AgentKiller(); // Kill all Agent.exe processes
-
+            // Registry Changes
             RegistryClass.ChangeLocale(Parent.Diablo.Language); // change language
             RegistryClass.ChangeRegion(Parent.Diablo.Region); // change region
 
@@ -427,7 +394,7 @@ namespace YetAnotherRelogger.Helpers.Bot
             };
             Logger.Instance.Write(Parent, "Starting InnerSpace: {0}", Settings.Default.ISBoxerPath);
             Logger.Instance.Write(Parent, "With arguments: {0}", isboxer.StartInfo.Arguments);
-            isboxer.StartInfo = UserAccount.ImpersonateStartInfo(isboxer.StartInfo, Parent);
+            //isboxer.StartInfo = UserAccount.ImpersonateStartInfo(isboxer.StartInfo, Parent);
             isboxer.Start();
 
             
@@ -461,6 +428,54 @@ namespace YetAnotherRelogger.Helpers.Bot
 
             Logger.Instance.Write(Parent, "Failed to find new Diablo III");
             Parent.Stop();
+        }
+        private void D3Prefs()
+        {
+            var imp = new Impersonator();
+            if (Parent.UseWindowsUser)
+                imp.Impersonate(Parent.WindowsUserName, "localhost", Parent.WindowsUserPassword);
+            // Copy D3Prefs
+            Logger.Instance.Write("Replacing D3Prefs for user: {0}", Environment.UserName);
+            var currentprefs = Environment.GetFolderPath(Environment.SpecialFolder.Personal) +
+                               @"\Diablo III\D3Prefs.txt";
+            if (Directory.Exists(Path.GetDirectoryName(currentprefs)))
+            {
+                Logger.Instance.Write("Copy custom D3Prefs file to: {0}", currentprefs);
+                try
+                {
+                    File.Copy(Parent.D3PrefsLocation, currentprefs, true);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.Write("Failed to copy D3Prefs file: {0}", ex);
+                }
+            }
+            else
+                Logger.Instance.Write("D3Prefs Failed: Path to \"{0}\" does not exist!", currentprefs);
+            if (imp != null)
+                imp.Dispose();
+
+
+            // Also replace Default User D3Prefs
+            var defaultprefs =
+                Regex.Match(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                            string.Format(@"(.+)\\{0}.*", Environment.UserName)).Groups[1].Value;
+            if (Directory.Exists(defaultprefs + "\\Default"))
+                defaultprefs += "\\Default";
+            else if (Directory.Exists(defaultprefs + "\\Default User"))
+                defaultprefs += "\\Default User";
+            else
+                return;
+
+            Logger.Instance.Write("Copy custom D3Prefs file to: {0}", defaultprefs);
+            try
+            {
+                File.Copy(Parent.D3PrefsLocation, defaultprefs, true);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Write("Failed to copy d3prefs file: {0}", ex);
+            }
         }
 
         public void Stop()
