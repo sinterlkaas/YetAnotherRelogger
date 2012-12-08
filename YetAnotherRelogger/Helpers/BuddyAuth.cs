@@ -79,7 +79,7 @@ namespace YetAnotherRelogger.Helpers
             public DateTime time;
         }
 
-        public List<Session> GetSessions(DateTime logintime)
+        public List<Session> GetSessions()
         {
             var sessions = new List<Session>();
 
@@ -116,8 +116,8 @@ namespace YetAnotherRelogger.Helpers
                 var logintime = bot.Demonbuddy.LoginTime;
                 _webClient.Headers["Referer"] = "http://buddyauth.com/User/Sessions";
                 var data = new NameValueCollection();
-                var match = GetSessions(logintime)
-                    .Where(i => logintime.Subtract(i.time).TotalSeconds <= 5)
+                var match = GetSessions()
+                    .Where(i => logintime.Subtract(i.time).TotalSeconds < 16 && logintime.Subtract(i.time).TotalSeconds > -16)
                     .OrderBy(i => logintime.Subtract(i.time).TotalSeconds).FirstOrDefault();
 
                 if (match.id == 0)

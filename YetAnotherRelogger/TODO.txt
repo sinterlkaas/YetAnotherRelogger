@@ -1,7 +1,7 @@
-Add Support for multiple windows users
 Add Allowed IP / Hosts check
 Add CPU/GPU/RAM Stats on mainform
 Add dph xph gph Stats to mainform botlist
-Add monsterpower selection in profile schedule
 Add option to add Registry identity for multiple launch on D3
+Add Save and Load Schedule
+Add Duplicate a bot
 Make a plugin compatibility format

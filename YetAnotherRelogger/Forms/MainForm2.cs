@@ -205,6 +205,11 @@ namespace YetAnotherRelogger.Forms
             dataGridView1.Columns["profileSchedule"].Visible = false;
             dataGridView1.Columns["AntiIdle"].Visible = false;
             dataGridView1.Columns["StartTime"].Visible = false;
+            dataGridView1.Columns["UseWindowsUser"].Visible = false;
+            dataGridView1.Columns["CreateWindowsUser"].Visible = false;
+            dataGridView1.Columns["WindowsUserName"].Visible = false;
+            dataGridView1.Columns["WindowsUserPassword"].Visible = false;
+            dataGridView1.Columns["D3PrefsLocation"].Visible = false;
 
             dataGridView1.Columns["isEnabled"].DisplayIndex = 1;
             dataGridView1.Columns["isEnabled"].HeaderText = "Enabled";

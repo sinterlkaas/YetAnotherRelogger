@@ -466,15 +466,18 @@ namespace YetAnotherRelogger.Helpers.Bot
                 defaultprefs += "\\Default User";
             else
                 return;
-
-            Logger.Instance.Write("Copy custom D3Prefs file to: {0}", defaultprefs);
-            try
+            defaultprefs += @"\Diablo III\D3Prefs.txt";
+            if (Directory.Exists(Path.GetDirectoryName(defaultprefs)))
             {
-                File.Copy(Parent.D3PrefsLocation, defaultprefs, true);
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.Write("Failed to copy d3prefs file: {0}", ex);
+                Logger.Instance.Write("Copy custom D3Prefs file to: {0}", defaultprefs);
+                try
+                {
+                    File.Copy(Parent.D3PrefsLocation, defaultprefs, true);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.Write("Failed to copy d3prefs file: {0}", ex);
+                }
             }
         }
 

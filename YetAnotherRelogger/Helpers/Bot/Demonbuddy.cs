@@ -76,7 +76,7 @@ namespace YetAnotherRelogger.Helpers.Bot
             get
             {
                 // If diablo is no longer running close db and return false
-                if (Parent.Diablo.IsRunning)
+                if (!Parent.Diablo.IsRunning)
                 {
                     Parent.Demonbuddy.Stop(true);
                     return false;
@@ -383,18 +383,31 @@ namespace YetAnotherRelogger.Helpers.Bot
                         using (var fs = new FileStream(logfile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
                             var reader = new StreamReader(fs);
+                            var time = new TimeSpan();
+                            bool Logging = false;
                             while (!reader.EndOfStream)
                             {
                                 var line = reader.ReadLine();
                                 if (line == null) continue;
-                                var m = new Regex(@"^\[([0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}) .\] Logging in\.\.\.$", RegexOptions.Compiled).Match(line);
-                                if (m.Success)
+
+                                if (Logging && line.Contains("Attached to Diablo III with pid"))
                                 {
-                                    LoginTime = DateTime.Parse(string.Format("{0:yyyy-MM-dd} {1}", starttime.ToUniversalTime(), TimeSpan.Parse(m.Groups[1].Value)));
-                                    Debug.WriteLine("Found login time: {0}", LoginTime);
+                                    LoginTime =
+                                        DateTime.Parse(string.Format("{0:yyyy-MM-dd} {1}",
+                                                                     starttime.ToUniversalTime(),
+                                                                     time));
+                                    Logger.Instance.Write("Found login time: {0}", LoginTime);
                                     return true;
                                 }
-                                Thread.Sleep(200); // Be nice for CPU
+                                var m = new Regex(@"^\[(.+) .\] Logging in\.\.\.$",
+                                              RegexOptions.Compiled).Match(line);
+                                if (m.Success)
+                                {
+                                    time = TimeSpan.Parse(m.Groups[1].Value);
+                                    Logging = true;
+                                }
+
+                                Thread.Sleep(100); // Be nice for CPU
                             }
                             Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to find login time", Proc.Id);
                             return false;
