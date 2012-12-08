@@ -19,7 +19,8 @@ namespace YetAnotherRelogger.Helpers.Bot
             get { return _proc; }
             set
             {
-                Parent.DemonbuddyPid = value.Id.ToString();
+                if (value != null)
+                    Parent.DemonbuddyPid = value.Id.ToString();
                 _proc = value;
             }
         }

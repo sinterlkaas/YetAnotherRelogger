@@ -156,7 +156,7 @@ namespace YetAnotherRelogger.Helpers.Bot
             }
 
             // Copy D3Prefs
-            if (Parent.D3PrefsLocation.Length > 0)
+            if (!string.IsNullOrEmpty(Parent.D3PrefsLocation))
                 D3Prefs();
 
             // Registry Changes
