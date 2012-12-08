@@ -231,6 +231,7 @@ namespace YetAnotherRelogger.Helpers
                             Send("Roger!");
                             break;
                         case "NewMonsterPowerLevel":
+                            Logger.Instance.Write("Sending MonsterPowerLevel: {0}", (int)b.ProfileSchedule.Current.MonsterPowerLevel);
                             Send("MonsterPower " + (int)b.ProfileSchedule.Current.MonsterPowerLevel);
                             break;
                         // Unknown command reply

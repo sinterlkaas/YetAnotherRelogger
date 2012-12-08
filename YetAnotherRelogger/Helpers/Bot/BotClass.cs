@@ -8,7 +8,6 @@ namespace YetAnotherRelogger.Helpers.Bot
 {
     public class BotClass : INotifyPropertyChanged
     {
-    
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
@@ -90,6 +89,10 @@ namespace YetAnotherRelogger.Helpers.Bot
 
         // D3Prefs
         public string D3PrefsLocation { get; set; }
+
+        [XmlIgnore] public string _demonbuddyPid;
+        [XmlIgnore] public string DemonbuddyPid { get { return _demonbuddyPid; } set { SetField(ref _demonbuddyPid, value, "DemonbuddyPid"); } }
+        
 
         public void Stop()
         {

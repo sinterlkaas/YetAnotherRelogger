@@ -1,4 +1,4 @@
-﻿// VERSION: 0.1.9.1
+﻿// VERSION: 0.1.9.2
 /* Changelog:
  * VERSION: 0.1.9.1
  * Added: Monsterpower
@@ -59,7 +59,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 1, 9, 1); } }
+        public Version Version { get { return new Version(0, 1, 9, 2); } }
 
         private const bool _debug = true;
 
@@ -437,8 +437,9 @@ namespace YARPLUGIN
                     break;
                 case "MonsterPower":
                     var powerlevel = Convert.ToInt32(data.Trim());
+                    Log("Recieved MonsterPowerLevel: {0}", powerlevel);
                     if (powerlevel >= 0)
-                    CharacterSettings.Instance.MonsterPowerLevel = powerlevel;
+                        CharacterSettings.Instance.MonsterPowerLevel = powerlevel;
                     break;
                 case "ForceEnableAll":
                     ForceEnableAllPlugins();

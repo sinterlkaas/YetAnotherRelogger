@@ -73,6 +73,7 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.labelStats = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -379,11 +380,20 @@
             this.TrayIcon.Text = "Yet Another Relogger";
             this.TrayIcon.Visible = true;
             // 
+            // labelStats
+            // 
+            this.labelStats.AutoSize = true;
+            this.labelStats.Location = new System.Drawing.Point(25, 448);
+            this.labelStats.Name = "labelStats";
+            this.labelStats.Size = new System.Drawing.Size(0, 13);
+            this.labelStats.TabIndex = 2;
+            // 
             // MainForm2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(714, 498);
+            this.Controls.Add(this.labelStats);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.button5);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
@@ -407,6 +417,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -441,5 +452,6 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Panel SettingsPanel;
         private System.Windows.Forms.PictureBox pictureBox2;
+        public System.Windows.Forms.Label labelStats;
     }
 }

@@ -13,7 +13,17 @@ namespace YetAnotherRelogger.Helpers.Bot
     {
         [XmlIgnore] public BotClass Parent { get; set; }
 
-        [XmlIgnore] public Process Proc;
+        [XmlIgnore] private Process _proc;
+        [XmlIgnore] public Process Proc
+        {
+            get { return _proc; }
+            set
+            {
+                Parent.DemonbuddyPid = value.Id.ToString();
+                _proc = value;
+            }
+        }
+
         [XmlIgnore] private bool _isStopped;
         [XmlIgnore] public bool IsRunning { get {  return (Proc != null && !Proc.HasExited && !_isStopped); } }
 

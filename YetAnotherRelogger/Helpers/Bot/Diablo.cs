@@ -436,7 +436,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                 imp.Impersonate(Parent.WindowsUserName, "localhost", Parent.WindowsUserPassword);
             // Copy D3Prefs
             Logger.Instance.Write("Replacing D3Prefs for user: {0}", Environment.UserName);
-            var currentprefs = Environment.GetFolderPath(Environment.SpecialFolder.Personal) +
+            var currentprefs = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
                                @"\Diablo III\D3Prefs.txt";
             if (Directory.Exists(Path.GetDirectoryName(currentprefs)))
             {
@@ -479,6 +479,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                     Logger.Instance.Write("Failed to copy d3prefs file: {0}", ex);
                 }
             }
+            Thread.Sleep(1000);
         }
 
         public void Stop()
