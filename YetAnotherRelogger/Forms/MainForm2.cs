@@ -263,8 +263,11 @@ namespace YetAnotherRelogger.Forms
 
         private void button5_Click(object sender, EventArgs e)
         {
-            bClose = true;
-            this.Close();
+            if (MessageBox.Show(this, "Are you sure you want to close Yet Another Relogger?", "Close Yet Another Relogger?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                bClose = true;
+                this.Close();
+            }
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)

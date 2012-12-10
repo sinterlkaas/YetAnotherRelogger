@@ -1,4 +1,9 @@
 -----------------------
+* Version 0.2.0.0 BETA
+- Attempt to fix Foreground checker
+- Fixed saved Hotkeys not loading
+- Added new max login attempt system (15 mins, 30 mins, 45 mins, 60 mins, 60 mins, repeat every hour)
+-----------------------
 * Version 0.1.9 BETA
 - Fixed diablo region selection when using multiple diablos on different regions and languages
 - Fixed Random profile schedule not always selection the right profile
