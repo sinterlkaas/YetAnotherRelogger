@@ -174,6 +174,7 @@ namespace YetAnotherRelogger.Helpers
                             b.AntiIdle.LastStats = DateTime.Now;
                             b.AntiIdle.State = IdleState.CheckIdle;
                             b.AntiIdle.IsInitialized = true;
+                            b.AntiIdle.InitAttempts = 0;
                             Send("Roger!");
                             break;
                         case "GameLeft":

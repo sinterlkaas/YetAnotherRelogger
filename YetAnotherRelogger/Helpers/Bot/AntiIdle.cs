@@ -20,6 +20,7 @@ namespace YetAnotherRelogger.Helpers.Bot
         public int FixAttempts;
         public int FailedInitCount;
         public DateTime InitTime;
+        public int InitAttempts;
 
         public int LastCoinage;
         public DateTime LastCoinageIncrease;

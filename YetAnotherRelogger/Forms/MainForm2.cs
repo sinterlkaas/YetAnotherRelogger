@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using YetAnotherRelogger.Helpers;
 using YetAnotherRelogger.Helpers.Hotkeys;
@@ -210,6 +211,7 @@ namespace YetAnotherRelogger.Forms
             dataGridView1.Columns["WindowsUserName"].Visible = false;
             dataGridView1.Columns["WindowsUserPassword"].Visible = false;
             dataGridView1.Columns["D3PrefsLocation"].Visible = false;
+            dataGridView1.Columns["IsStandby"].Visible = false;
 
             dataGridView1.Columns["isEnabled"].DisplayIndex = 1;
             dataGridView1.Columns["isEnabled"].HeaderText = "Enabled";
@@ -234,18 +236,12 @@ namespace YetAnotherRelogger.Forms
         }
 
         private void button1_Click(object sender, EventArgs e)
-        { // Start All
-            foreach (DataGridViewRow row in dataGridView1.Rows)
+        {
+            // Start All
+            foreach (var row in dataGridView1.Rows.Cast<DataGridViewRow>().Where(row => (bool) row.Cells["isEnabled"].Value))
             {
-                if (!((bool) row.Cells["isEnabled"].Value)) continue;
-
-                BotSettings.Instance.Bots[row.Index].AntiIdle.Reset(freshstart: true);
-                BotSettings.Instance.Bots[row.Index].Week.ForceStart = checkBox1.Checked;
-                BotSettings.Instance.Bots[row.Index].IsStarted = true;
-                if (checkBox1.Checked) Logger.Instance.Write(BotSettings.Instance.Bots[row.Index], "Forced to start! ");
-                BotSettings.Instance.Bots[row.Index].Status = (checkBox1.Checked ? "Forced start": "Started");
+                BotSettings.Instance.Bots[row.Index].Start(force:checkBox1.Checked);
             }
-
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -292,8 +288,7 @@ namespace YetAnotherRelogger.Forms
 
         private void startToolStripMenuItem_Click(object sender, EventArgs e)
         {// Start
-            BotSettings.Instance.Bots[dataGridView1.CurrentRow.Index].AntiIdle.Reset(freshstart: true);
-            BotSettings.Instance.Bots[dataGridView1.CurrentRow.Index].IsStarted = true;
+            BotSettings.Instance.Bots[dataGridView1.CurrentRow.Index].Start();
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
@@ -323,8 +318,7 @@ namespace YetAnotherRelogger.Forms
         }
         private void forceStartToolStripMenuItem_Click(object sender, EventArgs e)
         { // Force Start single bot
-            BotSettings.Instance.Bots[dataGridView1.CurrentRow.Index].Week.ForceStart = true;
-            BotSettings.Instance.Bots[dataGridView1.CurrentRow.Index].IsStarted = true;
+            BotSettings.Instance.Bots[dataGridView1.CurrentRow.Index].Start(true);
         }
         #region Settings Tree
 

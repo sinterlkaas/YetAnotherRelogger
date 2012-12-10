@@ -123,7 +123,7 @@ namespace YetAnotherRelogger
                             bot.StartTime = DateTime.Now;
                             StartBoth(bot);
                         }
-                        else if (bot.IsRunning)
+                        else if (!bot.IsStandby && bot.IsRunning)
                         {
                             // Check if process is responding
                             bot.Diablo.CrashCheck();
@@ -170,7 +170,7 @@ namespace YetAnotherRelogger
                 } // try
                 catch (InvalidOperationException iox)
                 { // Catch error when bot is edited while in a loop
-                    Logger.Instance.WriteGlobal(iox.Message);
+                    //Logger.Instance.WriteGlobal(iox.Message);
                     continue;
                 }
                 catch (Exception ex)

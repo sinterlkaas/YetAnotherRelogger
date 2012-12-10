@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using YetAnotherRelogger.Helpers.Tools;
 
 
 namespace YetAnotherRelogger.Helpers.Bot
@@ -74,6 +75,29 @@ namespace YetAnotherRelogger.Helpers.Bot
         [XmlIgnore] public bool IsStarted { get; set; }
         [XmlIgnore] public bool IsRunning { get; set; }
 
+        // Standby to try again at a later moment
+        [XmlIgnore] private bool _isStandby;
+        [XmlIgnore] public bool IsStandby
+        {
+            get
+            {
+                // Increase retry count by 15 mins with a max of 1 hour
+                if (_isStandby && General.DateSubtract(_standbyTime) > 900 * (AntiIdle.InitAttempts > 4 ? 4 : AntiIdle.InitAttempts))
+                {
+                    _isStandby = false;
+                    _diablo.Start();
+                    _demonbuddy.Start();
+                }
+                return _isStandby;
+            }
+            private set
+            {
+                _standbyTime = DateTime.Now;
+                _isStandby = value;
+            }
+        }
+        [XmlIgnore] private DateTime _standbyTime;
+
         [XmlIgnore] private string _status;
         [XmlIgnore] public string Status { get { return _status; } set { SetField(ref _status, value, "Status"); } }
 
@@ -90,9 +114,19 @@ namespace YetAnotherRelogger.Helpers.Bot
         // D3Prefs
         public string D3PrefsLocation { get; set; }
 
-        [XmlIgnore] public string _demonbuddyPid;
+        [XmlIgnore] private string _demonbuddyPid;
         [XmlIgnore] public string DemonbuddyPid { get { return _demonbuddyPid; } set { SetField(ref _demonbuddyPid, value, "DemonbuddyPid"); } }
         
+        public void Start(bool force = false)
+        {
+            AntiIdle.Reset(freshstart: true);
+            IsStarted = true;
+            IsStandby = false;
+            Week.ForceStart = force;
+            Status = (force ? "Forced start" : "Started");
+            if (force)
+                Logger.Instance.Write(this, "Forced to start! ");
+        }
 
         public void Stop()
         {
@@ -100,6 +134,16 @@ namespace YetAnotherRelogger.Helpers.Bot
             Status = "Stopped";
             IsStarted = false;
             IsRunning = false;
+            IsStandby = false;
+            _diablo.Stop();
+            _demonbuddy.Stop();
+        }
+
+        public void Standby()
+        {
+            Logger.Instance.Write(this, "Standby!");
+            Status = "Standby";
+            IsStandby = true;
             _diablo.Stop();
             _demonbuddy.Stop();
         }

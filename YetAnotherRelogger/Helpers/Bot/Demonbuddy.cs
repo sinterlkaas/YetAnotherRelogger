@@ -61,7 +61,6 @@ namespace YetAnotherRelogger.Helpers.Bot
                 return intProcessorAffinity;
             }
         }
-        
 
         // Position
         public bool ManualPosSize { get; set; }
@@ -96,10 +95,11 @@ namespace YetAnotherRelogger.Helpers.Bot
                 if ((!Parent.AntiIdle.IsInitialized && General.DateSubtract(Parent.AntiIdle.InitTime) > 180) || !IsRunning)
                 {
                     Parent.AntiIdle.FailedInitCount++;
-                    if (Parent.AntiIdle.FailedInitCount > 3)
+                    if (Parent.AntiIdle.FailedInitCount >= (Parent.AntiIdle.InitAttempts > 0 ? 1 : 3))
                     {
+                        Parent.AntiIdle.InitAttempts++;
                         Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to initialize more than 3 times", Parent.Demonbuddy.Proc.Id);
-                        Parent.Stop();
+                        Parent.Standby();
                     }
                     else
                     {
@@ -111,6 +111,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                 return Parent.AntiIdle.IsInitialized;
             }
         }
+
         private DateTime _lastRepsonse;
         public void CrashCheck()
         {
