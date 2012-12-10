@@ -12,8 +12,7 @@ namespace YetAnotherRelogger.Helpers.Bot
     public class DemonbuddyClass
     {
         [XmlIgnore] public BotClass Parent { get; set; }
-
-        [XmlIgnore] private Process _proc;
+[XmlIgnore] private Process _proc;
         [XmlIgnore] public Process Proc
         {
             get { return _proc; }
@@ -419,7 +418,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                                     Logging = true;
                                 }
 
-                                Thread.Sleep(100); // Be nice for CPU
+                                Thread.Sleep(5); // Be nice for CPU
                             }
                             Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to find login time", Proc.Id);
                             return false;
