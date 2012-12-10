@@ -143,7 +143,11 @@ namespace YetAnotherRelogger.Helpers
                         catch (WebException wex)
                         {
                             var code = ((HttpWebResponse)wex.Response).StatusCode;
-                            if (code != HttpStatusCode.InternalServerError || code != HttpStatusCode.RequestTimeout)
+                            if (code != HttpStatusCode.InternalServerError &&
+                                code != HttpStatusCode.BadGateway &&
+                                code != HttpStatusCode.ServiceUnavailable &&
+                                code != HttpStatusCode.GatewayTimeout &&
+                                code != HttpStatusCode.RequestTimeout)
                             {
                                 Logger.Instance.Write(bot, "Failed: {0}", wex.Message);
                                 return;
