@@ -68,23 +68,43 @@ namespace YetAnotherRelogger
                             _lastDiablo = bot.Diablo.MainWindowHandle;
                             _lastDemonbuddy = bot.Demonbuddy.MainWindowHandle;
                             Logger.Instance.WriteGlobal("<{0}> Diablo:{1}: has focus. Bring attached Demonbuddy to front", bot.Name, bot.Diablo.Proc.Id);
+
                             // Bring demonbuddy to front
                             WinAPI.ShowWindow(_lastDemonbuddy, WinAPI.WindowShowStyle.ShowNormal);
                             WinAPI.SetForegroundWindow(_lastDemonbuddy);
                             var timeout = DateTime.Now;
                             while (WinAPI.GetForegroundWindow() != _lastDemonbuddy)
                             {
-                                // if
-                                if (General.DateSubtract(timeout) > 3)
+                                if (General.DateSubtract(timeout, false) > 500)
                                 {
-                                    Logger.Instance.WriteGlobal("<{0}> Failed to bring Demonbuddy to fron", bot.Name);
+                                    WinAPI.ShowWindow(_lastDemonbuddy, WinAPI.WindowShowStyle.ForceMinimized);
+                                    Thread.Sleep(300);
+                                    WinAPI.ShowWindow(_lastDemonbuddy, WinAPI.WindowShowStyle.ShowNormal);
+                                    Thread.Sleep(300);
+                                    WinAPI.SetForegroundWindow(_lastDemonbuddy);
+                                    if (WinAPI.GetForegroundWindow() != _lastDemonbuddy)
+                                        Logger.Instance.WriteGlobal("<{0}> Failed to bring Demonbuddy to front", bot.Name);
                                     break;
                                 }
-                                Thread.Sleep(100); // Dont hog all cpu resources
+                                Thread.Sleep(100);
                             }
+
                             // Switch back to diablo
                             WinAPI.ShowWindow(_lastDiablo, WinAPI.WindowShowStyle.ShowNormal);
                             WinAPI.SetForegroundWindow(_lastDiablo);
+                            while (WinAPI.GetForegroundWindow() != _lastDiablo)
+                            {
+                                if (General.DateSubtract(timeout, false) > 500)
+                                {
+                                    WinAPI.ShowWindow(_lastDiablo, WinAPI.WindowShowStyle.ForceMinimized);
+                                    Thread.Sleep(300);
+                                    WinAPI.ShowWindow(_lastDiablo, WinAPI.WindowShowStyle.ShowNormal);
+                                    Thread.Sleep(300);
+                                    WinAPI.SetForegroundWindow(_lastDiablo);
+                                    break;
+                                }
+                                Thread.Sleep(100);
+                            }
 
                             // calculate sleeptime
                             var sleep = (int)(Program.Sleeptime - DateTime.Now.Subtract(time).TotalMilliseconds);
