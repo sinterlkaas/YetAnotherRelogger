@@ -40,6 +40,12 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
             {
                 Logger.Instance.WriteGlobal("Register hotkey: {0} - {1}+{2}", hk.Name, hk.Modifier.ToString().Replace(", ", "+"),hk.Key);
                 hk.HookId = _keyboardHook.RegisterHotKey(hk.Modifier, hk.Key);
+
+                foreach (var action in hk.Actions)
+                {
+                    Debug.WriteLine("Initialize Hotkey: {0} {1}", action.Name, action.Version);
+                    ActionContainer.GetAction(action.Name, action.Version).OnInitialize(hk);
+                }
             }
         }
 
