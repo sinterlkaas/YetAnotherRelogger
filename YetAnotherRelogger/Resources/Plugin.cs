@@ -1,4 +1,4 @@
-﻿// VERSION: 0.1.9.2
+﻿// VERSION: 0.2.0.0
 /* Changelog:
  * VERSION: 0.1.9.1
  * Added: Monsterpower
@@ -59,7 +59,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 1, 9, 2); } }
+        public Version Version { get { return new Version(0, 2, 0, 0); } }
 
         private const bool _debug = true;
 

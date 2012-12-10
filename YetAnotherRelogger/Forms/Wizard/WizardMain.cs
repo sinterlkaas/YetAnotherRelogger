@@ -28,7 +28,7 @@ namespace YetAnotherRelogger.Forms.Wizard
         public int FinishCount;
         private int _mainCount;
         private DemonbuddyOptions _ucDemonbuddy;
-        private DiabloOptions _ucDiablo;
+        public DiabloOptions _ucDiablo;
         private WeekSchedule _ucWeekSchedule;
         private ProfileSchedule _ucProfileSchedule;
         private Heroes _ucHeroes;
@@ -75,12 +75,17 @@ namespace YetAnotherRelogger.Forms.Wizard
             // Load data
             _ucDemonbuddy.textBox1.Text = bot.Name;
             _ucDemonbuddy.textBox2.Text = bot.Description;
+
+            // Advanced section
             _ucAdvanced.checkBox2.Checked = bot.CreateWindowsUser;
             _ucAdvanced.checkBox1.Checked = bot.UseWindowsUser;
             _ucAdvanced.textBox1.Text = bot.WindowsUserName;
             _ucAdvanced.maskedTextBox1.Text = bot.WindowsUserPassword;
             _ucAdvanced.textBox3.Text = bot.D3PrefsLocation;
+            _ucAdvanced.checkBox3.Checked = bot.UseDiabloClone;
+            _ucAdvanced.textBox2.Text = bot.DiabloCloneLocation;
 
+            // Demonbuddy
             _ucDemonbuddy.textBox4.Text = bot.Demonbuddy.Location;
             _ucDemonbuddy.textBox3.Text = bot.Demonbuddy.Key;
             
@@ -99,6 +104,7 @@ namespace YetAnotherRelogger.Forms.Wizard
             _ucDemonbuddy.textBox10.Text = bot.Demonbuddy.W.ToString();
             _ucDemonbuddy.textBox11.Text = bot.Demonbuddy.H.ToString();
 
+            // Diablo
             _ucDiablo.textBox3.Text = bot.Diablo.Username;
             _ucDiablo.maskedTextBox1.Text = bot.Diablo.Password;
             _ucDiablo.textBox1.Text = bot.Diablo.Location;
@@ -187,12 +193,17 @@ namespace YetAnotherRelogger.Forms.Wizard
 
                 b.Name = _ucDemonbuddy.textBox1.Text;
                 b.Description = _ucDemonbuddy.textBox2.Text;
+
+                // Advanced
                 b.CreateWindowsUser = _ucAdvanced.checkBox2.Checked;
                 b.UseWindowsUser = _ucAdvanced.checkBox1.Checked;
                 b.WindowsUserName = _ucAdvanced.textBox1.Text;
                 b.WindowsUserPassword = _ucAdvanced.maskedTextBox1.Text;
                 b.D3PrefsLocation = _ucAdvanced.textBox3.Text;
-
+                _ucAdvanced.checkBox3.Checked = bot.UseDiabloClone;
+                _ucAdvanced.textBox2.Text = bot.DiabloCloneLocation;
+                
+                // Demonbuddy
                 db.Location = _ucDemonbuddy.textBox4.Text;
                 db.Key = _ucDemonbuddy.textBox3.Text;
                 db.CombatRoutine = _ucDemonbuddy.comboBox1.SelectedItem != null ? _ucDemonbuddy.comboBox1.SelectedItem.ToString() : _ucDemonbuddy.comboBox1.Text ;
@@ -215,6 +226,7 @@ namespace YetAnotherRelogger.Forms.Wizard
                 int.TryParse(_ucDemonbuddy.textBox11.Text, out result);
                 db.H = result;
 
+                // Diablo
                 d.Username = _ucDiablo.textBox3.Text;
                 d.Password = _ucDiablo.maskedTextBox1.Text;
                 d.Location = _ucDiablo.textBox1.Text;

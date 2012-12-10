@@ -40,5 +40,12 @@ namespace YetAnotherRelogger.Forms.Wizard
             if (ofd.ShowDialog() == DialogResult.OK)
                 textBox3.Text = ofd.FileName;
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var fbd = new FolderBrowserDialog {Description = "Select Diablo III clone location"};
+            if (fbd.ShowDialog() == DialogResult.OK)
+                textBox2.Text = fbd.SelectedPath;
+        }
     }
 }

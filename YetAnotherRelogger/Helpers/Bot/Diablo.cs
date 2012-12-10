@@ -35,6 +35,7 @@ namespace YetAnotherRelogger.Helpers.Bot
         public int W { get; set; }
         public int H { get; set; }
         [XmlIgnore] public Rectangle AutoPos; 
+
         // Remove frame
         public bool NoFrame { get; set; }
 

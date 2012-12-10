@@ -105,14 +105,20 @@ namespace YetAnotherRelogger.Helpers.Bot
         [XmlIgnore] private string _runningtime;
         [XmlIgnore] public string RunningTime { get { return _runningtime; } set { SetField(ref _runningtime, value, "RunningTime"); } }
 
+        #region Advanced Options Variables
         // Windows User
         public bool UseWindowsUser { get; set; }
         public bool CreateWindowsUser { get; set; }
         public string WindowsUserName { get; set; }
         public string WindowsUserPassword { get; set; }
 
+        // Diablo Clone
+        public bool UseDiabloClone { get; set; }
+        public string DiabloCloneLocation { get; set; }
+
         // D3Prefs
         public string D3PrefsLocation { get; set; }
+        #endregion
 
         [XmlIgnore] private string _demonbuddyPid;
         [XmlIgnore] public string DemonbuddyPid { get { return _demonbuddyPid; } set { SetField(ref _demonbuddyPid, value, "DemonbuddyPid"); } }
