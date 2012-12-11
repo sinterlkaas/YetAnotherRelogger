@@ -140,6 +140,7 @@
     <Compile Include="Forms\Wizard\SetAffinity.Designer.cs">
       <DependentUpon>SetAffinity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\DiabloClone.cs" />
     <Compile Include="Helpers\Hotkeys\ActionContainer.cs" />
     <Compile Include="Helpers\Hotkeys\Actions\ResizeCurrent.cs" />
     <Compile Include="Helpers\Hotkeys\Actions\FullScreen.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Helpers\Tools\CookieAwareWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Helpers\Tools\FileListCache.cs" />
     <Compile Include="Helpers\Tools\FindWindow.cs" />
     <Compile Include="Helpers\Tools\Impersonator.cs" />
     <Compile Include="Helpers\Tools\MersenneTwister.cs" />

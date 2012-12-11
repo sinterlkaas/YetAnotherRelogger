@@ -22,6 +22,18 @@ namespace YetAnotherRelogger.Helpers.Bot
         public string Language { get; set; }
         public string Region { get; set; }
         public int Priority { get; set; }
+
+        public string Location2
+        {
+            get
+            {
+                var ret = Parent.UseDiabloClone
+                              ? Path.Combine(Parent.DiabloCloneLocation, Path.GetFileName(Path.GetDirectoryName(Location)), Path.GetFileName(Location))
+                              : Location;
+                Debug.WriteLine("File Location: {0}", ret);
+                return ret;
+            }
+        }
         
         // Isboxer
         public bool UseIsBoxer { get; set; }
@@ -137,6 +149,10 @@ namespace YetAnotherRelogger.Helpers.Bot
                 Thread.Sleep(10000);
             }
 
+            // Check if we need to create a Diablo clone
+            if (Parent.UseDiabloClone)
+                DiabloClone.Create(Parent);
+
             Parent.Status = "Prepare Diablo"; // Update Status
 
             General.AgentKiller(); // Kill all Agent.exe processes
@@ -173,7 +189,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                 try
                 {
                     var arguments = "-launch";
-                    var pi = new ProcessStartInfo(Location, arguments) { WorkingDirectory = Path.GetDirectoryName(Location) };
+                    var pi = new ProcessStartInfo(Location2, arguments) { WorkingDirectory = Path.GetDirectoryName(Location2) };
                     pi = UserAccount.ImpersonateStartInfo(pi, Parent);
                     // Set working directory to executable location
                     Parent.Status = "Starting Diablo"; // Update Status
@@ -331,7 +347,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                                           {
                                               FileName = Settings.Default.D3StarterPath,
                                               WorkingDirectory = Path.GetDirectoryName(Settings.Default.D3StarterPath),
-                                              Arguments = string.Format("\"{0}\" 1", Location),
+                                              Arguments = string.Format("\"{0}\" 1", Location2),
                                               UseShellExecute = false,
                                               RedirectStandardOutput = true,
                                               CreateNoWindow = true,

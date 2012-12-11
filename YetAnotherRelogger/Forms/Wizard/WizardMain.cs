@@ -200,8 +200,8 @@ namespace YetAnotherRelogger.Forms.Wizard
                 b.WindowsUserName = _ucAdvanced.textBox1.Text;
                 b.WindowsUserPassword = _ucAdvanced.maskedTextBox1.Text;
                 b.D3PrefsLocation = _ucAdvanced.textBox3.Text;
-                _ucAdvanced.checkBox3.Checked = bot.UseDiabloClone;
-                _ucAdvanced.textBox2.Text = bot.DiabloCloneLocation;
+                b.UseDiabloClone = _ucAdvanced.checkBox3.Checked;
+                b.DiabloCloneLocation = _ucAdvanced.textBox2.Text;
                 
                 // Demonbuddy
                 db.Location = _ucDemonbuddy.textBox4.Text;
