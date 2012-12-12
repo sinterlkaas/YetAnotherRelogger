@@ -15,6 +15,8 @@ namespace YetAnotherRelogger.Helpers
     {
         [DllImport("kernel32.dll")]
         static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, int dwFlags);
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        static extern bool CreateHardLink(string lpFileName, string lpExistingFileName, IntPtr lpSecurityAttributes);
 
         // Dont these link files / directories 
         private static HashSet<NoLink> _noLinks = new HashSet<NoLink>
@@ -74,8 +76,9 @@ namespace YetAnotherRelogger.Helpers
                             if (!_noLinks.Any(n => General.WildcardMatch(n.Source, p.Path)))
                             {
                                 Logger.Instance.Write(bot, "NewLink: {0} -> {1}", Path.Combine(clonepath,p.Path), Path.Combine(basepath, p.Path));
-                                if (!CreateSymbolicLink( Path.Combine(clonepath,p.Path),  Path.Combine(basepath,p.Path), 1))
-                                    throw new Exception("Failed to create link!");
+                                //if (!CreateSymbolicLink( Path.Combine(clonepath,p.Path),  Path.Combine(basepath,p.Path), 1))
+                                  //  throw new Exception("Failed to create link!");
+                                Directory.CreateDirectory(Path.Combine(clonepath, p.Path));
                             }
                             continue;
                         }
@@ -84,7 +87,7 @@ namespace YetAnotherRelogger.Helpers
                             if (!_noLinks.Any(n => General.WildcardMatch(n.Source, p.Path)))
                             {
                                 Logger.Instance.Write(bot, "NewLink: {0} -> {1}", Path.Combine(clonepath, p.Path), Path.Combine(basepath, p.Path));
-                                if (!CreateSymbolicLink(Path.Combine(clonepath, p.Path), Path.Combine(basepath, p.Path), 0))
+                                if (!CreateHardLink(Path.Combine(clonepath, p.Path), Path.Combine(basepath, p.Path), IntPtr.Zero))
                                     throw new Exception("Failed to create link!");
                             }
                         }
