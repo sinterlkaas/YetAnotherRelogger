@@ -27,10 +27,8 @@ namespace YetAnotherRelogger.Helpers
                 try
                 {
                     var serverStream = new NamedPipeServerStream("YetAnotherRelogger", PipeDirection.InOut, 100, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
-
                     serverStream.WaitForConnection();
-
-                    ThreadPool.QueueUserWorkItem(state =>
+                    /*ThreadPool.QueueUserWorkItem(state =>
                     {
                         using (var pipeClientConnection = (NamedPipeServerStream)state)
                         {
@@ -38,12 +36,14 @@ namespace YetAnotherRelogger.Helpers
                             handleClient.Start();
                         }
                     }, serverStream);
+                    */
+                    var handleClient = new HandleClient(serverStream);
+                    new Thread(handleClient.Start).Start();
                 }
                 catch (Exception ex)
                 {
                     Logger.Instance.WriteGlobal(ex.Message);
                 }
-                Thread.Sleep(Program.Sleeptime);
             }
         }
 
@@ -64,8 +64,10 @@ namespace YetAnotherRelogger.Helpers
             {
                 var isXml = false;
                 var xml = string.Empty;
+                var duration = DateTime.Now;
                 try
                 {
+                    Debug.WriteLine("PipeConnection [{0}]: Connected:{1}", _stream.GetHashCode(), _stream.IsConnected);
                     while (_stream.IsConnected)
                     {
                         var temp = _reader.ReadLine();
@@ -76,6 +78,7 @@ namespace YetAnotherRelogger.Helpers
                         }
                         if (temp.Equals("END"))
                         {
+                            Debug.WriteLine("PipeConnection [{0}]: Duration:{1} XML:{2}", _stream.GetHashCode(), General.DateSubtract(duration, false), xml);
                             HandleXml(xml);
                         }
 
@@ -90,14 +93,17 @@ namespace YetAnotherRelogger.Helpers
                             xml += temp + "\n";
                         }
                         else
+                        {
+                            Debug.WriteLine("PipeConnection [{0}]: Duration:{1} Data:{2}", _stream.GetHashCode(), General.DateSubtract(duration, false), temp);
                             HandleMsg(temp);
-                        Thread.Sleep(Program.Sleeptime);
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
+                Debug.WriteLine("PipeConnection [{0}]: Connected:{1} Duration:{2}ms", _stream.GetHashCode(), _stream.IsConnected, General.DateSubtract(duration, false));
                 Dispose();
             }
 

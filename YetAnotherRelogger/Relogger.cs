@@ -102,8 +102,8 @@ namespace YetAnotherRelogger
 
                         var time = DateTime.Now; // set current time to calculate sleep time at end of loop
                         CurrentBot = bot;
-                        Debug.WriteLine(bot.Name + ":" + ":" + bot.IsRunning);
-                        Debug.WriteLine("State=" + bot.AntiIdle.State);
+                        //Debug.WriteLine(bot.Name + ":" + ":" + bot.IsRunning);
+                        //Debug.WriteLine("State=" + bot.AntiIdle.State);
                         if (bot.IsRunning && bot.IsStarted && !bot.Week.ShouldRun(bot.IsRunning))
                         {
                             // We need to stop
