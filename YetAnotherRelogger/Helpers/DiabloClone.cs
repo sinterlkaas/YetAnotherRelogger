@@ -27,6 +27,7 @@ namespace YetAnotherRelogger.Helpers
                                  new NoLink {Source=@"App-*.dmp",Directory = false},
                                  new NoLink {Source=@"*.lock",Directory = false},
                              };
+
         public static void Create(BotClass bot)
         {
             var imp = new Impersonator();
@@ -87,8 +88,16 @@ namespace YetAnotherRelogger.Helpers
                             if (!_noLinks.Any(n => General.WildcardMatch(n.Source, p.Path)))
                             {
                                 Logger.Instance.Write(bot, "NewLink: {0} -> {1}", Path.Combine(clonepath, p.Path), Path.Combine(basepath, p.Path));
-                                if (!CreateHardLink(Path.Combine(clonepath, p.Path), Path.Combine(basepath, p.Path), IntPtr.Zero))
-                                    throw new Exception("Failed to create link!");
+                                if (Path.GetExtension(Path.Combine(clonepath, p.Path)).ToLower().Equals(".exe"))
+                                {
+                                    if (!CreateHardLink(Path.Combine(clonepath, p.Path), Path.Combine(basepath, p.Path), IntPtr.Zero))
+                                        throw new Exception("Failed to create link!");
+                                }
+                                else
+                                {
+                                    if (!CreateSymbolicLink(Path.Combine(clonepath, p.Path), Path.Combine(basepath, p.Path), 0))
+                                        throw new Exception("Failed to create link!");
+                                }
                             }
                         }
                     }
