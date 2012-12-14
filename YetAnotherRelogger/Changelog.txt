@@ -1,5 +1,7 @@
 -----------------------
-* Version 0.2.0.0 BETA
+* Version 0.2.0 BETA
+- Added Diablo clone possibilty in advanced bot tab
+- Improved Communication between DB and YAR (only really noticable with 10+ bots)
 - Attempt to fix Foreground checker
 - Fixed saved Hotkeys not loading
 - Added new max login attempt system (15 mins, 30 mins, 45 mins, 60 mins, 60 mins, repeat every hour)

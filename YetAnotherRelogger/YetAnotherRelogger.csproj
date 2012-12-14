@@ -380,7 +380,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"$(ProjectDir)..\ThirdParty\mt\mt.exe" -manifest "$(ProjectDir)Properties\app.manifest"  -outputresource:"$(TargetDir)$(TargetFileName)"
-if “$(ConfigurationName)”==”Release” "$(ProjectDir)..\ThirdParty\PETool\PETool.exe" "$(TargetDir)$(TargetFileName)" /DeStamp /VerChange "OriginalFilename" "" /VerChange "InternalName" "" /VerChange "FileVersion" "" /VerChange "ProductVersion" "" /VerChange "Assembly Version" ""</PostBuildEvent>
+if “$(ConfigurationName)”==”Release” "$(ProjectDir)..\ThirdParty\PETool\PETool.exe" "$(TargetDir)$(TargetFileName)" /DeStamp /VerChange "OriginalFilename" "" /VerChange "InternalName" "" /VerChange "FileVersion" "" /VerChange "ProductVersion" "" /VerChange "Assembly Version" ""
+if “$(ConfigurationName)”==”Release” copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\LatestBuild\$(TargetFileName)" /Y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
