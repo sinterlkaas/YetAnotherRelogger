@@ -1,4 +1,4 @@
-﻿// VERSION: 0.2.0.1
+﻿// VERSION: 0.2.0.2
 /* Changelog:
  * VERSION: 0.1.9.1
  * Added: Monsterpower
@@ -59,7 +59,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 2, 0, 1); } }
+        public Version Version { get { return new Version(0, 2, 0, 2); } }
 
         private const bool _debug = true;
 
@@ -67,11 +67,11 @@ namespace YARPLUGIN
         private static readonly Regex[] ReCompatibility =
             {
                 /* BuddyStats Remote control action */
-                new Regex(@"Stop command from BuddyStats", RegexOptions.Compiled), // stop command
+                new Regex(@"Stop command from BuddyStats"), // stop command
                 /* Emergency Stop: You need to stash an item but no valid space could be found. Stash is full? Stopping the bot to prevent infinite town-run loop. */
-                new Regex(@".+Emergency Stop: .+", RegexOptions.Compiled), // Emergency stop
+                new Regex(@".+Emergency Stop: .+"), // Emergency stop
                 /* Atom 2.0.15+ "Take a break" */
-                new Regex(@".*Atom.*Will Stop the bot for .+ minutes\.$", RegexOptions.Compiled), // Take a break
+                new Regex(@".*Atom.*Will Stop the bot for .+ minutes\.$"), // Take a break
                 /* RadsAtom "Take a break" */
                 new Regex(@"\[RadsAtom\].+ minutes to next break, the break will last for .+ minutes."), 
             };
@@ -80,11 +80,11 @@ namespace YARPLUGIN
         private static readonly Regex[] ReCrashTender =
             {
                 /* Invalid Session */
-                new Regex(@"Session is invalid!", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+                new Regex(@"Session is invalid!", RegexOptions.IgnoreCase),
                 /* Session expired */
-                new Regex(@"Session is expired", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+                new Regex(@"Session is expired", RegexOptions.IgnoreCase),
                 /* Failed to attach to D3*/
-                new Regex(@"Was not able to attach to any running Diablo III process, are you running the bot already\?",RegexOptions.Compiled ), 
+                new Regex(@"Was not able to attach to any running Diablo III process, are you running the bot already\?"), 
             };
 
         public class BotStats
@@ -203,13 +203,13 @@ namespace YARPLUGIN
                 {
                     Send("ThirdpartyStop");
                 }
-                Thread.Sleep(10);
+                Thread.Sleep(1);
             }
         }
         public bool FindStartDelay(string msg)
         {
             // Waiting #.# seconds before next game...
-            var m = new Regex(@"Waiting (.+) seconds before next game...", RegexOptions.Compiled).Match(msg);
+            var m = new Regex(@"Waiting (.+) seconds before next game...").Match(msg);
             if (m.Success)
             {
                 Send("StartDelay " + DateTime.Now.AddSeconds(double.Parse(m.Groups[1].Value, CultureInfo.InvariantCulture)).Ticks);
@@ -220,7 +220,7 @@ namespace YARPLUGIN
 
         public bool FindPluginsCompiled(string msg)
         {
-            var m = new Regex(@"There are \d+ plugins.", RegexOptions.Compiled).Match(msg);
+            var m = new Regex(@"There are \d+ plugins.").Match(msg);
             if (m.Success)
             {
                 _allPluginsCompiled = true;
@@ -382,14 +382,13 @@ namespace YARPLUGIN
                             var connectionTime = DateTime.Now;
                             while (client.IsConnected)
                             {
-                                if (DateTime.Now.Subtract(connectionTime).TotalSeconds > 10)
+                                if (DateTime.Now.Subtract(connectionTime).TotalSeconds > 3)
                                 {
                                     client.Close();
                                     break;
                                 }
 
                                 var temp = sr.ReadLine();
-
                                 if (temp == null)
                                 {
                                     Thread.Sleep(10);
@@ -398,7 +397,6 @@ namespace YARPLUGIN
 
                                 HandleResponse(temp);
                                 success = true;
-                                client.Close();
                             }
                         }
                         else
