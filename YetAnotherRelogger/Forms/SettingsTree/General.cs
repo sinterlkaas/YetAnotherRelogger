@@ -89,8 +89,7 @@ namespace YetAnotherRelogger.Forms.SettingsTree
 
         private void checkBox6_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.FocusCheck = checkBox6.Checked;
-            if (Settings.Default.FocusCheck)
+            if (checkBox6.Checked)
                 ForegroundChecker.Instance.Start();
             else
                 ForegroundChecker.Instance.Stop();

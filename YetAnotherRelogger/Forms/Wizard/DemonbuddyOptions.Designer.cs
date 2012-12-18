@@ -271,6 +271,7 @@
             "Generic",
             "Giles Routine For Use With Plugin",
             "GilesPlugin",
+            "Trinity",
             "Wizical Mass (Critical Mass Wizard)"});
             this.comboBox1.Location = new System.Drawing.Point(91, 71);
             this.comboBox1.Name = "comboBox1";
