@@ -13,6 +13,17 @@ namespace YetAnotherRelogger.Helpers
 {
     public class Communicator
     {
+        private static int _connections;
+        public static int Connections
+        {
+            get
+            {
+                return _connections;
+            }
+            set {
+                _connections = value < 0 ? 0 : value;
+            }
+        }
         Thread _threadWorker;
         public void Start()
         {
@@ -26,17 +37,8 @@ namespace YetAnotherRelogger.Helpers
             {
                 try
                 {
-                    var serverStream = new NamedPipeServerStream("YetAnotherRelogger", PipeDirection.InOut, 100, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
+                    var serverStream = new NamedPipeServerStream("YetAnotherRelogger", PipeDirection.InOut, 254);
                     serverStream.WaitForConnection();
-                    /*ThreadPool.QueueUserWorkItem(state =>
-                    {
-                        using (var pipeClientConnection = (NamedPipeServerStream)state)
-                        {
-                            var handleClient = new HandleClient(pipeClientConnection);
-                            handleClient.Start();
-                        }
-                    }, serverStream);
-                    */
                     var handleClient = new HandleClient(serverStream);
                     new Thread(handleClient.Start).Start();
                 }
@@ -65,6 +67,8 @@ namespace YetAnotherRelogger.Helpers
                 var isXml = false;
                 var xml = string.Empty;
                 var duration = DateTime.Now;
+                Connections++;
+                Debug.WriteLine("Connections: {0}",Connections);
                 try
                 {
                     Debug.WriteLine("PipeConnection [{0}]: Connected:{1}", _stream.GetHashCode(), _stream.IsConnected);
@@ -105,6 +109,7 @@ namespace YetAnotherRelogger.Helpers
                 }
                 Debug.WriteLine("PipeConnection [{0}]: Connected:{1} Duration:{2}ms", _stream.GetHashCode(), _stream.IsConnected, General.DateSubtract(duration, false));
                 Dispose();
+                Connections--;
             }
 
             private void HandleXml(string data)
@@ -199,7 +204,6 @@ namespace YetAnotherRelogger.Helpers
                             else
                                 Send("Roger!");
                             break;
-                        
                         case "UserStop":
                             b.Status = string.Format("User Stop: {0:d-m H:M:s}", DateTime.Now);
                             b.AntiIdle.State = IdleState.UserStop;
@@ -270,39 +274,22 @@ namespace YetAnotherRelogger.Helpers
             public void Dispose()
             {
                 //Free managed resources
+                if (_stream != null)
+                {
+                    try { _stream.Close(); } catch {}
+                    _stream = null;
+                }
                 if (_reader != null)
                 {
-                    try
-                    {
-                        _reader.Dispose();
-                        _reader = null;
-                    }
-                    catch
-                    {
-                    }
+                    try { _reader.Close(); } catch {}
+                    _reader = null;
                 }
                 if (_writer != null)
                 {
-                    try
-                    {
-                        _writer.Dispose();
-                        _writer = null;
-                    }
-                    catch
-                    {
-                    }
+                    try { _writer.Close(); } catch {}
+                    _writer = null;
                 }
-                if (_stream != null)
-                {
-                    try
-                    {
-                        _stream.Dispose();
-                        _stream = null;
-                    }
-                    catch
-                    {
-                    }
-                }
+                
             }
         }
     }
