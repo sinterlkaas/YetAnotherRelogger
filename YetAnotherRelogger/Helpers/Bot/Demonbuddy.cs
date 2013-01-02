@@ -167,7 +167,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                     // Check if current profile path is Kickstart
                     var file = Path.GetFileName(profilepath);
                     if (file == null || (file.Equals("YAR_Kickstart.xml") || file.Equals("YAR_TMP_Kickstart.xml")))
-                        profilepath = Parent.ProfileSchedule.GetProfile;
+                        profilepath = Parent.ProfileSchedule.Current.Location;
 
                     var profile = new Profile() {Location = profilepath};
                     var path = ProfileKickstart.GenerateKickstart(profile);
