@@ -1,4 +1,4 @@
-﻿// VERSION: 0.2.0.3
+﻿// VERSION: 0.2.0.4
 /* Changelog:
  * VERSION: 0.1.9.1
  * Added: Monsterpower
@@ -36,6 +36,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Threading;
 using System.Diagnostics;
@@ -59,7 +60,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 2, 0, 3); } }
+        public Version Version { get { return new Version(0, 2, 0, 4); } }
 
         private const bool _debug = true;
 
@@ -193,7 +194,7 @@ namespace YARPLUGIN
                 if (!_allPluginsCompiled && FindPluginsCompiled(msg)) continue;
                 if (FindStartDelay(msg)) continue;
 
-                if (msg.Equals("Start/Stop Button Clicked!"))
+                if (msg.Equals("Start/Stop Button Clicked!") && !BotMain.IsRunning)
                 {
                     Send("UserStop");
                     continue;
@@ -241,8 +242,11 @@ namespace YARPLUGIN
             while (true)
             {
                 // Handle errors and other strange situations
-                ErrorHandling(); 
-
+                ErrorHandling();
+                
+                // Trinity Pause support
+                TrinityPauseHandling();
+                
                 _bs.PluginPulse = DateTime.Now.Ticks;
                 _bs.IsRunning = BotMain.IsRunning;
                 _bs.IsLoadingWorld = ZetaDia.IsLoadingWorld;
@@ -252,7 +256,7 @@ namespace YARPLUGIN
                     if (ZetaDia.Me != null)
                         _bs.Coinage = ZetaDia.Me.Inventory.Coinage;
                 }
-                catch (System.Exception ex)
+                catch
                 {
                     _bs.Coinage = -1;
                 }
@@ -288,6 +292,20 @@ namespace YARPLUGIN
                 Send("XML:" + _bs.ToXmlString(), xml:true);
                 Thread.Sleep(3000);
             }
+        }
+        #endregion
+
+        #region Handle Trinity Pause
+        private bool _trinityIsPaused;
+        private void TrinityPauseHandling()
+        {
+            if (!_trinityIsPaused && TrinitySupport.IsPaused)
+            {
+                Send("TrinityPause");
+                _trinityIsPaused = true;
+            }
+            else if (!BotMain.IsPaused && !BotMain.IsPausedForStateExecution)
+                _trinityIsPaused = false;
         }
         #endregion
 
@@ -733,5 +751,101 @@ namespace YARPLUGIN
         }
     }
  
+}
+#endregion
+
+#region Trinity Support
+namespace YARPLUGIN
+{
+    public static class TrinitySupport
+    {
+        private static bool _failed;
+        private static Type _gilesTrinityType;
+        public static bool Initialized { get; private set; }
+
+        public static void Initialize()
+        {
+            Initialized = true;
+            YARPLUGIN.Log("Initialize Trinity Support");
+            var asm = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name.ToLower().StartsWith("gilestrinity"));
+            if (asm != null)
+            {
+                try
+                {
+                    _gilesTrinityType = asm.GetType("GilesTrinity.GilesTrinity");
+                    _failed = false;
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    YARPLUGIN.Log("Failed to initialize Trinity Support:");
+                    YARPLUGIN.LogException(ex);
+                }
+            }
+            else
+            {
+                YARPLUGIN.Log("Trinity is not installed");
+            }
+            _failed = true;
+        }
+
+        public static bool IsEnabled
+        {
+            get
+            {
+                var plugin = PluginManager.Plugins.FirstOrDefault(p => p.Plugin.Name.Equals("GilesTrinity"));
+                return (plugin != null && plugin.Enabled);
+            }
+        }
+
+        private static bool bDontMoveMeIAmDoingShit
+        {
+            get
+            {
+                try
+                {
+                    return (bool)_gilesTrinityType.GetField("bDontMoveMeIAmDoingShit", BindingFlags.Static).GetValue(null);
+                }
+                catch (Exception ex)
+                {
+                    YARPLUGIN.Log("Failed to get Trinity info:");
+                    YARPLUGIN.LogException(ex);
+                    return false;
+                }
+            }
+        }
+        private static bool bMainBotPaused
+        {
+            get
+            {
+                try
+                {
+                    return (bool)_gilesTrinityType.GetField("bMainBotPaused", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+                }
+                catch (Exception ex)
+                {
+                    YARPLUGIN.Log("Failed to get Trinity info:");
+                    YARPLUGIN.LogException(ex);
+                    return false;
+                }
+            }
+        }
+        public static bool IsPaused
+        {
+            get
+            {
+                if (!Initialized) Initialize();
+                return !_failed && bMainBotPaused;
+            }
+        }
+        public static bool IsBusy
+        {
+            get
+            {
+                if (!Initialized) Initialize();
+                return !_failed && bDontMoveMeIAmDoingShit;
+            }
+        }
+    }
 }
 #endregion

@@ -223,8 +223,9 @@ namespace YetAnotherRelogger.Helpers
                             Logger.Instance.Write(b, "Demonbuddy stopped by Thirdparty");
                             Send("Roger!");
                             break;
-                        case "GilesPause":
+                        case "TrinityPause":
                             b.AntiIdle.State = IdleState.UserPause;
+                            Logger.Instance.Write(b, "Trinity Pause Detected");
                             Send("Roger!");
                             break;
                         case "AllCompiled":

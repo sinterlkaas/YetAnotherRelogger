@@ -1,5 +1,6 @@
 -----------------------
 * Version 0.2.0 BETA
+- Added Support for Trinity Pause button
 - Added Diablo clone possibilty in advanced bot tab
 - Improved Communication between DB and YAR (only really noticable with 10+ bots)
 - Attempt to fix Foreground checker

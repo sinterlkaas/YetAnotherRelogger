@@ -125,8 +125,11 @@ namespace YetAnotherRelogger.Helpers.Bot
                     ResetCoinage();
                     break;
                 case IdleState.UserPause:
-                    if(!Stats.IsPaused)
+                    if (!Stats.IsPaused)
+                    {
+                        Reset();
                         State = IdleState.CheckIdle;
+                    }
                     break;
                 case IdleState.NewProfile:
                     State = IdleState.CheckIdle;
