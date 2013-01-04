@@ -1,5 +1,7 @@
 -----------------------
 * Version 0.2.0 BETA
+- Improved log scanning
+- Added CPU/RAM usage for running bots in main form
 - Added Support for Trinity Pause button
 - Added Diablo clone possibilty in advanced bot tab
 - Improved Communication between DB and YAR (only really noticable with 10+ bots)

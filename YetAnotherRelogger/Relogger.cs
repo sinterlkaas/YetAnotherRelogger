@@ -168,7 +168,7 @@ namespace YetAnotherRelogger
                         if (sleep > 0) Thread.Sleep(sleep);
                     }
                 } // try
-                catch (InvalidOperationException iox)
+                catch (InvalidOperationException)
                 { // Catch error when bot is edited while in a loop
                     //Logger.Instance.WriteGlobal(iox.Message);
                     continue;

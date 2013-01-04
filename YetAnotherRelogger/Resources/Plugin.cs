@@ -1,4 +1,4 @@
-﻿// VERSION: 0.2.0.4
+﻿// VERSION: 0.2.0.5+
 /* Changelog:
  * VERSION: 0.1.9.1
  * Added: Monsterpower
@@ -51,7 +51,6 @@ using Zeta.Common.Plugins;
 using Zeta.CommonBot;
 using Zeta.CommonBot.Profile;
 using Zeta.CommonBot.Settings;
-using Zeta.Internals;
 using Zeta.TreeSharp;
 using UIElement = Zeta.Internals.UIElement;
 
@@ -60,7 +59,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 2, 0, 4); } }
+        public Version Version { get { return new Version(0, 2, 0, 5); } }
 
         private const bool _debug = true;
 
@@ -139,6 +138,7 @@ namespace YARPLUGIN
 
             _yarThread = new Thread(YarWorker) {IsBackground = true};
             _yarThread.Start();
+
             Send("Initialized");
         }
 
@@ -181,32 +181,129 @@ namespace YARPLUGIN
         #endregion
 
         #region Logging Monitor
+
+        private Thread _scanlogthread;
         void Logging_OnLogMessage(ReadOnlyCollection<Logging.LogMessage> messages)
         {
-            foreach (var lm in messages)
+            try
             {
-                var msg = lm.Message;
-                if (ReCrashTender.Any(re => re.IsMatch(msg)))
+                // Create new log buffer
+                if (_logBuffer == null)
+                    _logBuffer = messages.ToArray();
+                else
                 {
-                    Send("CrashTender " + ProfileManager.CurrentProfile.Path); // tell relogger to "crash tender" :)
-                    break;
-                }
-                if (!_allPluginsCompiled && FindPluginsCompiled(msg)) continue;
-                if (FindStartDelay(msg)) continue;
-
-                if (msg.Equals("Start/Stop Button Clicked!") && !BotMain.IsRunning)
-                {
-                    Send("UserStop");
-                    continue;
+                    // Append to existing log buffer
+                    lock (_logBuffer)
+                    {
+                        var newbuffer = _logBuffer.Concat(messages.ToArray()).ToArray();
+                        _logBuffer = newbuffer;
+                    }
                 }
 
-                if (ReCompatibility.Any(re => re.IsMatch(msg)))
+                // Start Scan log thread with lower priority
+                if (_scanlogthread == null || (_scanlogthread != null && !_scanlogthread.IsAlive))
                 {
-                    Send("ThirdpartyStop");
+                    try
+                    {
+                        ThreadPriority priority;
+                        switch (Process.GetCurrentProcess().PriorityClass)
+                        {
+                            case ProcessPriorityClass.High:
+                                priority = ThreadPriority.AboveNormal;
+                                break;
+                            case ProcessPriorityClass.AboveNormal:
+                                priority = ThreadPriority.Normal;
+                                break;
+                            default:
+                                priority = ThreadPriority.BelowNormal;
+                                break;
+                        }
+
+                        _scanlogthread = new Thread(ScanLogWorker)
+                                             {
+                                                 Priority = priority,
+                                                 IsBackground = true
+                                             };
+                        _scanlogthread.Start();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log("Failed to assign priority to scanlogthread:");
+                        LogException(ex);
+
+                        Log("Starting scanlogthread with same priority");
+                        _scanlogthread = new Thread(ScanLogWorker) { IsBackground = true };
+                        _scanlogthread.Start();
+                    }
                 }
-                Thread.Sleep(1);
+            }
+            catch (Exception ex)
+            {
+                LogException(ex);
             }
         }
+        private Logging.LogMessage[] _logBuffer;
+        private void ScanLogWorker()
+        {
+            // Keep Thread alive while log buffer is not empty
+            while (_logBuffer != null)
+            {
+                try
+                {
+                    var duration = DateTime.Now;
+                    Logging.LogMessage[] buffer;
+                    // Lock buffer and copy to local variable for scanning
+                    lock (_logBuffer)
+                    {
+                        buffer = new Logging.LogMessage[_logBuffer.Length + 1]; // set log new local log buffer size
+                        _logBuffer.CopyTo(buffer, 0); // copy to local
+                        _logBuffer = null; // clear buffer
+                    }
+                    var count = 0; // Scan counter
+                    var breakloop = false;
+                    // Scan log items
+                    foreach (var lm in buffer.Where(x => x != null))
+                    {
+                        count++; // add to counter
+                        var msg = lm.Message;
+                        // Log level specific scanning to prevent uneeded cpu usage
+                        switch (lm.Level)
+                        {
+                            case LogLevel.Diagnostic:
+                                if (!_allPluginsCompiled && FindPluginsCompiled(msg)) continue; // Find all plugins compiled line
+                                // Find Start stop button click
+                                if (msg.Equals("Start/Stop Button Clicked!") && !BotMain.IsRunning)
+                                {
+                                    Send("UserStop");
+                                }
+                                break; // case end
+                            default:
+                                if (!ZetaDia.IsInGame && FindStartDelay(msg)) continue; // Find new start delay
+
+                                // Crash Tender check
+                                if (ReCrashTender.Any(re => re.IsMatch(msg)))
+                                {
+                                    Send("CrashTender " + ProfileManager.CurrentProfile.Path); // tell relogger to "crash tender" :)
+                                    breakloop = true; // break out of loop
+                                    break; // case end here!
+                                }
+                                // YAR compatibility with other plugins
+                                if (ReCompatibility.Any(re => re.IsMatch(msg)))
+                                    Send("ThirdpartyStop");
+                                break; // case end
+                        }
+                        if (breakloop) break; // Check if we need to break out of loop
+                    }
+
+                    if (count > 1) Logging.WriteDiagnostic("[YetAnotherRelogger] Scanned {0} log items in {1}ms", count, DateTime.Now.Subtract(duration).TotalMilliseconds);
+                }
+                catch (Exception ex)
+                {
+                    LogException(ex);
+                }
+            }
+        }
+
         public bool FindStartDelay(string msg)
         {
             // Waiting #.# seconds before next game...
