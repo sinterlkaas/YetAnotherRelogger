@@ -82,6 +82,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -250,6 +251,7 @@
     <Compile Include="Helpers\Tools\MersenneTwister.cs" />
     <Compile Include="Helpers\Tools\KeyboardHook.cs" />
     <Compile Include="Helpers\Hotkeys\Actions\RepositionAll.cs" />
+    <Compile Include="Helpers\Tools\PerformanceInfo.cs" />
     <Compile Include="Helpers\Tools\UserAccount.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

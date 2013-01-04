@@ -43,6 +43,10 @@ namespace YetAnotherRelogger.Forms
                 RegistryClass.WindowsAutoStartAdd();
             }
 
+            // Usage Chart
+            CpuUsage.Titles.Add("Cpu Usage");
+            // End Chart
+
             this.Resize += new EventHandler(MainForm2_Resize);
 
             // Set stuff for list of bots

@@ -1,5 +1,6 @@
 -----------------------
 * Version 0.2.0 BETA
+- Added Graph for cpu and ram usage
 - Improved log scanning
 - Added CPU/RAM usage for running bots in main form
 - Added Support for Trinity Pause button
