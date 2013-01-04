@@ -50,6 +50,7 @@ namespace YetAnotherRelogger
             
             prepareMainGraphCpu();
             prepareMainGraphMemory();
+            prepareMainGraphConnections();
             while (true)
             {
                 // Update Cpu/Ram Usage
@@ -98,26 +99,75 @@ namespace YetAnotherRelogger
                     
                 }
                 // Update Stats label on mainform
-                updateMainformStatsLabel(
+                /*
+                 updateMainformStatsLabel(
                     string.Format("Cpu Usage : Diablo[{0}] {1}%, Demonbuddy[{2}] {3}%, Total {4}%" + Environment.NewLine + 
-                                  "Ram Usage : Diablo[{0}] {5}Gb, Demonbuddy[{2}] {6}Mb, Total {7}Gb",
+                                  "Ram Usage : Diablo[{0}] {5}Gb, Demonbuddy[{2}] {6}Mb, Total {7}Gb" + Environment.NewLine +
+                                  "Connections: {8}",
                                   diabloCount, Math.Round(diabloCpuUsage,1), demonbuddyCount, Math.Round(demonbuddyCpuUsage,1), Math.Round(diabloCpuUsage+demonbuddyCpuUsage,1),
-                                  Math.Round(diabloRamUsage / Math.Pow(2 , 30), 2), Math.Round(demonbuddyRamUsage / Math.Pow(2 , 20),2), Math.Round((diabloRamUsage / Math.Pow(2,30)) + (demonbuddyRamUsage / Math.Pow(2,30)), 2)));
-                // Add point to Graph
-                updateMainGraphCpu("All Usage",diabloCpuUsage + demonbuddyCpuUsage);
-                updateMainGraphCpu("Diablo", diabloCpuUsage);
-                updateMainGraphCpu("Demonbuddy", demonbuddyCpuUsage);
-                updateMainGraphCpu("Total System", cpuUsage.NextValue());
+                                  Math.Round(diabloRamUsage / Math.Pow(2 , 30), 2), Math.Round(demonbuddyRamUsage / Math.Pow(2 , 20),2), Math.Round((diabloRamUsage / Math.Pow(2,30)) + (demonbuddyRamUsage / Math.Pow(2,30)), 2),
+                                  Communicator.StatConnections));
+                 */
 
-                updateMainGraphMemory("All Usage", (double)(diabloRamUsage + demonbuddyRamUsage) / totalRam * 100);
-                updateMainGraphMemory("Diablo", (double)diabloRamUsage / totalRam * 100);
-                updateMainGraphMemory("Demonbuddy", (double)demonbuddyRamUsage / totalRam * 100);
-                updateMainGraphMemory("Total System", (double)PerformanceInfo.GetPhysicalUsedMemory() / totalRam * 100);
-               
+                // add to Cpu graph
+                var graph = Program.Mainform.CpuUsage;
+                updateMainformGraph(graph, "All Usage", diabloCpuUsage + demonbuddyCpuUsage, legend: string.Format("All usage: {0,11}%", (diabloCpuUsage + demonbuddyCpuUsage).ToString("000.0")));
+                updateMainformGraph(graph, "Diablo", diabloCpuUsage, legend: string.Format("Diablo: {0,16}%", diabloCpuUsage.ToString("000.0")));
+                updateMainformGraph(graph, "Demonbuddy", demonbuddyCpuUsage, legend: string.Format("Demonbuddy: {0,4}%", demonbuddyCpuUsage.ToString("000.0")));
+                var cpu = cpuUsage.NextValue();
+                updateMainformGraph(graph, "Total System", cpu, legend: string.Format("Total System: {0,2}%", cpu.ToString("000.0")));
+
+                // add to Memory graph
+                graph = Program.Mainform.MemoryUsage;
+                updateMainformGraph(graph, "All Usage", (double)(diabloRamUsage + demonbuddyRamUsage) / totalRam * 100, legend: string.Format("All usage: {0,11}%", ((double)(diabloRamUsage + demonbuddyRamUsage) / totalRam * 100).ToString("000.0")));
+                updateMainformGraph(graph, "Diablo", (double)diabloRamUsage / totalRam * 100, legend: string.Format("Diablo: {0,16}%", ((double)diabloRamUsage / totalRam * 100).ToString("000.0")));
+                updateMainformGraph(graph, "Demonbuddy", (double)demonbuddyRamUsage / totalRam * 100, legend: string.Format("Demonbuddy: {0,4}%", ((double)demonbuddyRamUsage / totalRam * 100).ToString("000.0")));
+                var mem = (double)PerformanceInfo.GetPhysicalUsedMemory()/totalRam*100;
+                updateMainformGraph(graph, "Total System", mem, legend: string.Format("Total System: {0,2}%", mem.ToString("000.0")));
+
+                // add to Connection graph
+                updateMainformGraph(Program.Mainform.CommConnections,"Connections", Communicator.StatConnections, legend:string.Format("Connections {0}", Communicator.StatConnections));
+                Communicator.StatConnections = 0;
+
                 Thread.Sleep(500);
             }
         }
+        #region Communicator connections
+        private void prepareMainGraphConnections()
+        {
+            if (Program.Mainform != null && Program.Mainform.CommConnections != null)
+            {
+                try
+                {
+                    Program.Mainform.Invoke(new Action(() =>
+                    {
+                        // Clear mainform stats
+                        var mainConnectionsGraph = Program.Mainform.CommConnections;
+                        mainConnectionsGraph.Series.Clear();
+                        mainConnectionsGraph.Palette = ChartColorPalette.Pastel;
+                        // Add Series
+                        mainConnectionsGraph.Series.Add("Connections");
+                        mainConnectionsGraph.Series["Connections"].ChartType = SeriesChartType.FastLine;
+                        mainConnectionsGraph.Series["Connections"].Points.Add(0);
+                        mainConnectionsGraph.Series["Connections"].YAxisType = AxisType.Primary;
+                        mainConnectionsGraph.Series["Connections"].YValueType = ChartValueType.Double;
+                        mainConnectionsGraph.Series["Connections"].IsXValueIndexed = false;
+                        mainConnectionsGraph.Series["Connections"].Color = Color.DarkSlateBlue;
 
+                        mainConnectionsGraph.ResetAutoValues();
+                        mainConnectionsGraph.ChartAreas[0].AxisY.Maximum = 255; //Max Y 
+                        mainConnectionsGraph.ChartAreas[0].AxisY.Minimum = 0;
+                        mainConnectionsGraph.ChartAreas[0].AxisX.Enabled = AxisEnabled.False;
+                        mainConnectionsGraph.ChartAreas[0].AxisY.Title = "Communicator"+Environment.NewLine+"Connections";
+                        mainConnectionsGraph.ChartAreas[0].AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
+                    }));
+                }
+                catch
+                {
+                }
+            }
+        }
+        #endregion
         #region CPU Graph
         private void prepareMainGraphCpu()
         {
@@ -131,7 +181,6 @@ namespace YetAnotherRelogger
                         var mainCpuGraph = Program.Mainform.CpuUsage;
                         mainCpuGraph.Series.Clear();
                         mainCpuGraph.Palette = ChartColorPalette.Pastel;
-                        //mainCpuGraph.Titles.Add("CPU Usage");
                         // Add Series
                         mainCpuGraph.Series.Add("All Usage");
                         mainCpuGraph.Series["All Usage"].ChartType = SeriesChartType.FastLine;
@@ -172,25 +221,6 @@ namespace YetAnotherRelogger
                         mainCpuGraph.ChartAreas[0].AxisX.Enabled = AxisEnabled.False;
                         mainCpuGraph.ChartAreas[0].AxisY.Title = "CPU usage %";
                         mainCpuGraph.ChartAreas[0].AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
-                    }));
-                }
-                catch
-                {
-                }
-            }
-        }
-        private void updateMainGraphCpu(string serie, double value)
-        {
-            if (Program.Mainform != null && Program.Mainform.CpuUsage != null)
-            {
-                try
-                {
-                    Program.Mainform.Invoke(new Action(() =>
-                    {
-                        var mainCpuGraph = Program.Mainform.CpuUsage;
-                        mainCpuGraph.Series[serie].Points.AddY(value);
-                        if (mainCpuGraph.Series[serie].Points.Count > 120)
-                            mainCpuGraph.Series[serie].Points.RemoveAt(0);
                     }));
                 }
                 catch
@@ -260,18 +290,20 @@ namespace YetAnotherRelogger
                 }
             }
         }
-        private void updateMainGraphMemory(string serie, double value)
+        #endregion
+
+        private void updateMainformGraph(Chart graph, string serie, double value, int limit=120, string legend = null)
         {
-            if (Program.Mainform != null && Program.Mainform.MemoryUsage != null)
+            if (Program.Mainform != null && graph != null)
             {
                 try
                 {
                     Program.Mainform.Invoke(new Action(() =>
                     {
-                        var mainMemoryGraph = Program.Mainform.MemoryUsage;
-                        mainMemoryGraph.Series[serie].Points.AddY(value);
-                        if (mainMemoryGraph.Series[serie].Points.Count > 120)
-                            mainMemoryGraph.Series[serie].Points.RemoveAt(0);
+                        if (legend != null) graph.Series[serie].LegendText = legend;
+                        graph.Series[serie].Points.AddY(value);
+                        if (graph.Series[serie].Points.Count > limit)
+                            graph.Series[serie].Points.RemoveAt(0);
                     }));
                 }
                 catch
@@ -279,7 +311,6 @@ namespace YetAnotherRelogger
                 }
             }
         }
-        #endregion
         private void updateMainformStatsLabel(string text)
         {
             if (Program.Mainform != null && Program.Mainform.labelStats != null)

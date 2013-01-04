@@ -22,8 +22,11 @@ namespace YetAnotherRelogger.Helpers
             }
             set {
                 _connections = value < 0 ? 0 : value;
+                StatConnections += _connections;
             }
         }
+        public static int StatConnections { get; set; }
+
         Thread _threadWorker;
         public void Start()
         {
