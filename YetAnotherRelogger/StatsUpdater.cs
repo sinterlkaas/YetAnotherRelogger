@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -113,6 +112,8 @@ namespace YetAnotherRelogger
                         #region Calculate Gold
                         // Calculate Gold
                         var coinage = bot.AntiIdle.Stats.Coinage;
+                        var hours = DateTime.Now.Subtract(chartStats.GoldPerHour.StartTime).TotalSeconds / 3600;
+                        double botGph = 0;
                         if (coinage > 0)
                         {
                             if (chartStats.GoldPerHour.StartCoinage <= 0)
@@ -120,49 +121,40 @@ namespace YetAnotherRelogger
                                 chartStats.GoldPerHour.StartCoinage = coinage;
                                 chartStats.GoldPerHour.StartTime = DateTime.Now;
                             }
-                            else if (coinage > chartStats.GoldPerHour.LastCoinage)
+                            else
                             {
-                                chartStats.GoldPerHour.LastUpdate = DateTime.Now;
                                 chartStats.GoldPerHour.LastGain = (coinage - chartStats.GoldPerHour.LastCoinage);
-
                                 if (chartStats.GoldPerHour.LastGain < 0)
                                 {
                                     chartStats.GoldPerHour.StartCoinage = 0;
-                                    continue;
+                                    botGph = Math.Round((chartStats.GoldPerHour.LastCoinage - chartStats.GoldPerHour.StartCoinage) / hours);
                                 }
-
-                                var hours = DateTime.Now.Subtract(chartStats.GoldPerHour.StartTime).TotalSeconds/3600;
-                                var botGph = Math.Round((coinage - chartStats.GoldPerHour.StartCoinage)/hours, 0);
-                                
-                                goldPerHour += botGph;
-                                
-                                var serie = Program.Mainform.GoldStats.Series.FirstOrDefault(x => x.Name == bot.Name);
-                                if (serie != null)
+                                else
                                 {
-                                    updateMainformGraph(Program.Mainform.GoldStats, serie.Name, botGph, limit:7200,autoscale:true);
+                                    botGph = Math.Round((coinage - chartStats.GoldPerHour.StartCoinage)/hours);
+                                    chartStats.GoldPerHour.LastCoinage = coinage;
                                 }
+                                goldPerHour += botGph;
                             }
+                        }
+                        else
+                        {
+                            botGph = Math.Round((chartStats.GoldPerHour.LastCoinage - chartStats.GoldPerHour.StartCoinage) / hours);
+                            goldPerHour += botGph;
+                        }
+
+                        var serie = Program.Mainform.GoldStats.Series.FirstOrDefault(x => x.Name == bot.Name);
+                        if (serie != null)
+                        {
+                            updateMainformGraph(Program.Mainform.GoldStats, serie.Name, botGph, limit: 360, autoscale: true);
                         }
                         #endregion
                     }
                     else
                     {
-
                     }
                 }
-                // Update Stats label on mainform
-                /*
-                 updateMainformStatsLabel(
-                    string.Format("Cpu Usage : Diablo[{0}] {1}%, Demonbuddy[{2}] {3}%, Total {4}%" + Environment.NewLine + 
-                                  "Ram Usage : Diablo[{0}] {5}Gb, Demonbuddy[{2}] {6}Mb, Total {7}Gb" + Environment.NewLine +
-                                  "Connections: {8}",
-                                  diabloCount, Math.Round(diabloCpuUsage,1), demonbuddyCount, Math.Round(demonbuddyCpuUsage,1), Math.Round(diabloCpuUsage+demonbuddyCpuUsage,1),
-                                  Math.Round(diabloRamUsage / Math.Pow(2 , 30), 2), Math.Round(demonbuddyRamUsage / Math.Pow(2 , 20),2), Math.Round((diabloRamUsage / Math.Pow(2,30)) + (demonbuddyRamUsage / Math.Pow(2,30)), 2),
-                                  Communicator.StatConnections));
-                 */
-
                 // add to Cpu graph
-                
                 var graph = Program.Mainform.CpuUsage;
                 var allusage = diabloCpuUsage + demonbuddyCpuUsage;
                 updateMainformGraph(graph, "All Usage", allusage, legend: string.Format("All usage: {0,11}%", allusage.ToString("000.0")));
@@ -184,17 +176,19 @@ namespace YetAnotherRelogger
 
                 // add to Connection graph
                 updateMainformGraph(Program.Mainform.CommConnections,"Connections", Communicator.StatConnections, legend:string.Format("Connections {0}", Communicator.StatConnections), autoscale:true);
+                updateMainformGraph(Program.Mainform.CommConnections, "Failed", Communicator.StatFailed, legend: string.Format("Failed {0}", Communicator.StatFailed), autoscale: true);
                 Communicator.StatConnections = 0;
+                Communicator.StatFailed = 0;
                 
                 // add to Gold Graph
-                updateMainformGraph(Program.Mainform.GoldStats, "Gph", goldPerHour, legend: string.Format("Gph {0}", goldPerHour),autoscale:true,limit:7200);
+                updateMainformGraph(Program.Mainform.GoldStats, "Gph", goldPerHour, legend: string.Format("Gph {0}", goldPerHour),autoscale:true,limit:360);
                 
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
             }
         }
 
         #region Chart Stats Per Bot Creation
-        private Color[] ChartColors = new Color[]
+        private static readonly Color[] ChartColors = new[]
                                           {
                                               Color.DarkOrange,
                                               Color.DarkOrchid,
@@ -206,8 +200,9 @@ namespace YetAnotherRelogger
                                               Color.LimeGreen,
                                               Color.Magenta,
                                               Color.Red,
-                                              Color.MidnightBlue,
-                                              Color.Teal
+                                              Color.Yellow,
+                                              Color.Teal,
+                                              Color.LightSteelBlue
                                           };
         private void CreateChartStats(BotClass bot, Chart graph, ChartValueType valueType = ChartValueType.Auto)
         {
@@ -315,6 +310,14 @@ namespace YetAnotherRelogger
                         graph.Series["Connections"].YValueType = ChartValueType.Int32;
                         graph.Series["Connections"].IsXValueIndexed = false;
                         graph.Series["Connections"].Color = Color.DarkSlateBlue;
+
+                        graph.Series.Add("Failed");
+                        graph.Series["Failed"].ChartType = SeriesChartType.FastLine;
+                        graph.Series["Failed"].Points.Add(0);
+                        graph.Series["Failed"].YAxisType = AxisType.Secondary;
+                        graph.Series["Failed"].YValueType = ChartValueType.Int32;
+                        graph.Series["Failed"].IsXValueIndexed = false;
+                        graph.Series["Failed"].Color = Color.Red;
 
                         graph.ResetAutoValues();
                         graph.ChartAreas[0].AxisY.Maximum = 255; //Max Y 

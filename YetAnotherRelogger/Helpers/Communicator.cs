@@ -26,6 +26,7 @@ namespace YetAnotherRelogger.Helpers
             }
         }
         public static int StatConnections { get; set; }
+        public static int StatFailed { get; set; }
 
         Thread _threadWorker;
         public void Start()
@@ -47,6 +48,7 @@ namespace YetAnotherRelogger.Helpers
                 }
                 catch (Exception ex)
                 {
+                    StatFailed++;
                     Logger.Instance.WriteGlobal(ex.Message);
                 }
             }
@@ -109,6 +111,7 @@ namespace YetAnotherRelogger.Helpers
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    StatFailed++;
                 }
                 Debug.WriteLine("PipeConnection [{0}]: Connected:{1} Duration:{2}ms", _stream.GetHashCode(), _stream.IsConnected, General.DateSubtract(duration, false));
                 Dispose();
@@ -148,6 +151,7 @@ namespace YetAnotherRelogger.Helpers
                     {
                         Send("Internal server error: " + ex.Message);
                         Logger.Instance.WriteGlobal(ex.ToString());
+                        StatFailed++;
                         return;
                     }
                 }
@@ -172,6 +176,7 @@ namespace YetAnotherRelogger.Helpers
                     if (b == null)
                     {
                         Send("Error: Unknown process");
+                        StatFailed++;
                         return;
                     }
 
@@ -258,6 +263,7 @@ namespace YetAnotherRelogger.Helpers
                 }
                 catch (Exception ex)
                 {
+                    StatFailed++;
                     Send("Internal server error: " + ex.Message);
                     Logger.Instance.WriteGlobal(ex.ToString());
                 }
@@ -271,6 +277,7 @@ namespace YetAnotherRelogger.Helpers
                 }
                 catch (Exception ex)
                 {
+                    StatFailed++;
                     Logger.Instance.WriteGlobal(ex.ToString());
                 }
             }
