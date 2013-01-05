@@ -22,4 +22,22 @@ namespace YetAnotherRelogger.Helpers.Bot
             Coinage = 0;
         }
     }
+
+    public class ChartStats
+    {
+        public ChartStats()
+        {
+            GoldPerHour = new Gold();
+        }
+        public Gold GoldPerHour;
+        
+        public class Gold
+        {
+            public DateTime StartTime;
+            public DateTime LastUpdate;
+            public long StartCoinage;
+            public long LastGain;
+            public long LastCoinage;
+        }
+    }
 }

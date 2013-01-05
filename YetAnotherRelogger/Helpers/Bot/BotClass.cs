@@ -28,6 +28,7 @@ namespace YetAnotherRelogger.Helpers.Bot
             Name = string.Empty;
             Description = String.Empty;
             AntiIdle = new AntiIdleClass();
+            ChartStats = new ChartStats();
         }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -68,8 +69,6 @@ namespace YetAnotherRelogger.Helpers.Bot
         }
 
         public WeekSchedule Week { get; set; }
-
-
         public ProfileScheduleClass ProfileSchedule { get; set; }
 
         [XmlIgnore] public bool IsStarted { get; set; }
@@ -104,6 +103,8 @@ namespace YetAnotherRelogger.Helpers.Bot
         [XmlIgnore] public DateTime StartTime { get; set; }
         [XmlIgnore] private string _runningtime;
         [XmlIgnore] public string RunningTime { get { return _runningtime; } set { SetField(ref _runningtime, value, "RunningTime"); } }
+
+        [XmlIgnore] public ChartStats ChartStats { get; set; }
 
         #region Advanced Options Variables
         // Windows User

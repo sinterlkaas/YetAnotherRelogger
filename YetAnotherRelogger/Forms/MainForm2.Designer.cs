@@ -43,12 +43,15 @@
             System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Profile Kickstart");
             System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Anti Idle");
             System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Hotkeys");
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
@@ -69,6 +72,12 @@
             this.SettingsPanel = new System.Windows.Forms.Panel();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.MemoryUsage = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.CpuUsage = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.CommConnections = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -84,12 +93,8 @@
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.labelStats = new System.Windows.Forms.Label();
-            this.tabControl2 = new System.Windows.Forms.TabControl();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.CpuUsage = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.MemoryUsage = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.CommConnections = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.GoldStats = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -97,16 +102,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.tabControl2.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MemoryUsage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CpuUsage)).BeginInit();
+            this.tabPage6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CommConnections)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
-            this.tabControl2.SuspendLayout();
-            this.tabPage5.SuspendLayout();
-            this.tabPage6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.CpuUsage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MemoryUsage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.CommConnections)).BeginInit();
+            this.tabPage7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.GoldStats)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -300,6 +307,88 @@
             this.tabPage4.Text = "Stats";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // tabControl2
+            // 
+            this.tabControl2.Controls.Add(this.tabPage5);
+            this.tabControl2.Controls.Add(this.tabPage7);
+            this.tabControl2.Controls.Add(this.tabPage6);
+            this.tabControl2.Location = new System.Drawing.Point(12, 6);
+            this.tabControl2.Name = "tabControl2";
+            this.tabControl2.SelectedIndex = 0;
+            this.tabControl2.Size = new System.Drawing.Size(667, 395);
+            this.tabControl2.TabIndex = 3;
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.MemoryUsage);
+            this.tabPage5.Controls.Add(this.CpuUsage);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(659, 369);
+            this.tabPage5.TabIndex = 0;
+            this.tabPage5.Text = "System";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // MemoryUsage
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.MemoryUsage.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.MemoryUsage.Legends.Add(legend1);
+            this.MemoryUsage.Location = new System.Drawing.Point(0, 179);
+            this.MemoryUsage.Name = "MemoryUsage";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.MemoryUsage.Series.Add(series1);
+            this.MemoryUsage.Size = new System.Drawing.Size(653, 140);
+            this.MemoryUsage.TabIndex = 2;
+            this.MemoryUsage.Text = "chart1";
+            // 
+            // CpuUsage
+            // 
+            chartArea2.Name = "ChartArea1";
+            this.CpuUsage.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.CpuUsage.Legends.Add(legend2);
+            this.CpuUsage.Location = new System.Drawing.Point(3, 19);
+            this.CpuUsage.Name = "CpuUsage";
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.CpuUsage.Series.Add(series2);
+            this.CpuUsage.Size = new System.Drawing.Size(650, 140);
+            this.CpuUsage.TabIndex = 1;
+            this.CpuUsage.Text = "chart1";
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.CommConnections);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(659, 369);
+            this.tabPage6.TabIndex = 1;
+            this.tabPage6.Text = "Relogger";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // CommConnections
+            // 
+            chartArea4.Name = "ChartArea1";
+            this.CommConnections.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.CommConnections.Legends.Add(legend4);
+            this.CommConnections.Location = new System.Drawing.Point(6, 6);
+            this.CommConnections.Name = "CommConnections";
+            series4.ChartArea = "ChartArea1";
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            this.CommConnections.Series.Add(series4);
+            this.CommConnections.Size = new System.Drawing.Size(643, 105);
+            this.CommConnections.TabIndex = 4;
+            this.CommConnections.Text = "chart1";
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.pictureBox2);
@@ -423,86 +512,32 @@
             this.labelStats.Size = new System.Drawing.Size(0, 13);
             this.labelStats.TabIndex = 2;
             // 
-            // tabControl2
+            // tabPage7
             // 
-            this.tabControl2.Controls.Add(this.tabPage5);
-            this.tabControl2.Controls.Add(this.tabPage6);
-            this.tabControl2.Location = new System.Drawing.Point(12, 6);
-            this.tabControl2.Name = "tabControl2";
-            this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(667, 395);
-            this.tabControl2.TabIndex = 3;
+            this.tabPage7.Controls.Add(this.GoldStats);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(659, 369);
+            this.tabPage7.TabIndex = 2;
+            this.tabPage7.Text = "Bots";
+            this.tabPage7.UseVisualStyleBackColor = true;
             // 
-            // tabPage5
-            // 
-            this.tabPage5.Controls.Add(this.MemoryUsage);
-            this.tabPage5.Controls.Add(this.CpuUsage);
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(659, 369);
-            this.tabPage5.TabIndex = 0;
-            this.tabPage5.Text = "System";
-            this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // tabPage6
-            // 
-            this.tabPage6.Controls.Add(this.CommConnections);
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(659, 369);
-            this.tabPage6.TabIndex = 1;
-            this.tabPage6.Text = "Relogger";
-            this.tabPage6.UseVisualStyleBackColor = true;
-            // 
-            // CpuUsage
-            // 
-            chartArea2.Name = "ChartArea1";
-            this.CpuUsage.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.CpuUsage.Legends.Add(legend2);
-            this.CpuUsage.Location = new System.Drawing.Point(3, 19);
-            this.CpuUsage.Name = "CpuUsage";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.CpuUsage.Series.Add(series2);
-            this.CpuUsage.Size = new System.Drawing.Size(650, 140);
-            this.CpuUsage.TabIndex = 1;
-            this.CpuUsage.Text = "chart1";
-            // 
-            // MemoryUsage
-            // 
-            chartArea1.Name = "ChartArea1";
-            this.MemoryUsage.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.MemoryUsage.Legends.Add(legend1);
-            this.MemoryUsage.Location = new System.Drawing.Point(0, 179);
-            this.MemoryUsage.Name = "MemoryUsage";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.MemoryUsage.Series.Add(series1);
-            this.MemoryUsage.Size = new System.Drawing.Size(653, 140);
-            this.MemoryUsage.TabIndex = 2;
-            this.MemoryUsage.Text = "chart1";
-            // 
-            // CommConnections
+            // GoldStats
             // 
             chartArea3.Name = "ChartArea1";
-            this.CommConnections.ChartAreas.Add(chartArea3);
+            this.GoldStats.ChartAreas.Add(chartArea3);
             legend3.Name = "Legend1";
-            this.CommConnections.Legends.Add(legend3);
-            this.CommConnections.Location = new System.Drawing.Point(6, 6);
-            this.CommConnections.Name = "CommConnections";
+            this.GoldStats.Legends.Add(legend3);
+            this.GoldStats.Location = new System.Drawing.Point(6, 6);
+            this.GoldStats.Name = "GoldStats";
             series3.ChartArea = "ChartArea1";
             series3.Legend = "Legend1";
             series3.Name = "Series1";
-            this.CommConnections.Series.Add(series3);
-            this.CommConnections.Size = new System.Drawing.Size(643, 105);
-            this.CommConnections.TabIndex = 4;
-            this.CommConnections.Text = "chart1";
+            this.GoldStats.Series.Add(series3);
+            this.GoldStats.Size = new System.Drawing.Size(643, 105);
+            this.GoldStats.TabIndex = 5;
+            this.GoldStats.Text = "GoldStats";
             // 
             // MainForm2
             // 
@@ -528,17 +563,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
+            this.tabControl2.ResumeLayout(false);
+            this.tabPage5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.MemoryUsage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CpuUsage)).EndInit();
+            this.tabPage6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.CommConnections)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
-            this.tabControl2.ResumeLayout(false);
-            this.tabPage5.ResumeLayout(false);
-            this.tabPage6.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.CpuUsage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MemoryUsage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.CommConnections)).EndInit();
+            this.tabPage7.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.GoldStats)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -583,5 +620,7 @@
         public System.Windows.Forms.DataVisualization.Charting.Chart CpuUsage;
         private System.Windows.Forms.TabPage tabPage6;
         public System.Windows.Forms.DataVisualization.Charting.Chart CommConnections;
+        private System.Windows.Forms.TabPage tabPage7;
+        public System.Windows.Forms.DataVisualization.Charting.Chart GoldStats;
     }
 }
