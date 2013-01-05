@@ -27,8 +27,8 @@ namespace YetAnotherRelogger
             // Allow only one instance to be run
             if (!SingleInstance.Start())
             {
-                //SingleInstance.ShowFirstInstance();
-               // return;
+                SingleInstance.ShowFirstInstance();
+                return;
             }
             // Run as admin check
             IsRunAsAdmin = (new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator));
@@ -48,7 +48,8 @@ namespace YetAnotherRelogger
 
             // Start background threads
             Relogger.Instance.Start();
-            StatsUpdater.Instance.Start();
+            if (Settings.Default.StatsEnabled)
+                StatsUpdater.Instance.Start();
             
             if (Settings.Default.FocusCheck)
                 ForegroundChecker.Instance.Start();

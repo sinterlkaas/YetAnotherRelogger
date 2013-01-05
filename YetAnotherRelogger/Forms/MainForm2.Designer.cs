@@ -43,18 +43,19 @@
             System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Profile Kickstart");
             System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Anti Idle");
             System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Hotkeys");
+            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("Stats");
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm2));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -76,6 +77,10 @@
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.MemoryUsage = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.CpuUsage = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.CashPerHour = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.GoldStats = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.CommConnections = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -93,8 +98,10 @@
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.labelStats = new System.Windows.Forms.Label();
-            this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.GoldStats = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.CurrentCash = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.TotalGold = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -106,14 +113,14 @@
             this.tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MemoryUsage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CpuUsage)).BeginInit();
+            this.tabPage7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.GoldStats)).BeginInit();
             this.tabPage6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CommConnections)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
-            this.tabPage7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.GoldStats)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -288,11 +295,14 @@
             treeNode8.Text = "Anti Idle";
             treeNode9.Name = "HotKeys";
             treeNode9.Text = "Hotkeys";
+            treeNode10.Name = "Stats";
+            treeNode10.Text = "Stats";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode6,
             treeNode7,
             treeNode8,
-            treeNode9});
+            treeNode9,
+            treeNode10});
             this.treeView1.Size = new System.Drawing.Size(173, 395);
             this.treeView1.TabIndex = 3;
             // 
@@ -361,6 +371,57 @@
             this.CpuUsage.Size = new System.Drawing.Size(650, 140);
             this.CpuUsage.TabIndex = 1;
             this.CpuUsage.Text = "chart1";
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.Controls.Add(this.TotalGold);
+            this.tabPage7.Controls.Add(this.label4);
+            this.tabPage7.Controls.Add(this.CurrentCash);
+            this.tabPage7.Controls.Add(this.label3);
+            this.tabPage7.Controls.Add(this.CashPerHour);
+            this.tabPage7.Controls.Add(this.label1);
+            this.tabPage7.Controls.Add(this.GoldStats);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(659, 369);
+            this.tabPage7.TabIndex = 2;
+            this.tabPage7.Text = "Bots";
+            this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // CashPerHour
+            // 
+            this.CashPerHour.AutoSize = true;
+            this.CashPerHour.Location = new System.Drawing.Point(95, 135);
+            this.CashPerHour.Name = "CashPerHour";
+            this.CashPerHour.Size = new System.Drawing.Size(22, 13);
+            this.CashPerHour.TabIndex = 7;
+            this.CashPerHour.Text = "0 $";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 135);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(76, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Cash per hour:";
+            // 
+            // GoldStats
+            // 
+            chartArea3.Name = "ChartArea1";
+            this.GoldStats.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.GoldStats.Legends.Add(legend3);
+            this.GoldStats.Location = new System.Drawing.Point(6, 6);
+            this.GoldStats.Name = "GoldStats";
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.GoldStats.Series.Add(series3);
+            this.GoldStats.Size = new System.Drawing.Size(643, 105);
+            this.GoldStats.TabIndex = 5;
+            this.GoldStats.Text = "GoldStats";
             // 
             // tabPage6
             // 
@@ -512,32 +573,41 @@
             this.labelStats.Size = new System.Drawing.Size(0, 13);
             this.labelStats.TabIndex = 2;
             // 
-            // tabPage7
+            // CurrentCash
             // 
-            this.tabPage7.Controls.Add(this.GoldStats);
-            this.tabPage7.Location = new System.Drawing.Point(4, 22);
-            this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(659, 369);
-            this.tabPage7.TabIndex = 2;
-            this.tabPage7.Text = "Bots";
-            this.tabPage7.UseVisualStyleBackColor = true;
+            this.CurrentCash.AutoSize = true;
+            this.CurrentCash.Location = new System.Drawing.Point(95, 179);
+            this.CurrentCash.Name = "CurrentCash";
+            this.CurrentCash.Size = new System.Drawing.Size(22, 13);
+            this.CurrentCash.TabIndex = 9;
+            this.CurrentCash.Text = "0 $";
             // 
-            // GoldStats
+            // label3
             // 
-            chartArea3.Name = "ChartArea1";
-            this.GoldStats.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            this.GoldStats.Legends.Add(legend3);
-            this.GoldStats.Location = new System.Drawing.Point(6, 6);
-            this.GoldStats.Name = "GoldStats";
-            series3.ChartArea = "ChartArea1";
-            series3.Legend = "Legend1";
-            series3.Name = "Series1";
-            this.GoldStats.Series.Add(series3);
-            this.GoldStats.Size = new System.Drawing.Size(643, 105);
-            this.GoldStats.TabIndex = 5;
-            this.GoldStats.Text = "GoldStats";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 179);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(72, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Gold as cash:";
+            // 
+            // TotalGold
+            // 
+            this.TotalGold.AutoSize = true;
+            this.TotalGold.Location = new System.Drawing.Point(95, 157);
+            this.TotalGold.Name = "TotalGold";
+            this.TotalGold.Size = new System.Drawing.Size(13, 13);
+            this.TotalGold.TabIndex = 11;
+            this.TotalGold.Text = "0";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 157);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(59, 13);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Total Gold:";
             // 
             // MainForm2
             // 
@@ -567,6 +637,9 @@
             this.tabPage5.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.MemoryUsage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CpuUsage)).EndInit();
+            this.tabPage7.ResumeLayout(false);
+            this.tabPage7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.GoldStats)).EndInit();
             this.tabPage6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.CommConnections)).EndInit();
             this.tabPage3.ResumeLayout(false);
@@ -574,8 +647,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
-            this.tabPage7.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.GoldStats)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -622,5 +693,11 @@
         public System.Windows.Forms.DataVisualization.Charting.Chart CommConnections;
         private System.Windows.Forms.TabPage tabPage7;
         public System.Windows.Forms.DataVisualization.Charting.Chart GoldStats;
+        public System.Windows.Forms.Label CashPerHour;
+        private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Label CurrentCash;
+        private System.Windows.Forms.Label label3;
+        public System.Windows.Forms.Label TotalGold;
+        private System.Windows.Forms.Label label4;
     }
 }

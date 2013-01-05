@@ -35,13 +35,15 @@ namespace YetAnotherRelogger
         private Thread _statsUpdater;
         public void Start()
         {
+            if (_statsUpdater != null) return;
             _statsUpdater = new Thread(new ThreadStart(StatsUpdaterWorker)) { IsBackground = true };
             _statsUpdater.Start();
         }
 
         public void Stop()
         {
-            _statsUpdater.Abort();
+            if (_statsUpdater != null)
+                _statsUpdater.Abort();
         }
 
         public void StatsUpdaterWorker()
@@ -66,6 +68,7 @@ namespace YetAnotherRelogger
                 long demonbuddyRamUsage = 0;
                 int demonbuddyCount = 0;
                 double goldPerHour = 0;
+                double totalGold = 0;
                 foreach (var bot in BotSettings.Instance.Bots)
                 {
                     var chartStats = bot.ChartStats;
@@ -143,10 +146,12 @@ namespace YetAnotherRelogger
                             goldPerHour += botGph;
                         }
 
+                        totalGold += chartStats.GoldPerHour.LastCoinage;
+
                         var serie = Program.Mainform.GoldStats.Series.FirstOrDefault(x => x.Name == bot.Name);
                         if (serie != null)
                         {
-                            updateMainformGraph(Program.Mainform.GoldStats, serie.Name, botGph, limit: 360, autoscale: true);
+                            updateMainformGraph(Program.Mainform.GoldStats, serie.Name, botGph, limit: (int)Properties.Settings.Default.StatsGphHistory, autoscale: true);
                         }
                         #endregion
                     }
@@ -157,33 +162,35 @@ namespace YetAnotherRelogger
                 // add to Cpu graph
                 var graph = Program.Mainform.CpuUsage;
                 var allusage = diabloCpuUsage + demonbuddyCpuUsage;
-                updateMainformGraph(graph, "All Usage", allusage, legend: string.Format("All usage: {0,11}%", allusage.ToString("000.0")));
-                updateMainformGraph(graph, "Diablo", diabloCpuUsage, legend: string.Format("Diablo: {0,16}%", diabloCpuUsage.ToString("000.0")));
-                updateMainformGraph(graph, "Demonbuddy", demonbuddyCpuUsage, legend: string.Format("Demonbuddy: {0,4}%", demonbuddyCpuUsage.ToString("000.0")));
+                updateMainformGraph(graph, "All Usage", allusage, legend: string.Format("All usage: {0,11}%", allusage.ToString("000.0")), limit: (int)Properties.Settings.Default.StatsCPUHistory);
+                updateMainformGraph(graph, "Diablo", diabloCpuUsage, legend: string.Format("Diablo: {0,16}%", diabloCpuUsage.ToString("000.0")), limit: (int)Properties.Settings.Default.StatsCPUHistory);
+                updateMainformGraph(graph, "Demonbuddy", demonbuddyCpuUsage, legend: string.Format("Demonbuddy: {0,4}%", demonbuddyCpuUsage.ToString("000.0")), limit: (int)Properties.Settings.Default.StatsCPUHistory);
                 var cpu = cpuUsage.NextValue();
-                updateMainformGraph(graph, "Total System", cpu, legend: string.Format("Total System: {0,2}%", cpu.ToString("000.0")));
+                updateMainformGraph(graph, "Total System", cpu, legend: string.Format("Total System: {0,2}%", cpu.ToString("000.0")), limit: (int)Properties.Settings.Default.StatsCPUHistory);
                 
                 // add to Memory graph
                 graph = Program.Mainform.MemoryUsage;
                 allusage = (double) (diabloRamUsage + demonbuddyRamUsage)/totalRam*100;
                 var diablousage = (double) diabloRamUsage/totalRam*100;
                 var demonbuddyusage = (double) demonbuddyRamUsage/totalRam*100;
-                updateMainformGraph(graph, "All Usage", allusage, legend: string.Format("All usage: {0,11}%", ((double)(diabloRamUsage + demonbuddyRamUsage) / totalRam * 100).ToString("000.0")));
-                updateMainformGraph(graph, "Diablo", diablousage, legend: string.Format("Diablo: {0,16}%", diablousage.ToString("000.0")));
-                updateMainformGraph(graph, "Demonbuddy", demonbuddyusage, legend: string.Format("Demonbuddy: {0,4}%", demonbuddyusage.ToString("000.0")));
+                updateMainformGraph(graph, "All Usage", allusage, legend: string.Format("All usage: {0,11}%", ((double)(diabloRamUsage + demonbuddyRamUsage) / totalRam * 100).ToString("000.0")), limit: (int)Properties.Settings.Default.StatsMemoryHistory);
+                updateMainformGraph(graph, "Diablo", diablousage, legend: string.Format("Diablo: {0,16}%", diablousage.ToString("000.0")), limit: (int)Properties.Settings.Default.StatsMemoryHistory);
+                updateMainformGraph(graph, "Demonbuddy", demonbuddyusage, legend: string.Format("Demonbuddy: {0,4}%", demonbuddyusage.ToString("000.0")), limit: (int)Properties.Settings.Default.StatsMemoryHistory);
                 var mem = (double)PerformanceInfo.GetPhysicalUsedMemory()/totalRam*100;
-                updateMainformGraph(graph, "Total System", mem, legend: string.Format("Total System: {0,2}%", mem.ToString("000.0")));
+                updateMainformGraph(graph, "Total System", mem, legend: string.Format("Total System: {0,2}%", mem.ToString("000.0")), limit: (int)Properties.Settings.Default.StatsMemoryHistory);
 
                 // add to Connection graph
-                updateMainformGraph(Program.Mainform.CommConnections,"Connections", Communicator.StatConnections, legend:string.Format("Connections {0}", Communicator.StatConnections), autoscale:true);
-                updateMainformGraph(Program.Mainform.CommConnections, "Failed", Communicator.StatFailed, legend: string.Format("Failed {0}", Communicator.StatFailed), autoscale: true);
+                updateMainformGraph(Program.Mainform.CommConnections, "Connections", Communicator.StatConnections, legend: string.Format("Connections {0}", Communicator.StatConnections), autoscale: true, limit: (int)Properties.Settings.Default.StatsConnectionsHistory);
+                updateMainformGraph(Program.Mainform.CommConnections, "Failed", Communicator.StatFailed, legend: string.Format("Failed {0}", Communicator.StatFailed), autoscale: true, limit: (int)Properties.Settings.Default.StatsConnectionsHistory);
                 Communicator.StatConnections = 0;
                 Communicator.StatFailed = 0;
                 
                 // add to Gold Graph
-                updateMainformGraph(Program.Mainform.GoldStats, "Gph", goldPerHour, legend: string.Format("Gph {0}", goldPerHour),autoscale:true,limit:360);
-                
-                Thread.Sleep(1000);
+                updateMainformGraph(Program.Mainform.GoldStats, "Gph", goldPerHour, legend: string.Format("Gph {0}", goldPerHour),autoscale:true,limit:(int)Properties.Settings.Default.StatsGphHistory);
+                updateMainformLabel(Program.Mainform.CashPerHour, string.Format("{0:C2}", (goldPerHour/1000000*(double)Properties.Settings.Default.StatsGoldPrice)));
+                updateMainformLabel(Program.Mainform.CurrentCash, string.Format("{0:C2}", (totalGold / 1000000 * (double)Properties.Settings.Default.StatsGoldPrice)));
+                updateMainformLabel(Program.Mainform.TotalGold, string.Format("{0:N0}", totalGold));
+                Thread.Sleep((int)Properties.Settings.Default.StatsUpdateRate);
             }
         }
 
@@ -470,9 +477,12 @@ namespace YetAnotherRelogger
 
                             while(graph.Series[serie].Points.Count < limit)
                                 graph.Series[serie].Points.Add(0);
+                            
                             graph.Series[serie].Points.Add(value);
-                            if (graph.Series[serie].Points.Count > limit)
+                            
+                            while (graph.Series[serie].Points.Count > limit)
                                 graph.Series[serie].Points.RemoveAt(0);
+
                             if (autoscale)
                             {
                                 graph.ChartAreas[0].AxisY.Minimum = Double.NaN;
@@ -491,17 +501,27 @@ namespace YetAnotherRelogger
                 }
             }
         }
-        private void updateMainformStatsLabel(string text)
+
+        private void updateMainformLabel(System.Windows.Forms.Label label, string value)
         {
-            if (Program.Mainform != null && Program.Mainform.labelStats != null)
+            if (Program.Mainform != null && label != null)
             {
                 try
                 {
-                    Program.Mainform.Invoke(new Action(() => Program.Mainform.labelStats.Text = text));
+                    Program.Mainform.Invoke(new Action(() =>
+                    {
+                        try
+                        {
+                            label.Text = value;
+                        }
+                        catch (Exception ex)
+                        {// Suppress exceptions
+                            Debug.WriteLine(ex);
+                        }
+                    }));
                 }
                 catch
-                {
-                    // Failed! do nothing
+                {// Suppress exceptions
                 }
             }
         }

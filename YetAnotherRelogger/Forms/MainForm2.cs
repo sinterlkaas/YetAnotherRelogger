@@ -357,6 +357,9 @@ namespace YetAnotherRelogger.Forms
                 case "HotKeys":
                     tmp = new SettingsTree.HotKeys();
                     break;
+                case "Stats":
+                    tmp = new SettingsTree.Stats();
+                    break;
             }
 
             // Check if new user control should be displayed

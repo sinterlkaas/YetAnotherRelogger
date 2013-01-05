@@ -129,6 +129,12 @@
     <Compile Include="Forms\SettingsTree\ProfileKickstart.Designer.cs">
       <DependentUpon>ProfileKickstart.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SettingsTree\Stats.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsTree\Stats.Designer.cs">
+      <DependentUpon>Stats.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Wizard\Advanced.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -297,6 +303,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsTree\ProfileKickstart.resx">
       <DependentUpon>ProfileKickstart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsTree\Stats.resx">
+      <DependentUpon>Stats.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Wizard\Advanced.resx">
       <DependentUpon>Advanced.cs</DependentUpon>
