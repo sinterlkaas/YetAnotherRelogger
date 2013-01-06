@@ -1,8 +1,10 @@
 -----------------------
 * Version 0.2.0 BETA
+- Added Commandline argument "-safemode" to disable some extra feature like (stats, foregroundcheck) and reset detected screens
+- Added Graph for Gold statistics
 - Added Graph for cpu and ram usage
-- Improved log scanning
-- Added CPU/RAM usage for running bots in main form
+- Improved plugin log scanning
+- Added Support for Take A Break by Ghaleon
 - Added Support for Trinity Pause button
 - Added Diablo clone possibilty in advanced bot tab
 - Improved Communication between DB and YAR (only really noticable with 10+ bots)
