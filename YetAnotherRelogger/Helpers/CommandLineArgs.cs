@@ -6,6 +6,7 @@ namespace YetAnotherRelogger.Helpers
     {
         public static bool WindowsAutoStart { get; set; }
         public static bool AutoStart { get; set; }
+        public static bool SafeMode { get; set; }
 
         public static void Get()
         {
@@ -19,6 +20,9 @@ namespace YetAnotherRelogger.Helpers
                         break;
                     case "-autostart":
                         AutoStart = true;
+                        break;
+                    case "-safemode":
+                        SafeMode = true;
                         break;
                     default:
                         // Unknown argument passed

@@ -1,5 +1,9 @@
-﻿// VERSION: 0.2.0.5+
+﻿// VERSION: 0.2.0.6
 /* Changelog:
+ * VERSION: 0.2.0.6
+ * Added: Support for: Take A Break by Ghaleon
+ * VERSION: 0.2.0.5
+ * Improved: Log scanning
  * VERSION: 0.1.9.1
  * Added: Monsterpower
  * Added: Support for RadsAtom
@@ -59,7 +63,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 2, 0, 5); } }
+        public Version Version { get { return new Version(0, 2, 0, 6); } }
 
         private const bool _debug = true;
 
@@ -74,6 +78,8 @@ namespace YARPLUGIN
                 new Regex(@".*Atom.*Will Stop the bot for .+ minutes\.$"), // Take a break
                 /* RadsAtom "Take a break" */
                 new Regex(@"\[RadsAtom\].+ minutes to next break, the break will last for .+ minutes."), 
+                /* Take A Break by Ghaleon */
+                new Regex(@"\[TakeABreak.*\] It's time to take a break.*"), 
             };
 
         // CrashTender

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -15,7 +14,7 @@ namespace YetAnotherRelogger
 {
     static class Program
     {
-        public const string VERSION = "0.2.0.5";
+        public const string VERSION = "0.2.0.6";
         public const int Sleeptime = 10;
         /// <summary>
         /// The main entry point for the application.
@@ -24,44 +23,69 @@ namespace YetAnotherRelogger
         [STAThread]
         static void Main()
         {
-            // Allow only one instance to be run
-            if (!SingleInstance.Start())
+            try
             {
-                SingleInstance.ShowFirstInstance();
-                return;
+                // Allow only one instance to be run
+                if (!SingleInstance.Start())
+                {
+                    SingleInstance.ShowFirstInstance();
+                    return;
+                }
+
+                // Run as admin check
+                var identity = WindowsIdentity.GetCurrent();
+                if (identity != null)
+                    IsRunAsAdmin = (new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator));
+
+                // Get Commandline args
+                CommandLineArgs.Get();
+
+                if (CommandLineArgs.SafeMode)
+                {
+                    var result = MessageBox.Show("Launching in safe mode!\nThis will reset some features", "YetAnotherRelogger Safe Mode", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Cancel)
+                        return;
+                }
+
+                // Load settings
+                BotSettings.Instance.Load();
+                Settings.Default.Reload();
+
+                if (Settings.Default.AutoPosScreens == null ||
+                    (Settings.Default.AutoPosScreens != null && Settings.Default.AutoPosScreens.Count == 0))
+                    AutoPosition.UpdateScreens();
+                if (Settings.Default.D3StarterPath.Equals(string.Empty) || Settings.Default.D3StarterPath.Equals(""))
+                    Settings.Default.D3StarterPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath),
+                                                                  "ThirdParty\\D3Starter.exe");
+
+                // Start background threads
+                Relogger.Instance.Start();
+                Communicator.Instance.Start();
+
+                if (!CommandLineArgs.SafeMode)
+                {
+                    if (Settings.Default.StatsEnabled)
+                        StatsUpdater.Instance.Start();
+                    if (Settings.Default.FocusCheck)
+                        ForegroundChecker.Instance.Start();
+                }
+                else
+                {
+                    Settings.Default.StatsEnabled = false;
+                    Settings.Default.FocusCheck = false;
+                    AutoPosition.UpdateScreens();
+                }
+
+
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Mainform = new MainForm2();
+                Application.Run(Mainform);
             }
-            // Run as admin check
-            IsRunAsAdmin = (new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator));
-            
-            // Get Commandline args
-            CommandLineArgs.Get();
-
-            // Load settings
-            BotSettings.Instance.Load();
-            Settings.Default.Reload();
-
-            
-            if (Settings.Default.AutoPosScreens == null || (Settings.Default.AutoPosScreens != null && Settings.Default.AutoPosScreens.Count == 0))
-                AutoPosition.UpdateScreens();
-            if (Settings.Default.D3StarterPath.Equals(string.Empty) || Settings.Default.D3StarterPath.Equals(""))
-                Settings.Default.D3StarterPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "ThirdParty\\D3Starter.exe");
-
-            // Start background threads
-            Relogger.Instance.Start();
-            if (Settings.Default.StatsEnabled)
-                StatsUpdater.Instance.Start();
-            
-            if (Settings.Default.FocusCheck)
-                ForegroundChecker.Instance.Start();
-            
-            var comms = new Communicator();
-            comms.Start();
-
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Mainform = new MainForm2();
-            Application.Run(Mainform);
-
+            catch (Exception ex)
+            {
+                Logger.Instance.WriteGlobal(ex.ToString());
+            }
             // Clean up
             SingleInstance.Stop();
             Settings.Default.Save();
