@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Xml.Serialization;
 using YetAnotherRelogger.Helpers.Stats;
 using YetAnotherRelogger.Helpers.Tools;
@@ -12,8 +13,26 @@ namespace YetAnotherRelogger.Helpers.Bot
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+            try
+            {
+                if (Program.Mainform == null) return;
+                Program.Mainform.Invoke(new Action(() =>
+                   {
+                       try
+                       {
+                           var handler = PropertyChanged;
+                           if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+                       }
+                       catch(Exception ex)
+                       {
+                           Debug.WriteLine(ex);
+                       }
+                   }));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
         }
         protected bool SetField<T>(ref T field, T value, string propertyName)
         {

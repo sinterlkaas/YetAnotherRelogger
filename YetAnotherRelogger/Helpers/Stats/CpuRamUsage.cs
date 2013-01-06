@@ -1,4 +1,5 @@
-﻿using System;
+﻿/* http://www.philosophicalgeek.com/2009/01/03/determine-cpu-usage-of-current-process-c-and-c/ */
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -15,12 +16,16 @@ namespace YetAnotherRelogger.Helpers.Stats
 
         private ComTypes.FILETIME _lastSysKernel;
         private ComTypes.FILETIME _lastSysUser;
+        private ComTypes.FILETIME _lastSysIdle;
         private HashSet<ProcUsage> _procUsageList;
+        public double TotalCpuUsage { get; private set; }
 
         public CpuRamUsage()
         {
+            TotalCpuUsage = 0;
             _lastSysKernel.dwHighDateTime = _lastSysKernel.dwLowDateTime = 0;
             _lastSysUser.dwHighDateTime = _lastSysUser.dwLowDateTime = 0;
+            _lastSysIdle.dwHighDateTime = _lastSysIdle.dwLowDateTime = 0;
             _procUsageList = new HashSet<ProcUsage>();
         }
 
@@ -35,7 +40,11 @@ namespace YetAnotherRelogger.Helpers.Stats
             // Calculate tot system cpu time
             var sysKernelDiff = SubtractTimes(sysKernel, _lastSysKernel);
             var sysUserDiff = SubtractTimes(sysUser, _lastSysUser);
+            var sysIdleDiff = SubtractTimes(sysIdle, _lastSysIdle);
             var sysTotal = sysKernelDiff + sysUserDiff;
+            // Calculate total Cpu usage
+            var totalUsage = sysTotal > 0 ? 100 - ((100d * sysIdleDiff) / sysTotal) : TotalCpuUsage;
+            TotalCpuUsage = totalUsage < 0 ? 0 : totalUsage;
 
             var newList = new HashSet<ProcUsage>();
             foreach (var proc in Process.GetProcesses())
@@ -46,11 +55,18 @@ namespace YetAnotherRelogger.Helpers.Stats
                     if (proc.Id == 0) continue;
 
                     Int64 procTotal;
+                    double usage;
                     var p = GetById(proc.Id);
                     if (p != null)
+                    {
                         procTotal = proc.TotalProcessorTime.Ticks - p.LastProcTime.Ticks;
+                        usage = sysTotal > 0 ?((100.0*procTotal)/sysTotal) : p.Usage.Cpu;
+                    }
                     else
+                    {
                         procTotal = 0;
+                        usage = sysTotal > 0 ?((100.0*procTotal)/sysTotal) : 0;
+                    }
 
                     // Add Process to list
                     newList.Add(new ProcUsage
@@ -58,7 +74,7 @@ namespace YetAnotherRelogger.Helpers.Stats
                         Process = proc,
                         Usage = new Usage
                         {
-                            Cpu = ((100.0 * procTotal) / sysTotal), // Calculate process CPU Usage
+                            Cpu = usage, // Calculate process CPU Usage
                             Memory = proc.PrivateMemorySize64
                         },
                         LastProcTime = proc.TotalProcessorTime
@@ -74,6 +90,7 @@ namespace YetAnotherRelogger.Helpers.Stats
             // Update last system times
             _lastSysKernel = sysKernel;
             _lastSysUser = sysUser;
+            _lastSysIdle = sysIdle;
 
             // Update Process list
             _procUsageList = newList;

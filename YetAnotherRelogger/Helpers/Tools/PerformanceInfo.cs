@@ -7,8 +7,7 @@ namespace YetAnotherRelogger.Helpers.Tools
     {
         [DllImport("psapi.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetPerformanceInfo([Out] out PerformanceInformation performanceInformation,
-                                                     [In] int size);
+        public static extern bool GetPerformanceInfo([Out] out PerformanceInformation performanceInformation, [In] int size);
 
         [StructLayout(LayoutKind.Sequential)]
         public struct PerformanceInformation

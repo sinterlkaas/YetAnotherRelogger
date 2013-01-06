@@ -214,6 +214,7 @@ namespace YetAnotherRelogger.Forms
             dataGridView1.Columns["IsStandby"].Visible = false;
             dataGridView1.Columns["UseDiabloClone"].Visible = false;
             dataGridView1.Columns["DiabloCloneLocation"].Visible = false;
+            dataGridView1.Columns["ChartStats"].Visible = false;
 
             dataGridView1.Columns["isEnabled"].DisplayIndex = 1;
             dataGridView1.Columns["isEnabled"].HeaderText = "Enabled";
