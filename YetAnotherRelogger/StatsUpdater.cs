@@ -168,19 +168,19 @@ namespace YetAnotherRelogger
         #region Chart Stats Per Bot Creation
         private static readonly Color[] ChartColors = new[]
                                           {
-                                              Color.DarkOrange,
-                                              Color.DarkOrchid,
-                                              Color.DarkRed,
-                                              Color.DarkSeaGreen,
-                                              Color.DeepPink,
-                                              Color.DeepSkyBlue,
-                                              Color.Goldenrod,
-                                              Color.LimeGreen,
-                                              Color.Magenta,
-                                              Color.Red,
-                                              Color.Yellow,
+                                              Color.LightSteelBlue,
                                               Color.Teal,
-                                              Color.LightSteelBlue
+                                              Color.Yellow,
+                                              Color.Red,
+                                              Color.LimeGreen,
+                                              Color.Goldenrod,
+                                              Color.DeepSkyBlue,
+                                              Color.DeepPink,
+                                              Color.Magenta,
+                                              Color.DarkSeaGreen,
+                                              Color.DarkRed,
+                                              Color.DarkOrchid,
+                                              Color.DarkOrange,
                                           };
         private void CreateChartStats(BotClass bot, Chart graph, ChartValueType valueType = ChartValueType.Auto)
         {
@@ -202,16 +202,10 @@ namespace YetAnotherRelogger
                                 graph.Series[bot.Name].YAxisType = AxisType.Primary;
                                 graph.Series[bot.Name].YValueType = valueType;
                                 graph.Series[bot.Name].IsXValueIndexed = false;
-                                
-                                foreach (var color in ChartColors)
-                                {
-                                    if (graph.Series.Any(x => x.Color != color))
-                                    {
-                                        graph.Series[bot.Name].Color = color;
-                                        break;
-                                    }
-                                    graph.Series[bot.Name].Color = Color.Black;
-                                }
+
+                                graph.Series[bot.Name].Color = Color.Black;
+                                foreach (var color in ChartColors.Where(color => graph.Series.All(x => x.Color != color)))
+                                    graph.Series[bot.Name].Color = color;
                                 graph.Series[bot.Name].Name = bot.Name;
                             }
                         }
