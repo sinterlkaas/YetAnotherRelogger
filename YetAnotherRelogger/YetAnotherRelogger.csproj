@@ -247,6 +247,7 @@
     <Compile Include="Helpers\PluginVersionCheck.cs" />
     <Compile Include="Helpers\BotSettings.cs" />
     <Compile Include="Helpers\Bot\WeekSchedule.cs" />
+    <Compile Include="Helpers\Stats\ChartStats.cs" />
     <Compile Include="Helpers\Stats\CpuRamUsage.cs" />
     <Compile Include="Helpers\Tools\CookieAwareWebClient.cs">
       <SubType>Component</SubType>

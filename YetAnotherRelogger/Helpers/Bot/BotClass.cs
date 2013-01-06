@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using YetAnotherRelogger.Helpers.Stats;
 using YetAnotherRelogger.Helpers.Tools;
-
 
 namespace YetAnotherRelogger.Helpers.Bot
 {

@@ -13,6 +13,26 @@ namespace YetAnotherRelogger.Helpers
 {
     public class Communicator
     {
+        #region singleton
+        static readonly Communicator instance = new Communicator();
+
+        static Communicator()
+        {
+        }
+
+        Communicator()
+        {
+        }
+
+        public static Communicator Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+        #endregion
+
         private static int _connections;
         public static int Connections
         {

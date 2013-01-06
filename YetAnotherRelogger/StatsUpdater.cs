@@ -35,7 +35,7 @@ namespace YetAnotherRelogger
         private Thread _statsUpdater;
         public void Start()
         {
-            if (_statsUpdater != null) return;
+            if (_statsUpdater != null && _statsUpdater.IsAlive) return;
             _statsUpdater = new Thread(new ThreadStart(StatsUpdaterWorker)) { IsBackground = true };
             _statsUpdater.Start();
         }
@@ -112,46 +112,17 @@ namespace YetAnotherRelogger
 
                         }
                         #endregion
-                        #region Calculate Gold
-                        // Calculate Gold
-                        var coinage = bot.AntiIdle.Stats.Coinage;
-                        var hours = DateTime.Now.Subtract(chartStats.GoldPerHour.StartTime).TotalSeconds / 3600;
-                        double botGph = 0;
-                        if (coinage > 0)
-                        {
-                            if (chartStats.GoldPerHour.StartCoinage <= 0)
-                            {
-                                chartStats.GoldPerHour.StartCoinage = coinage;
-                                chartStats.GoldPerHour.StartTime = DateTime.Now;
-                            }
-                            else
-                            {
-                                chartStats.GoldPerHour.LastGain = (coinage - chartStats.GoldPerHour.LastCoinage);
-                                if (chartStats.GoldPerHour.LastGain < 0)
-                                {
-                                    chartStats.GoldPerHour.StartCoinage = 0;
-                                    botGph = Math.Round((chartStats.GoldPerHour.LastCoinage - chartStats.GoldPerHour.StartCoinage) / hours);
-                                }
-                                else
-                                {
-                                    botGph = Math.Round((coinage - chartStats.GoldPerHour.StartCoinage)/hours);
-                                    chartStats.GoldPerHour.LastCoinage = coinage;
-                                }
-                                goldPerHour += botGph;
-                            }
-                        }
-                        else
-                        {
-                            botGph = Math.Round((chartStats.GoldPerHour.LastCoinage - chartStats.GoldPerHour.StartCoinage) / hours);
-                            goldPerHour += botGph;
-                        }
-
-                        totalGold += chartStats.GoldPerHour.LastCoinage;
+                        #region Gold Stats
+                        chartStats.GoldStats.Update(bot); // Update Current bot
+                        
+                        // Calculate total gold for all bots
+                        goldPerHour += chartStats.GoldStats.GoldPerHour;
+                        totalGold += chartStats.GoldStats.LastCoinage;
 
                         var serie = Program.Mainform.GoldStats.Series.FirstOrDefault(x => x.Name == bot.Name);
                         if (serie != null)
                         {
-                            updateMainformGraph(Program.Mainform.GoldStats, serie.Name, botGph, limit: (int)Properties.Settings.Default.StatsGphHistory, autoscale: true);
+                            updateMainformGraph(Program.Mainform.GoldStats, serie.Name, Math.Round(chartStats.GoldStats.GoldPerHour), limit: (int)Properties.Settings.Default.StatsGphHistory, autoscale: true);
                         }
                         #endregion
                     }
@@ -186,7 +157,7 @@ namespace YetAnotherRelogger
                 Communicator.StatFailed = 0;
                 
                 // add to Gold Graph
-                updateMainformGraph(Program.Mainform.GoldStats, "Gph", goldPerHour, legend: string.Format("Gph {0}", goldPerHour),autoscale:true,limit:(int)Properties.Settings.Default.StatsGphHistory);
+                updateMainformGraph(Program.Mainform.GoldStats, "Gph", Math.Round(goldPerHour), legend: string.Format("Gph {0}", Math.Round(goldPerHour)),autoscale:true,limit:(int)Properties.Settings.Default.StatsGphHistory);
                 updateMainformLabel(Program.Mainform.CashPerHour, string.Format("{0:C2}", (goldPerHour/1000000*(double)Properties.Settings.Default.StatsGoldPrice)));
                 updateMainformLabel(Program.Mainform.CurrentCash, string.Format("{0:C2}", (totalGold / 1000000 * (double)Properties.Settings.Default.StatsGoldPrice)));
                 updateMainformLabel(Program.Mainform.TotalGold, string.Format("{0:N0}", totalGold));
@@ -272,13 +243,14 @@ namespace YetAnotherRelogger
                         var graph = Program.Mainform.GoldStats;
                         graph.Series.Clear();
                         graph.Palette = ChartColorPalette.Pastel;
+                        graph.Titles.Clear();
                         graph.Titles.Add("Gold Statistics");
                         // Add Series
                         graph.Series.Add("Gph");
                         graph.Series["Gph"].ChartType = SeriesChartType.FastLine;
                         graph.Series["Gph"].Points.Add(0);
                         graph.Series["Gph"].YAxisType = AxisType.Primary;
-                        graph.Series["Gph"].YValueType = ChartValueType.Double;
+                        graph.Series["Gph"].YValueType = ChartValueType.Auto;
                         graph.Series["Gph"].IsXValueIndexed = false;
                         graph.Series["Gph"].Color = Color.DarkSlateBlue;
 
@@ -308,6 +280,7 @@ namespace YetAnotherRelogger
                         var graph = Program.Mainform.CommConnections;
                         graph.Series.Clear();
                         graph.Palette = ChartColorPalette.Pastel;
+                        graph.Titles.Clear();
                         graph.Titles.Add("Communicator Open Connections");
                         // Add Series
                         graph.Series.Add("Connections");
@@ -352,6 +325,7 @@ namespace YetAnotherRelogger
                         var graph = Program.Mainform.CpuUsage;
                         graph.Series.Clear();
                         graph.Palette = ChartColorPalette.Pastel;
+                        graph.Titles.Clear();
                         graph.Titles.Add("Processor Usage");
                         // Add Series
                         graph.Series.Add("All Usage");
@@ -414,6 +388,7 @@ namespace YetAnotherRelogger
                         var graph = Program.Mainform.MemoryUsage;
                         graph.Series.Clear();
                         graph.Palette = ChartColorPalette.Pastel;
+                        graph.Titles.Clear();
                         graph.Titles.Add("Memory Usage");
                         // Add Series
                         graph.Series.Add("All Usage");
