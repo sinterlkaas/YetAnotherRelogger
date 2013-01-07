@@ -119,7 +119,11 @@ namespace YetAnotherRelogger.Helpers.Stats
                 _lastSysIdle = sysIdle;
 
                 // unmark glitch recover
-                glitchRecover = false;
+                if (glitchRecover)
+                {
+                    glitchRecover = false;
+                    Update(); // Update again
+                }
 
                 // Update Process list
                 _procUsageList = newList;
