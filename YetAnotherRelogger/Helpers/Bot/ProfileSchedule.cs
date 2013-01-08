@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using System.ComponentModel;
+using YetAnotherRelogger.Helpers.Enums;
 using YetAnotherRelogger.Helpers.Tools;
 using YetAnotherRelogger.Properties;
 
@@ -93,21 +94,5 @@ namespace YetAnotherRelogger.Helpers.Bot
         public int Minutes { get; set; }
         public MonsterPower MonsterPowerLevel { get; set; }
         [XmlIgnore] public bool IsDone { get; set; }
-    }
-
-    public enum MonsterPower
-    {
-        Disabled = -1,
-        Level0,
-        Level1,
-        Level2,
-        Level3,
-        Level4,
-        Level5,
-        Level6,
-        Level7,
-        Level8,
-        Level9,
-        Level10,
     }
 }

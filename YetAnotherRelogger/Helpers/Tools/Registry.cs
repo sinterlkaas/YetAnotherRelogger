@@ -22,7 +22,8 @@ namespace YetAnotherRelogger.Helpers.Tools
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteGlobal("Failed to add/change registry key: {0}", ex);
+                Logger.Instance.WriteGlobal("Failed to add/change registry key: {0}", ex.Message);
+                DebugHelper.Exception(ex);
                 return false;
             }
         }
@@ -43,7 +44,8 @@ namespace YetAnotherRelogger.Helpers.Tools
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteGlobal("Failed to delete registry key: {0}", ex);
+                Logger.Instance.WriteGlobal("Failed to delete registry key: {0}", ex.Message);
+                DebugHelper.Exception(ex);
                 return false;
             }
         }
@@ -64,9 +66,10 @@ namespace YetAnotherRelogger.Helpers.Tools
                 key.Close();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 Logger.Instance.Write("Failed to change locale!");
+                DebugHelper.Exception(ex);
                 return false;
             }
         }
@@ -106,9 +109,10 @@ namespace YetAnotherRelogger.Helpers.Tools
                 key.Close();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 Logger.Instance.Write("Changing Region Failed!");
+                DebugHelper.Exception(ex);
                 return false;
             }
         }

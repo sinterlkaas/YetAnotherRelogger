@@ -76,6 +76,7 @@ namespace YetAnotherRelogger.Helpers.Hotkeys
             catch (Exception ex)
             {
                 Logger.Instance.WriteGlobal("Failed to register hotkey with message: " + ex.Message);
+                DebugHelper.Exception(ex);
             }
             return id >= 1;
         }

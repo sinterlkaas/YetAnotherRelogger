@@ -118,8 +118,7 @@ namespace YetAnotherRelogger.Helpers.Tools
             catch (Exception ex)
             {
                 Logger.Instance.WriteGlobal("Failed to add new user: {0}", name);
-                Logger.Instance.WriteGlobal("Error: {0}", ex.Message);
-                Logger.Instance.WriteGlobal("Trace: {0}", ex.StackTrace);
+                DebugHelper.Exception(ex);
                 return false;
             }
             

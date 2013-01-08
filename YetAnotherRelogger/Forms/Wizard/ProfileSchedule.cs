@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.IO;
 
 using YetAnotherRelogger.Helpers.Bot;
+using YetAnotherRelogger.Helpers.Enums;
 
 namespace YetAnotherRelogger.Forms.Wizard
 {

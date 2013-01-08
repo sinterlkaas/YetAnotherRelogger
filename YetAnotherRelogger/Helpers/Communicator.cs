@@ -69,7 +69,7 @@ namespace YetAnotherRelogger.Helpers
                 catch (Exception ex)
                 {
                     StatFailed++;
-                    Logger.Instance.WriteGlobal(ex.Message);
+                    DebugHelper.Exception(ex);
                 }
             }
         }
@@ -93,7 +93,6 @@ namespace YetAnotherRelogger.Helpers
                 var xml = string.Empty;
                 var duration = DateTime.Now;
                 Connections++;
-                Debug.WriteLine("Connections: {0}",Connections);
                 try
                 {
                     Debug.WriteLine("PipeConnection [{0}]: Connected:{1}", _stream.GetHashCode(), _stream.IsConnected);
@@ -141,7 +140,6 @@ namespace YetAnotherRelogger.Helpers
             private void HandleXml(string data)
             {
                 BotStats stats;
-                //Debug.WriteLine(data);
                 var xml = new XmlSerializer(typeof (BotStats));
                 using (var stringReader = new StringReader(data))
                 {
@@ -169,9 +167,9 @@ namespace YetAnotherRelogger.Helpers
                     }
                     catch (Exception ex)
                     {
-                        Send("Internal server error: " + ex.Message);
-                        Logger.Instance.WriteGlobal(ex.ToString());
                         StatFailed++;
+                        Send("Internal server error: " + ex.Message);
+                        DebugHelper.Exception(ex);
                         return;
                     }
                 }
@@ -184,7 +182,6 @@ namespace YetAnotherRelogger.Helpers
                 // PID:CMD DATA
                 // 1234:GameLeft 25-09-1985 18:27:00
                 Debug.WriteLine("Recieved: " + msg);
-
                 try
                 {
                     var pid = msg.Split(':')[0];
@@ -226,7 +223,7 @@ namespace YetAnotherRelogger.Helpers
                             if (b.ProfileSchedule.IsDone)
                             {
                                 var newprofile = b.ProfileSchedule.GetProfile;
-                                Logger.Instance.Write("Next profile: {0}", newprofile);
+                                Logger.Instance.Write(b, "Next profile: {0}", newprofile);
                                 Send("LoadProfile " + newprofile);
                             }
                             else
@@ -285,7 +282,7 @@ namespace YetAnotherRelogger.Helpers
                 {
                     StatFailed++;
                     Send("Internal server error: " + ex.Message);
-                    Logger.Instance.WriteGlobal(ex.ToString());
+                    DebugHelper.Exception(ex);
                 }
             }
 
@@ -298,7 +295,7 @@ namespace YetAnotherRelogger.Helpers
                 catch (Exception ex)
                 {
                     StatFailed++;
-                    Logger.Instance.WriteGlobal(ex.ToString());
+                    DebugHelper.Exception(ex);
                 }
             }
 

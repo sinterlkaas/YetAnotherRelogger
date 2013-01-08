@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -74,11 +73,11 @@ namespace YetAnotherRelogger.Helpers
                             {
                                 hostname = Dns.GetHostEntry(ip).HostName;
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
-                                //Logger.Instance.WriteGlobal("ValidConnection: {0}", ex.Message);
+                                DebugHelper.Exception(ex);
                             }
-                            if (!silent) Logger.Instance.WriteGlobal("ValidConnection: IP {0}{1}", ip, !string.IsNullOrEmpty(hostname) ? " HostName: " + hostname : "");
+                            if (!silent) DebugHelper.Write(string.Format("ValidConnection: IP {0}{1}", ip, !string.IsNullOrEmpty(hostname) ? " HostName: " + hostname : ""));
 
                             if (!validIp(ip, silent)) return false;
                             if (!string.IsNullOrEmpty(hostname) && !validHost(hostname, silent)) return false;
@@ -94,7 +93,8 @@ namespace YetAnotherRelogger.Helpers
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteGlobal("ValidConnection: {0}",ex.Message);
+                DebugHelper.Write(string.Format("ValidConnection: {0}", ex.Message));
+                DebugHelper.Exception(ex);
                 return false;
             }
             return true;
@@ -116,7 +116,7 @@ namespace YetAnotherRelogger.Helpers
                     var inrange = new IPAddressRange(lowerip, higherip).IsInRange(IPAddress.Parse(ip));
                     if (inrange)
                     {
-                        Logger.Instance.WriteGlobal("ValidConnection: IP {0} in range -> {1}-{2}", ip, lowerip,higherip);
+                        DebugHelper.Write(string.Format("ValidConnection: IP {0} in range -> {1}-{2}", ip, lowerip, higherip));
                         return false;
                     }
                     continue;
@@ -128,7 +128,7 @@ namespace YetAnotherRelogger.Helpers
                 test = m.Groups[1].Value;
                 if (General.WildcardMatch(test, ip))
                 {
-                    Logger.Instance.WriteGlobal("ValidConnection: IP match {0} -> {1}", ip,test);
+                    DebugHelper.Write(string.Format("ValidConnection: IP match {0} -> {1}", ip, test));
                     return false;
                 }
             }
@@ -147,7 +147,7 @@ namespace YetAnotherRelogger.Helpers
 
                 if (General.WildcardMatch(test.ToLower(), hostname.ToLower()))
                 {
-                    Logger.Instance.WriteGlobal("ValidConnection: Host match {0} -> {1}", hostname, test);
+                    DebugHelper.Write(string.Format("ValidConnection: Host match {0} -> {1}", hostname, test));
                     return false;
                 }
             }
@@ -200,46 +200,48 @@ namespace YetAnotherRelogger.Helpers
                 var reply = ping.Send(Settings.Default.ConnectionCheckPingHost1, 3000);
                 if (reply == null)
                 {
-                    if (!silent) Logger.Instance.WriteGlobal("PingCheck: reply = NULL");
+                    if (!silent) DebugHelper.Write("PingCheck: reply = NULL");
                 }
                 else if (reply.Status != IPStatus.Success)
                 {
-                    if (!silent) Logger.Instance.WriteGlobal("PingCheck: {0} -> {1}", reply.Address, reply.Status);
+                    if (!silent) DebugHelper.Write(string.Format("PingCheck: {0} -> {1}", reply.Address, reply.Status));
                 }
                 else
                 {
-                    if (!silent) Logger.Instance.WriteGlobal("PingCheck: {0} -> {1}ms", reply.Address, reply.RoundtripTime);
+                    if (!silent) DebugHelper.Write(string.Format("PingCheck: {0} -> {1}ms", reply.Address, reply.RoundtripTime));
                     return true;
                 }
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteGlobal("PingCheck: Failed with message: " + ex.Message);
+               DebugHelper.Write(string.Format("PingCheck: Failed with message: " + ex.Message));
+               DebugHelper.Exception(ex);
             }
 
             try
             {
                 // Ping host 2
-                if (!silent) Logger.Instance.WriteGlobal("PingCheck: Ping -> {0}", Settings.Default.ConnectionCheckPingHost2);
+                if (!silent) DebugHelper.Write(string.Format("PingCheck: Ping -> {0}", Settings.Default.ConnectionCheckPingHost2));
                 var reply = ping.Send(Settings.Default.ConnectionCheckPingHost2, 3000);
                 if (reply == null)
                 {
-                    if (!silent) Logger.Instance.WriteGlobal("PingCheck: reply = NULL");
+                    if (!silent) DebugHelper.Write(string.Format("PingCheck: reply = NULL"));
                 }
                 else if (reply.Status != IPStatus.Success)
                 {
-                    if (!silent) Logger.Instance.WriteGlobal("PingCheck: {0} -> {1}", reply.Address, reply.Status);
+                    if (!silent) DebugHelper.Write(string.Format("PingCheck: {0} -> {1}", reply.Address, reply.Status));
                 }
                 else
                 {
-                    if (!silent) Logger.Instance.WriteGlobal("PingCheck: {0} -> {1}ms", reply.Address, reply.RoundtripTime);
+                    if (!silent) DebugHelper.Write(string.Format("PingCheck: {0} -> {1}ms", reply.Address, reply.RoundtripTime));
                     return true;
                 }
 
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteGlobal("PingCheck: Failed with message: " + ex.Message);
+                DebugHelper.Write(string.Format("PingCheck: Failed with message: " + ex.Message));
+                DebugHelper.Exception(ex);
             }
 
             return false;

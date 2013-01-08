@@ -45,7 +45,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -147,7 +147,9 @@
     <Compile Include="Forms\Wizard\SetAffinity.Designer.cs">
       <DependentUpon>SetAffinity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\DebugHelper.cs" />
     <Compile Include="Helpers\DiabloClone.cs" />
+    <Compile Include="Helpers\Enums\MonsterPower.cs" />
     <Compile Include="Helpers\Hotkeys\ActionContainer.cs" />
     <Compile Include="Helpers\Hotkeys\Actions\ResizeCurrent.cs" />
     <Compile Include="Helpers\Hotkeys\Actions\FullScreen.cs" />
@@ -226,7 +228,7 @@
     </Compile>
     <Compile Include="Helpers\Bot\BotStats.cs" />
     <Compile Include="Helpers\Bot\Heroes.cs" />
-    <Compile Include="Helpers\Bot\IdleState.cs" />
+    <Compile Include="Helpers\Enums\IdleState.cs" />
     <Compile Include="Helpers\Hotkeys\IHotkeyAction.cs" />
     <Compile Include="Helpers\Hotkeys\SelectAction.cs">
       <SubType>Form</SubType>

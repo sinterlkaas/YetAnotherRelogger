@@ -47,7 +47,7 @@ namespace YetAnotherRelogger.Helpers
                     }
                     catch (Exception ex)
                     {
-                        Logger.Instance.WriteGlobal(ex.ToString());
+                        DebugHelper.Exception(ex);
                     }
                     return rect;
                 }
@@ -74,7 +74,7 @@ namespace YetAnotherRelogger.Helpers
                     }
                     catch (Exception ex)
                     {
-                        Logger.Instance.WriteGlobal(ex.ToString());
+                        DebugHelper.Exception(ex);
                     }
                     return rect;
                 }
@@ -92,7 +92,7 @@ namespace YetAnotherRelogger.Helpers
                     if (w <= 0)w = rct.Width;
                     if (h <= 0)h = rct.Heigth;
 
-                    Logger.Instance.Write(bot, "ManualPosition window:{0}: X:{1} Y:{2} W:{3} H:{4}", handle, x, y, w, h);
+                    DebugHelper.Write(bot, "ManualPosition window:{0}: X:{1} Y:{2} W:{3} H:{4}", handle, x, y, w, h);
                     if (!WinAPI.SetWindowPos(handle, IntPtr.Zero, x, y, w, h, WinAPI.SetWindowPosFlags.SWP_NOACTIVATE | WinAPI.SetWindowPosFlags.SWP_NOSENDCHANGING))
                         Logger.Instance.Write(bot, "ManualPosition window:{0}: Failed!", handle);
                 }
@@ -101,7 +101,8 @@ namespace YetAnotherRelogger.Helpers
             }
             catch (Exception ex)
             {
-                Logger.Instance.Write(bot, "ManualPosition Error: " + ex);
+                DebugHelper.Write(bot, "Failed", "ManualPositionWindow(...)");
+                DebugHelper.Exception(ex);
             }
         }
         
@@ -142,7 +143,8 @@ namespace YetAnotherRelogger.Helpers
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteGlobal("Error: Failed to update screens: " + ex);
+                DebugHelper.Write("Failed", "UpdateScreens()");
+                DebugHelper.Exception(ex);
             }
         }
         #endregion
@@ -220,7 +222,8 @@ namespace YetAnotherRelogger.Helpers
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteGlobal("Error: AutoPosition failed: " + ex);
+                DebugHelper.Write("Failed", "PositionWindows()");
+                DebugHelper.Exception(ex);
             }
 
         }
@@ -244,7 +247,8 @@ namespace YetAnotherRelogger.Helpers
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteGlobal(ex.ToString());
+                DebugHelper.Write("Failed", "RemoveWindowFrame(...)");
+                DebugHelper.Exception(ex);
             }
             Thread.Sleep(100); // We need to wait a bit before we can reposition the window
         }
@@ -262,7 +266,7 @@ namespace YetAnotherRelogger.Helpers
                     Debug.WriteLine("handle: {0} X:{1},Y:{2},W:{3},H:{4}", handle, rct.Left, rct.Top, rct.Width, rct.Heigth);
                     if (rct.Heigth == h && rct.Width == w && rct.Left == x && rct.Top == y)
                     {
-                        Logger.Instance.WriteGlobal("No need to reposition: {0}", handle);
+                        DebugHelper.Write("No need to reposition: {0}", "RepositionWindow(...)", handle);
                         return;
                     }
 
@@ -274,7 +278,8 @@ namespace YetAnotherRelogger.Helpers
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteGlobal(ex.ToString());
+                DebugHelper.Write("Failed", "RepositionWindow(...)");
+                DebugHelper.Exception(ex);
             }
         }
     }

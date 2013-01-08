@@ -114,8 +114,9 @@ namespace YetAnotherRelogger
                     Thread.Sleep(1000);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                DebugHelper.Exception(ex);
                 Thread.Sleep(5000);
                 ForegroundCheckerWorker();
             }

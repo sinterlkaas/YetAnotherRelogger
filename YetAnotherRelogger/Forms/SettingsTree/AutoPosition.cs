@@ -114,7 +114,7 @@ namespace YetAnotherRelogger.Forms.SettingsTree
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteGlobal(ex.ToString());
+                DebugHelper.Exception(ex);
             }
         }
 
@@ -139,7 +139,7 @@ namespace YetAnotherRelogger.Forms.SettingsTree
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteGlobal(ex.ToString());
+                DebugHelper.Exception(ex);
             }
         }
 

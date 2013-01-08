@@ -179,10 +179,10 @@ namespace YetAnotherRelogger.Helpers.Bot
                 {
                     if (General.DateSubtract(LastCoinageBugReported) > 30)
                     {
-                        if (Properties.Settings.Default.UseGoldTimer)
+                        if (Settings.Default.UseGoldTimer)
                             Logger.Instance.Write(Parent, "Demonbuddy:{0}: has not gained any gold in {1} seconds, limit {2}",
                                 Parent.Demonbuddy.Proc.Id, (int)General.DateSubtract(LastCoinageIncrease),
-                                (int)Properties.Settings.Default.GoldTimer);
+                                (int)Settings.Default.GoldTimer);
                         else
                             Logger.Instance.Write(Parent, "Demonbuddy:{0}: has not gained any gold in {1} seconds, limit NONE",
                                 Parent.Demonbuddy.Proc.Id, (int)General.DateSubtract(LastCoinageIncrease));
@@ -191,8 +191,8 @@ namespace YetAnotherRelogger.Helpers.Bot
                 }
 
                 // If we are w/o gold change for 2 minutes, send reset, but at max every 45s
-                if (Properties.Settings.Default.UseGoldTimer &&
-                    General.DateSubtract(LastCoinageIncrease) > (double)Properties.Settings.Default.GoldTimer)
+                if (Settings.Default.UseGoldTimer &&
+                    General.DateSubtract(LastCoinageIncrease) > (double)Settings.Default.GoldTimer)
                 {
                     if(General.DateSubtract(LastCoinageReset) < 45) // we still give it a chance
                         return "Roger!";

@@ -18,7 +18,7 @@ namespace YetAnotherRelogger.Helpers
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         static extern bool CreateHardLink(string lpFileName, string lpExistingFileName, IntPtr lpSecurityAttributes);
 
-        // Dont these link files / directories 
+        // Dont link this list
         private static HashSet<NoLink> _noLinks = new HashSet<NoLink>
                              {
                                  new NoLink {Source=@"Data_D3\PC\MPQs\Cache\*",Directory = true},
@@ -31,31 +31,33 @@ namespace YetAnotherRelogger.Helpers
         public static void Create(BotClass bot)
         {
             var imp = new Impersonator();
-            if (bot.UseWindowsUser)
-                imp.Impersonate(bot.WindowsUserName, "localhost", bot.WindowsUserPassword);
-
-            bot.Status = "Create Diablo Clone";
-            var basepath = Path.GetDirectoryName(bot.Diablo.Location);
-            var clonepath = Path.Combine(bot.DiabloCloneLocation, "Diablo III");
-
-            // if diablo base path does not exist stop here!
-            if (basepath != null && !Directory.Exists(basepath))
-            {
-                
-                bot.Stop();
-                throw new Exception("Diablo base directory does not exist!");
-            }
-
-            // Check if given language is installed on basepath
-            var testpath = Path.Combine(basepath, @"Data_D3\PC\MPQs", General.GetLocale(bot.Diablo.Language));
-            if (!Directory.Exists(testpath))
-            {
-                bot.Stop();
-                throw new Exception(string.Format("ERROR: {0} language is not installed (path: {1})", bot.Diablo.Language, testpath));
-            }
-
             try
             {
+                
+                if (bot.UseWindowsUser)
+                    imp.Impersonate(bot.WindowsUserName, "localhost", bot.WindowsUserPassword);
+
+                bot.Status = "Create Diablo Clone";
+                var basepath = Path.GetDirectoryName(bot.Diablo.Location);
+                var clonepath = Path.Combine(bot.DiabloCloneLocation, "Diablo III");
+
+                // if diablo base path does not exist stop here!
+                if (basepath != null && !Directory.Exists(basepath))
+                {
+                    bot.Stop();
+                    throw new Exception("Diablo base directory does not exist!");
+                }
+
+                // Check if given language is installed on basepath
+                var testpath = Path.Combine(basepath, @"Data_D3\PC\MPQs", General.GetLocale(bot.Diablo.Language));
+                if (!Directory.Exists(testpath))
+                {
+                    bot.Stop();
+                    throw new Exception(string.Format("ERROR: {0} language is not installed (path: {1})",
+                                                      bot.Diablo.Language, testpath));
+                }
+
+
                 // if diablo clone does not exist create it
                 if (!Directory.Exists(Path.Combine(clonepath, @"Data_D3\PC\MPQs\Cache")))
                 {
@@ -76,9 +78,10 @@ namespace YetAnotherRelogger.Helpers
                         {
                             if (!_noLinks.Any(n => General.WildcardMatch(n.Source, p.Path)))
                             {
-                                Logger.Instance.Write(bot, "NewLink: {0} -> {1}", Path.Combine(clonepath,p.Path), Path.Combine(basepath, p.Path));
+                                Logger.Instance.Write(bot, "NewLink: {0} -> {1}", Path.Combine(clonepath, p.Path),
+                                                      Path.Combine(basepath, p.Path));
                                 //if (!CreateSymbolicLink( Path.Combine(clonepath,p.Path),  Path.Combine(basepath,p.Path), 1))
-                                  //  throw new Exception("Failed to create link!");
+                                //  throw new Exception("Failed to create link!");
                                 Directory.CreateDirectory(Path.Combine(clonepath, p.Path));
                             }
                             continue;
@@ -87,15 +90,20 @@ namespace YetAnotherRelogger.Helpers
                         {
                             if (!_noLinks.Any(n => General.WildcardMatch(n.Source, p.Path)))
                             {
-                                Logger.Instance.Write(bot, "NewLink: {0} -> {1}", Path.Combine(clonepath, p.Path), Path.Combine(basepath, p.Path));
+                                Logger.Instance.Write(bot, "NewLink: {0} -> {1}", Path.Combine(clonepath, p.Path),
+                                                      Path.Combine(basepath, p.Path));
                                 if (Path.GetExtension(Path.Combine(clonepath, p.Path)).ToLower().Equals(".exe"))
                                 {
-                                    if (!CreateHardLink(Path.Combine(clonepath, p.Path), Path.Combine(basepath, p.Path), IntPtr.Zero))
+                                    if (
+                                        !CreateHardLink(Path.Combine(clonepath, p.Path), Path.Combine(basepath, p.Path),
+                                                        IntPtr.Zero))
                                         throw new Exception("Failed to create link!");
                                 }
                                 else
                                 {
-                                    if (!CreateSymbolicLink(Path.Combine(clonepath, p.Path), Path.Combine(basepath, p.Path), 0))
+                                    if (
+                                        !CreateSymbolicLink(Path.Combine(clonepath, p.Path),
+                                                            Path.Combine(basepath, p.Path), 0))
                                         throw new Exception("Failed to create link!");
                                 }
                             }
@@ -132,11 +140,13 @@ namespace YetAnotherRelogger.Helpers
                     }
                 }
                  */
+                
             }
             catch (Exception ex)
             {
                 bot.Stop();
-                Logger.Instance.Write(bot, ex.ToString());
+                DebugHelper.Write(bot, "Failed to create clone!");
+                DebugHelper.Exception(ex);
             }
             imp.Dispose();
         }

@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Threading;
-
+using YetAnotherRelogger.Helpers;
 using YetAnotherRelogger.Helpers.Bot;
 using YetAnotherRelogger.Helpers.Tools;
 
@@ -168,8 +168,9 @@ namespace YetAnotherRelogger.Forms.Wizard
                     x = 0; // X-Axis
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                DebugHelper.Exception(ex);
             }
             isDone = true;
         }

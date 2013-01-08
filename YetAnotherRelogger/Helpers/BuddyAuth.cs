@@ -162,7 +162,8 @@ namespace YetAnotherRelogger.Helpers
                 }
                 catch (Exception ex)
                 {
-                    Logger.Instance.Write(bot, "BuddyAuth: Failed: ", ex.ToString());
+                    DebugHelper.Write(bot, "BuddyAuth session killer failed!");
+                    DebugHelper.Exception(ex);
                     return;
                 }
                 Logger.Instance.Write(bot, "BuddyAuth: No session found.");

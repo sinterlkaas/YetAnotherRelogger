@@ -131,7 +131,8 @@ namespace YetAnotherRelogger.Helpers.Bot
                 }
                 catch (Exception ex)
                 {
-                    Logger.Instance.Write(Parent, "Failed to kill process: {0}", ex.Message);
+                    Logger.Instance.Write(Parent, "Failed to kill process", ex.Message);
+                    DebugHelper.Exception(ex);
                 }
             }
         }
@@ -180,8 +181,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                         arguments += string.Format(" -profile=\"{0}\"", path);
                 }
                 else if (!noprofile)
-                    Logger.Instance.Write(
-                        "Warning: Launching Demonbuddy without a starting profile (Add a profile to the profilescheduler for this bot)");
+                    Logger.Instance.Write("Warning: Launching Demonbuddy without a starting profile (Add a profile to the profilescheduler for this bot)");
 
                 if (NoFlash) arguments += " -noflash";
                 if (AutoUpdate) arguments += " -autoupdate";
@@ -249,7 +249,7 @@ namespace YetAnotherRelogger.Helpers.Bot
                 }
                 catch (Exception ex)
                 {
-                    Logger.Instance.Write(ex.ToString());
+                    DebugHelper.Exception(ex);
                     Parent.Stop();
                 }
 
@@ -426,7 +426,8 @@ namespace YetAnotherRelogger.Helpers.Bot
                     }
                     catch (Exception ex)
                     {
-                        Logger.Instance.Write(Parent, "Demonbuddy:{0}: Error accured while reading log: {1}", Proc.Id, ex.ToString());
+                        Logger.Instance.Write(Parent, "Demonbuddy:{0}: Error accured while reading log", Proc.Id);
+                        DebugHelper.Exception(ex);
                     }
                 }
                 // Else print error + return false

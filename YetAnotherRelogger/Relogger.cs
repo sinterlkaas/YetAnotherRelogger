@@ -77,7 +77,7 @@ namespace YetAnotherRelogger
                 }
             }
 
-            Logger.Instance.WriteGlobal("Relogger Thread Starting!");
+            DebugHelper.Write("Relogger Thread Starting!");
             while (true)
             {
                 try
@@ -91,7 +91,7 @@ namespace YetAnotherRelogger
                     // Check / validate internet connection
                     if (!ConnectionCheck.IsConnected || !ConnectionCheck.ValidConnection)
                     {
-                        Debug.WriteLine("Internet validation failed looping until success");
+                        DebugHelper.Write("Internet validation failed looping until success");
                         Thread.Sleep(1000);
                         continue;
                     }
@@ -177,7 +177,7 @@ namespace YetAnotherRelogger
                 {
                     if (_isStopped) return;
                     Logger.Instance.WriteGlobal("Relogger Crashed! with message {0}", ex.Message);
-                    Logger.Instance.WriteGlobal(ex.StackTrace);
+                    DebugHelper.Exception(ex);
                     Logger.Instance.WriteGlobal("Waiting 10 seconds and try again!");
                     Thread.Sleep(10000);
                     continue;

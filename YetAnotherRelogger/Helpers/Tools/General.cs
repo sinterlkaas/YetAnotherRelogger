@@ -47,9 +47,9 @@ namespace YetAnotherRelogger.Helpers.Tools
                     Logger.Instance.Write("Killing Agent.exe:{0}", p.Id);
                     p.Kill();
                 }
-                catch
+                catch (Exception ex)
                 {
-                    continue;
+                    DebugHelper.Exception(ex);
                 }
             }
         }

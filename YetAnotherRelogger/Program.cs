@@ -129,9 +129,9 @@ namespace YetAnotherRelogger
             {
                 mutex.ReleaseMutex();
             }
-            catch
+            catch (Exception ex)
             {
-                // Do nothing
+                DebugHelper.Exception(ex);
             }
             
         }

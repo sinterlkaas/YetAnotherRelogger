@@ -25,13 +25,13 @@ namespace YetAnotherRelogger.Helpers.Bot
                        }
                        catch(Exception ex)
                        {
-                           Debug.WriteLine(ex);
+                           DebugHelper.Exception(ex);
                        }
                    }));
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                DebugHelper.Exception(ex);
             }
         }
         protected bool SetField<T>(ref T field, T value, string propertyName)

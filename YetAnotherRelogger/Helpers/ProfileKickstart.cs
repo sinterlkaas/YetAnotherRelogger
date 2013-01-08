@@ -90,8 +90,9 @@ It is used to ensure a profile starts without causing DB to choken it -->
             }
             catch (Exception ex)
             {
-                Logger.Instance.Write("Failed to generate Kickstart profile: {0}", ex);
+                Logger.Instance.Write("Failed to generate Kickstart profile: {0}", ex.Message);
                 Logger.Instance.Write("Using the profile without Kickstart!");
+                DebugHelper.Exception(ex);
                 return profile.Location;
             }
         }

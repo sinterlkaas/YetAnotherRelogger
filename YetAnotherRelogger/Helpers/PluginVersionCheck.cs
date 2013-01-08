@@ -38,7 +38,7 @@ namespace YetAnotherRelogger.Helpers
             }
             catch (Exception ex)
             {
-                Logger.Instance.Write("Something went wrong: {0}", ex.ToString());
+                DebugHelper.Exception(ex);
             }
             Logger.Instance.Write("Plugin is outdated!");
             return false;
@@ -58,7 +58,7 @@ namespace YetAnotherRelogger.Helpers
             }
             catch (Exception ex)
             {
-                Logger.Instance.Write("Something went wrong: {0}", ex.ToString());
+                DebugHelper.Exception(ex);
             }
         }
     }

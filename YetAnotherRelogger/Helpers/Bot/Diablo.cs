@@ -115,8 +115,9 @@ namespace YetAnotherRelogger.Helpers.Bot
                     if (Proc != null && !Proc.HasExited)
                         Proc.Kill();
                 }
-                catch
+                catch (Exception ex)
                 {
+                    DebugHelper.Exception(ex);
                 }
             }
         }
@@ -168,7 +169,8 @@ namespace YetAnotherRelogger.Helpers.Bot
                 }
                 catch (Exception ex)
                 {
-                    Logger.Instance.Write("Failed to delete! Exception: {0}", ex.ToString());
+                    Logger.Instance.Write("Failed to delete! Exception: {0}", ex.Message);
+                    DebugHelper.Exception(ex);
                 }
             }
 
@@ -197,8 +199,8 @@ namespace YetAnotherRelogger.Helpers.Bot
                 }
                 catch (Exception ex)
                 {
-                    Logger.Instance.Write(ex.ToString());
                     Parent.Stop();
+                    DebugHelper.Exception(ex);
                     return;
                 }
             }
@@ -224,7 +226,7 @@ namespace YetAnotherRelogger.Helpers.Bot
             while ((!Proc.HasExited && state < 4))
             {
                 if (timedout) return;
-                Debug.WriteLine("Splash: " + FindWindow.FindWindowClass("D3 Splash Window Class", Proc.Id) + " Main:" + FindWindow.FindWindowClass("D3 Main Window Class", Proc.Id));
+                //Debug.WriteLine("Splash: " + FindWindow.FindWindowClass("D3 Splash Window Class", Proc.Id) + " Main:" + FindWindow.FindWindowClass("D3 Main Window Class", Proc.Id));
                 switch (state)
                 {
                     case 0:
@@ -294,8 +296,9 @@ namespace YetAnotherRelogger.Helpers.Bot
                     if (Proc.WaitForInputIdle(100) || CrashChecker.IsResponding(MainWindowHandle))
                         break;
                 }
-                catch
+                catch (Exception ex)
                 {
+                    DebugHelper.Exception(ex);
                 }
             }
 
@@ -376,6 +379,7 @@ namespace YetAnotherRelogger.Helpers.Bot
             catch (Exception ex)
             {
                 Logger.Instance.Write("D3Starter Error: {0}", ex.Message);
+                DebugHelper.Exception(ex);
             }
 
             if (!d3StarterSuccess)

@@ -16,6 +16,8 @@ namespace YetAnotherRelogger.Helpers.Stats
         public class Gold
         {
             public DateTime StartTime;
+
+            public DateTime LastGainTime { get; private set; }
             public double Hours { get { return DateTime.Now.Subtract(StartTime).TotalSeconds / 3600; } }
             public double GoldPerHour
             {
@@ -33,12 +35,7 @@ namespace YetAnotherRelogger.Helpers.Stats
 
             public Gold()
             {
-                StartTime = DateTime.Now;
-                LastCoinage = 0;
-                LastGain = 0;
-                TotalGain = 0;
-                StartCoinage = 0;
-                LastCoinage = 0;
+                Reset();
             }
             public void Update(BotClass bot)
             {
@@ -61,10 +58,22 @@ namespace YetAnotherRelogger.Helpers.Stats
                     }
                     else
                     {
+                        if (LastGain > 0) LastGainTime = DateTime.Now;
+                        else if (DateTime.Now.Subtract(LastGainTime).TotalMinutes > 5) Reset();
                         TotalGain += LastGain;
                         Debug.WriteLine("[GoldPerHour] <{0}> LastGain: {1:N0}, TotalGain: {2:N0}, GPH: {3}", bot.Name, LastGain, TotalGain, GoldPerHour);
                     }
                 }
+            }
+            public void Reset()
+            {
+                StartTime = DateTime.Now;
+                LastGainTime = DateTime.Now;
+                LastCoinage = 0;
+                LastGain = 0;
+                TotalGain = 0;
+                StartCoinage = 0;
+                LastCoinage = 0;
             }
         }
         #endregion

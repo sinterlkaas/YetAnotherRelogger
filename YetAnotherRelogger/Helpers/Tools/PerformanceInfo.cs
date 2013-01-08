@@ -30,30 +30,51 @@ namespace YetAnotherRelogger.Helpers.Tools
 
         public static Int64 GetPhysicalAvailableMemory()
         {
-            var pi = new PerformanceInformation();
-            if (GetPerformanceInfo(out pi, Marshal.SizeOf(pi)))
+            try
             {
-                return Convert.ToInt64((pi.PhysicalAvailable.ToInt64() * pi.PageSize.ToInt64()));
+                var pi = new PerformanceInformation();
+                if (GetPerformanceInfo(out pi, Marshal.SizeOf(pi)))
+                {
+                    return Convert.ToInt64((pi.PhysicalAvailable.ToInt64()*pi.PageSize.ToInt64()));
+                }
+            }
+            catch (Exception ex)
+            {
+                DebugHelper.Exception(ex);
             }
             return -1;
 
         }
         public static Int64 GetPhysicalUsedMemory()
         {
-            var pi = new PerformanceInformation();
-            if (GetPerformanceInfo(out pi, Marshal.SizeOf(pi)))
+            try
             {
-                return Convert.ToInt64(GetTotalMemory() - (pi.PhysicalAvailable.ToInt64() * pi.PageSize.ToInt64()));
+                var pi = new PerformanceInformation();
+                if (GetPerformanceInfo(out pi, Marshal.SizeOf(pi)))
+                {
+                    return Convert.ToInt64(GetTotalMemory() - (pi.PhysicalAvailable.ToInt64()*pi.PageSize.ToInt64()));
+                }
+            }
+            catch (Exception ex)
+            {
+                DebugHelper.Exception(ex);
             }
             return -1;
-
         }
+
         public static Int64 GetTotalMemory()
         {
-            var pi = new PerformanceInformation();
-            if (GetPerformanceInfo(out pi, Marshal.SizeOf(pi)))
+            try
             {
-                return Convert.ToInt64((pi.PhysicalTotal.ToInt64() * pi.PageSize.ToInt64()));
+                var pi = new PerformanceInformation();
+                if (GetPerformanceInfo(out pi, Marshal.SizeOf(pi)))
+                {
+                    return Convert.ToInt64((pi.PhysicalTotal.ToInt64()*pi.PageSize.ToInt64()));
+                }
+            }
+            catch (Exception ex)
+            {
+                DebugHelper.Exception(ex);
             }
             return -1;
         }

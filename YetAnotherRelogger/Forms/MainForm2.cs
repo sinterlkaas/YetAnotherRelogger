@@ -164,7 +164,6 @@ namespace YetAnotherRelogger.Forms
                 }
                 catch
                 {
-
                 }
             }
         }
