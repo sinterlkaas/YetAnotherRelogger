@@ -64,7 +64,7 @@
             this.groupBox4.Controls.Add(this.checkBox7);
             this.groupBox4.Location = new System.Drawing.Point(6, 64);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(482, 244);
+            this.groupBox4.Size = new System.Drawing.Size(482, 272);
             this.groupBox4.TabIndex = 2;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Check list";
@@ -74,9 +74,10 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(6, 220);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(316, 13);
+            this.label3.Size = new System.Drawing.Size(265, 39);
             this.label3.TabIndex = 6;
-            this.label3.Text = "Any match in the list will flag the relogger as invalid ip or hostname";
+            this.label3.Text = "To allow a Host or IP simply place the \'@\' sign in front\r\n(be sure to place all a" +
+                "llowed hosts/ips before all others)\r\n- Example: @192.168.1.200";
             // 
             // checkBox1
             // 
@@ -94,7 +95,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(297, 78);
+            this.label2.Location = new System.Drawing.Point(296, 81);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(180, 91);
             this.label2.TabIndex = 4;
@@ -106,7 +107,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(293, 65);
+            this.label1.Location = new System.Drawing.Point(296, 68);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(60, 13);
             this.label1.TabIndex = 3;
@@ -118,7 +119,7 @@
             this.textBox1.Location = new System.Drawing.Point(5, 65);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(286, 152);
+            this.textBox1.Size = new System.Drawing.Size(285, 152);
             this.textBox1.TabIndex = 2;
             this.textBox1.Text = global::YetAnotherRelogger.Properties.Settings.Default.ConnectionCheckIpHostList;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);

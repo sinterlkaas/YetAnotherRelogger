@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Diagnostics;
 using YetAnotherRelogger.Helpers.Bot;
+using YetAnotherRelogger.Helpers.Enums;
 
 namespace YetAnotherRelogger.Helpers
 {
@@ -196,10 +197,5 @@ namespace YetAnotherRelogger.Helpers
             Message = null;
         }
     }
-    public enum Loglevel
-    {
-        Normal,
-        Verbose,
-        Debug
-    }
+    
 }

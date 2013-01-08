@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using YetAnotherRelogger.Helpers.Bot;
+using YetAnotherRelogger.Helpers.Enums;
 
 namespace YetAnotherRelogger.Helpers
 {

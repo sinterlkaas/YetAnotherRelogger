@@ -46,22 +46,26 @@ namespace YetAnotherRelogger.Helpers.Stats
                     LastCoinage = coinage;
                     if (coinage < StartCoinage)
                     {
-                        Logger.Instance.Write(bot,"[GoldPerHour] Reset! (Current coinage is below start coinage)");
+                        DebugHelper.Write(bot, "Reset! (Current coinage is below start coinage)", "GoldPerHour");
                         StartCoinage = 0;
                         TotalGain = 0;
                     }
                     if (StartCoinage <= 0)
                     {
-                        Logger.Instance.Write(bot, "[GoldPerHour] New start coinage: {0:N0}", coinage);
+                        DebugHelper.Write(bot, "New start coinage: {0:N0}", "GoldPerHour", coinage);
                         StartCoinage = coinage;
                         StartTime = DateTime.Now;
                     }
                     else
                     {
                         if (LastGain > 0) LastGainTime = DateTime.Now;
-                        else if (DateTime.Now.Subtract(LastGainTime).TotalMinutes > 5) Reset();
+                        else if (DateTime.Now.Subtract(LastGainTime).TotalMinutes > 15)
+                        {
+                            DebugHelper.Write(bot, "Reset! No gold collected for 15 mins", "GoldPerHour");
+                            Reset();
+                        }
                         TotalGain += LastGain;
-                        Debug.WriteLine("[GoldPerHour] <{0}> LastGain: {1:N0}, TotalGain: {2:N0}, GPH: {3}", bot.Name, LastGain, TotalGain, GoldPerHour);
+                        Debug.WriteLine("<{0}> LastGain: {1:N0}, TotalGain: {2:N0}, GPH: {3:N0}", bot.Name, LastGain, TotalGain, GoldPerHour);
                     }
                 }
             }

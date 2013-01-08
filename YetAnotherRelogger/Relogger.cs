@@ -91,7 +91,7 @@ namespace YetAnotherRelogger
                     // Check / validate internet connection
                     if (!ConnectionCheck.IsConnected || !ConnectionCheck.ValidConnection)
                     {
-                        DebugHelper.Write("Internet validation failed looping until success");
+                        Debug.WriteLine("Internet validation failed looping until success");
                         Thread.Sleep(1000);
                         continue;
                     }

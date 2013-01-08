@@ -239,6 +239,7 @@ namespace YetAnotherRelogger.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
+            ConnectionCheck.Reset();
             // Start All
             foreach (var row in dataGridView1.Rows.Cast<DataGridViewRow>().Where(row => (bool) row.Cells["isEnabled"].Value))
             {
