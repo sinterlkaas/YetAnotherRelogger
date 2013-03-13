@@ -908,7 +908,7 @@ namespace YARPLUGIN
         {
             Initialized = true;
             YARPLUGIN.Log("Initialize Trinity Support");
-            var asm = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name.ToLower().StartsWith("gilestrinity"));
+            var asm = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name.ToLower().StartsWith("trinity"));
             if (asm != null)
             {
                 try
@@ -934,7 +934,7 @@ namespace YARPLUGIN
         {
             get
             {
-                var plugin = PluginManager.Plugins.FirstOrDefault(p => p.Plugin.Name.Equals("GilesTrinity"));
+                var plugin = PluginManager.Plugins.FirstOrDefault(p => p.Plugin.Name.Equals("Trinity"));
                 return (plugin != null && plugin.Enabled);
             }
         }
