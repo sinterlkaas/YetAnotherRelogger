@@ -135,7 +135,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(693, 433);
+            this.tabControl1.Size = new System.Drawing.Size(693, 449);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -145,7 +145,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(685, 407);
+            this.tabPage1.Size = new System.Drawing.Size(685, 423);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Relogger";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -155,7 +155,7 @@
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.richTextBox1);
-            this.groupBox2.Location = new System.Drawing.Point(6, 227);
+            this.groupBox2.Location = new System.Drawing.Point(6, 243);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(669, 174);
             this.groupBox2.TabIndex = 1;
@@ -190,7 +190,7 @@
             this.groupBox1.Controls.Add(this.dataGridView1);
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(669, 215);
+            this.groupBox1.Size = new System.Drawing.Size(669, 231);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Bots";
@@ -198,7 +198,7 @@
             // button6
             // 
             this.button6.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button6.Location = new System.Drawing.Point(222, 184);
+            this.button6.Location = new System.Drawing.Point(222, 200);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(74, 23);
             this.button6.TabIndex = 6;
@@ -210,7 +210,7 @@
             // 
             this.checkBox1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(6, 188);
+            this.checkBox1.Location = new System.Drawing.Point(6, 204);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(53, 17);
             this.checkBox1.TabIndex = 5;
@@ -220,7 +220,7 @@
             // button4
             // 
             this.button4.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button4.Location = new System.Drawing.Point(503, 182);
+            this.button4.Location = new System.Drawing.Point(503, 198);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 4;
@@ -231,7 +231,7 @@
             // button3
             // 
             this.button3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button3.Location = new System.Drawing.Point(584, 182);
+            this.button3.Location = new System.Drawing.Point(584, 198);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 3;
@@ -242,7 +242,7 @@
             // button2
             // 
             this.button2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button2.Location = new System.Drawing.Point(141, 184);
+            this.button2.Location = new System.Drawing.Point(141, 200);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 2;
@@ -253,7 +253,7 @@
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button1.Location = new System.Drawing.Point(60, 184);
+            this.button1.Location = new System.Drawing.Point(60, 200);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -270,7 +270,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(6, 19);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(653, 159);
+            this.dataGridView1.Size = new System.Drawing.Size(657, 175);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
@@ -281,7 +281,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(685, 407);
+            this.tabPage2.Size = new System.Drawing.Size(685, 423);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -333,13 +333,16 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(685, 407);
+            this.tabPage4.Size = new System.Drawing.Size(685, 423);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Stats";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // tabControl2
             // 
+            this.tabControl2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl2.Controls.Add(this.tabPage5);
             this.tabControl2.Controls.Add(this.tabPage7);
             this.tabControl2.Controls.Add(this.tabPage6);
@@ -363,27 +366,33 @@
             // 
             // MemoryUsage
             // 
+            this.MemoryUsage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             chartArea1.Name = "ChartArea1";
             this.MemoryUsage.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.MemoryUsage.Legends.Add(legend1);
             this.MemoryUsage.Location = new System.Drawing.Point(0, 179);
+            this.MemoryUsage.MinimumSize = new System.Drawing.Size(650, 140);
             this.MemoryUsage.Name = "MemoryUsage";
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.MemoryUsage.Series.Add(series1);
-            this.MemoryUsage.Size = new System.Drawing.Size(653, 140);
+            this.MemoryUsage.Size = new System.Drawing.Size(650, 140);
             this.MemoryUsage.TabIndex = 2;
             this.MemoryUsage.Text = "chart1";
             // 
             // CpuUsage
             // 
+            this.CpuUsage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             chartArea2.Name = "ChartArea1";
             this.CpuUsage.ChartAreas.Add(chartArea2);
             legend2.Name = "Legend1";
             this.CpuUsage.Legends.Add(legend2);
             this.CpuUsage.Location = new System.Drawing.Point(3, 19);
+            this.CpuUsage.MinimumSize = new System.Drawing.Size(650, 140);
             this.CpuUsage.Name = "CpuUsage";
             series2.ChartArea = "ChartArea1";
             series2.Legend = "Legend1";
@@ -543,7 +552,7 @@
             // button5
             // 
             this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button5.Location = new System.Drawing.Point(606, 463);
+            this.button5.Location = new System.Drawing.Point(621, 467);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 1;
