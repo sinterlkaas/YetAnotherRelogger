@@ -1,6 +1,8 @@
-﻿// VERSION: 0.2.0.7
+﻿// VERSION: 0.2.0.8
 /* Changelog:
- * VERSION: 0.2.0.6
+ * VERSION: 0.2.0.8
+ * Added FrameLock to Pulse, in hopes this helps avoid crashes
+ * VERSION: 0.2.0.7
  * Added 1 second pulse timer to reduce CPU utilization
  * VERSION: 0.2.0.6
  * Added: Support for: Take A Break by Ghaleon
@@ -65,7 +67,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 2, 0, 7); } }
+        public Version Version { get { return new Version(0, 2, 0, 8); } }
 
         private const bool _debug = true;
 
@@ -222,43 +224,46 @@ namespace YARPLUGIN
             if (pulseTimer.ElapsedMilliseconds > 1000)
                 pulseTimer.Restart();
 
-            if (!ZetaDia.IsInGame || ZetaDia.Me == null || !ZetaDia.Me.IsValid || ZetaDia.IsLoadingWorld)
+            using (ZetaDia.Memory.AcquireFrame())
             {
-                return;
-            }
-
-            // Handle errors and other strange situations
-            //ErrorHandling();
-
-            // Trinity Pause support
-            //TrinityPauseHandling();
-
-            // in-game / character data 
-            _bs.IsLoadingWorld = ZetaDia.IsLoadingWorld;
-            _bs.Coinage = 0;
-            try
-            {
-                if (ZetaDia.Me != null && ZetaDia.Me.IsValid)
-                    _bs.Coinage = ZetaDia.Me.Inventory.Coinage;
-            }
-            catch
-            {
-                _bs.Coinage = -1;
-            }
-
-            if (ZetaDia.IsInGame)
-            {
-                _bs.LastGame = DateTime.Now.Ticks;
-                _bs.IsInGame = true;
-            }
-            else
-            {
-                if (_bs.IsInGame)
+                if (!ZetaDia.IsInGame || ZetaDia.Me == null || !ZetaDia.Me.IsValid || ZetaDia.IsLoadingWorld)
                 {
-                    Send("GameLeft", true);
-                    Send("NewMonsterPowerLevel", true); // Request Monsterpower level
+                    return;
                 }
-                _bs.IsInGame = false;
+
+                // Handle errors and other strange situations
+                //ErrorHandling();
+
+                // Trinity Pause support
+                //TrinityPauseHandling();
+
+                // in-game / character data 
+                _bs.IsLoadingWorld = ZetaDia.IsLoadingWorld;
+                _bs.Coinage = 0;
+                try
+                {
+                    if (ZetaDia.Me != null && ZetaDia.Me.IsValid)
+                        _bs.Coinage = ZetaDia.Me.Inventory.Coinage;
+                }
+                catch
+                {
+                    _bs.Coinage = -1;
+                }
+
+                if (ZetaDia.IsInGame)
+                {
+                    _bs.LastGame = DateTime.Now.Ticks;
+                    _bs.IsInGame = true;
+                }
+                else
+                {
+                    if (_bs.IsInGame)
+                    {
+                        Send("GameLeft", true);
+                        Send("NewMonsterPowerLevel", true); // Request Monsterpower level
+                    }
+                    _bs.IsInGame = false;
+                }
             }
         }
         #endregion
