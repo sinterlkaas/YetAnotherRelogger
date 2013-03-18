@@ -15,12 +15,12 @@ namespace YetAnotherRelogger.Helpers
 It is used to ensure a profile starts without causing DB to choken it -->
 <Profile>
     <Name>YAR Profile Kickstart: {profile}</Name>
-    {gameparams}
-        <Order>
-            <Kickstart Profile=""{profile_path}"" Delay=""{delay}""/>
-        </Order>
     <KillMonsters>True</KillMonsters>
     <PickupLoot>True</PickupLoot>
+    {gameparams}
+        <Order>
+            <LoadProfile profile=""{profile_path}"" />
+        </Order>
 </Profile>";
         public static string GenerateKickstart(Profile profile, bool tmpkickstart = false)
         {

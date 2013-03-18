@@ -321,7 +321,7 @@ namespace YetAnotherRelogger.Helpers.Bot
             if (Parent.Diablo.Proc == null || Parent.Diablo.Proc.HasExited)
             {
                 Logger.Instance.Write(Parent, "Demonbuddy:{0}: Waiting to close", Proc.Id);
-                Proc.WaitForExit(5000);
+                Proc.WaitForExit(60000);
                 if (Proc == null || Proc.HasExited) 
                 {
                     Logger.Instance.Write(Parent, "Demonbuddy:{0}: Closed.", Proc.Id);
@@ -334,7 +334,7 @@ namespace YetAnotherRelogger.Helpers.Bot
             else
             {
                 Logger.Instance.Write(Parent, "Demonbuddy:{0}: Failed to close! kill process", Proc.Id);
-                Proc.Kill();
+                //Proc.Kill();
             }
         }
 

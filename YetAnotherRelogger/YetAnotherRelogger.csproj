@@ -78,6 +78,10 @@
     <StartupObject>YetAnotherRelogger.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Demonbuddy, Version=1.0.1353.172, Culture=neutral, PublicKeyToken=eff32ccf253d66d4, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Demonbuddy.exe</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
