@@ -1,5 +1,9 @@
-﻿// VERSION: 0.2.0.6
+﻿// VERSION: 0.2.0.8
 /* Changelog:
+ * VERSION: 0.2.0.8
+ * Added FrameLock to Pulse, in hopes this helps avoid crashes
+ * VERSION: 0.2.0.7
+ * Added 1 second pulse timer to reduce CPU utilization
  * VERSION: 0.2.0.6
  * Added: Support for: Take A Break by Ghaleon
  * VERSION: 0.2.0.5
@@ -63,7 +67,7 @@ namespace YARPLUGIN
     public class YARPLUGIN : IPlugin
     {
         // Plugin version
-        public Version Version { get { return new Version(0, 2, 0, 6); } }
+        public Version Version { get { return new Version(0, 2, 0, 8); } }
 
         private const bool _debug = true;
 
@@ -119,6 +123,7 @@ namespace YARPLUGIN
         public Window DisplayWindow { get { return null; } }
         private bool _allPluginsCompiled;
         private Thread _yarThread;
+        private Thread _scanlogthread;
         private BotStats _bs;
         private bool _pulseFix;
 
@@ -137,12 +142,13 @@ namespace YARPLUGIN
         {
             _bs = new BotStats();
 
-            Logging.OnLogMessage += new Logging.LogMessageDelegate(Logging_OnLogMessage);
+            lmd = new Logging.LogMessageDelegate(Logging_OnLogMessage);
+            Logging.OnLogMessage += lmd;
             _bs.Pid = Process.GetCurrentProcess().Id;
 
             Reset();
 
-            _yarThread = new Thread(YarWorker) {IsBackground = true};
+            _yarThread = new Thread(YarWorker) { IsBackground = true };
             _yarThread.Start();
 
             Send("Initialized");
@@ -154,8 +160,12 @@ namespace YARPLUGIN
             Logging.OnLogMessage -= new Logging.LogMessageDelegate(Logging_OnLogMessage);
         }
 
+
+        Logging.LogMessageDelegate lmd;
         public void OnEnabled()
         {
+
+
             if (_yarThread == null || (_yarThread != null && !_yarThread.IsAlive))
             {
                 _yarThread = new Thread(YarWorker) { IsBackground = true };
@@ -176,19 +186,90 @@ namespace YARPLUGIN
                 return; // Stop here to prevent Thread abort
             }
             // user disabled plugin abort Thread
-            _yarThread.Abort(); 
+            _yarThread.Abort();
+
+            if (lmd != null)
+                Logging.OnLogMessage -= lmd;
         }
+
+        private Stopwatch pulseTimer = new Stopwatch();
 
         public void OnPulse()
         {
+            
             _pulseCheck = true;
             _bs.LastPulse = DateTime.Now.Ticks;
+
+            _bs.PluginPulse = DateTime.Now.Ticks;
+            _bs.IsRunning = BotMain.IsRunning;
+
+            if (BotMain.IsPaused || BotMain.IsPausedForStateExecution)
+            {
+                _bs.IsPaused = true;
+            }
+            else if (BotMain.IsRunning)
+            {
+                _bs.IsPaused = false;
+                _bs.LastRun = DateTime.Now.Ticks;
+            }
+            else
+                _bs.IsPaused = false;
+
+            if (!pulseTimer.IsRunning)
+            {
+                pulseTimer.Start();
+                return;
+            }
+
+            if (pulseTimer.ElapsedMilliseconds > 1000)
+                pulseTimer.Restart();
+
+            using (ZetaDia.Memory.AcquireFrame())
+            {
+                if (!ZetaDia.IsInGame || ZetaDia.Me == null || !ZetaDia.Me.IsValid || ZetaDia.IsLoadingWorld)
+                {
+                    return;
+                }
+
+                // Handle errors and other strange situations
+                //ErrorHandling();
+
+                // Trinity Pause support
+                //TrinityPauseHandling();
+
+                // in-game / character data 
+                _bs.IsLoadingWorld = ZetaDia.IsLoadingWorld;
+                _bs.Coinage = 0;
+                try
+                {
+                    if (ZetaDia.Me != null && ZetaDia.Me.IsValid)
+                        _bs.Coinage = ZetaDia.Me.Inventory.Coinage;
+                }
+                catch
+                {
+                    _bs.Coinage = -1;
+                }
+
+                if (ZetaDia.IsInGame)
+                {
+                    _bs.LastGame = DateTime.Now.Ticks;
+                    _bs.IsInGame = true;
+                }
+                else
+                {
+                    if (_bs.IsInGame)
+                    {
+                        Send("GameLeft", true);
+                        Send("NewMonsterPowerLevel", true); // Request Monsterpower level
+                    }
+                    _bs.IsInGame = false;
+                }
+            }
         }
         #endregion
 
         #region Logging Monitor
 
-        private Thread _scanlogthread;
         void Logging_OnLogMessage(ReadOnlyCollection<Logging.LogMessage> messages)
         {
             try
@@ -344,55 +425,11 @@ namespace YARPLUGIN
         {
             while (true)
             {
-                // Handle errors and other strange situations
-                ErrorHandling();
-                
-                // Trinity Pause support
-                TrinityPauseHandling();
-                
                 _bs.PluginPulse = DateTime.Now.Ticks;
                 _bs.IsRunning = BotMain.IsRunning;
-                _bs.IsLoadingWorld = ZetaDia.IsLoadingWorld;
-                _bs.Coinage = 0;
-                try
-                {
-                    if (ZetaDia.Me != null)
-                        _bs.Coinage = ZetaDia.Me.Inventory.Coinage;
-                }
-                catch
-                {
-                    _bs.Coinage = -1;
-                }
-
-                if (BotMain.IsPaused || BotMain.IsPausedForStateExecution)
-                {
-                    _bs.IsPaused = true;
-                }
-                else if (BotMain.IsRunning)
-                {
-                    _bs.IsPaused = false;
-                    _bs.LastRun = DateTime.Now.Ticks;
-                }
-                else
-                    _bs.IsPaused = false;
-
-                if (ZetaDia.IsInGame)
-                {
-                    _bs.LastGame = DateTime.Now.Ticks;
-                    _bs.IsInGame = true;
-                }
-                else
-                {
-                    if (_bs.IsInGame)
-                    {
-                        Send("GameLeft", true);
-                        Send("NewMonsterPowerLevel", true); // Request Monsterpower level
-                    }
-                    _bs.IsInGame = false;
-                }
 
                 // Send stats
-                Send("XML:" + _bs.ToXmlString(), xml:true);
+                Send("XML:" + _bs.ToXmlString(), xml: true);
                 Thread.Sleep(3000);
             }
         }
@@ -421,7 +458,7 @@ namespace YARPLUGIN
             { // Check if Demonbuddy found errordialog
                 if (!handlederror)
                 {
-                    Send("CheckConnection", pause:true);
+                    Send("CheckConnection", pause: true);
                     handlederror = true;
                 }
                 else
@@ -468,9 +505,9 @@ namespace YARPLUGIN
         #endregion
 
         #region PipeClientSend
-        private void Send(string data, bool pause = false, bool xml = false, int retry = 1, int timeout = 3000)
+        private bool Send(string data, bool pause = false, bool xml = false, int retry = 1, int timeout = 3000)
         {
-            
+
             var success = false;
             var tries = 0;
 
@@ -484,7 +521,7 @@ namespace YARPLUGIN
             {
                 _recieved = false;
                 Func<bool> waitFor = Recieved;
-                BotMain.PauseWhile(waitFor, 0, TimeSpan.FromMilliseconds((retry*timeout) + 3000));
+                BotMain.PauseWhile(waitFor, 0, TimeSpan.FromMilliseconds((retry * timeout) + 3000));
             }
             while (!success && tries < retry)
             {
@@ -496,7 +533,7 @@ namespace YARPLUGIN
                         client.Connect(timeout);
                         if (client.IsConnected)
                         {
-                            var sw = new StreamWriter(client) {AutoFlush = true};
+                            var sw = new StreamWriter(client) { AutoFlush = true };
                             var sr = new StreamReader(client);
 
                             sw.WriteLine(data);
@@ -529,10 +566,12 @@ namespace YARPLUGIN
                 catch (Exception ex)
                 {
                     LogException(ex);
+                    OnShutdown();
                 }
                 Thread.Sleep(100);
             }
             _recieved = true;
+            return success;
         }
         #endregion
 
@@ -591,7 +630,7 @@ namespace YARPLUGIN
             plugins.Add(Name);
             PluginManager.SetEnabledPlugins(plugins.ToArray());
         }
-        
+
         private void ForceEnableAllPlugins()
         {
             PluginContainer test;
@@ -719,17 +758,17 @@ namespace YARPLUGIN
             BotMain.Stop(false, "YetAnotherRelogger -> Load new profile");
             if (ZetaDia.IsInGame)
             {
-                ZetaDia.Service.Games.LeaveGame();
+                ZetaDia.Service.Party.LeaveGame();
                 while (ZetaDia.IsInGame)
                     Thread.Sleep(1000);
             }
-            
+
             Thread.Sleep(2000);
             Log("Loading profile: {0}", profile);
             ProfileManager.Load(profile.Trim());
             Thread.Sleep(5000);
             BotMain.Start();
-        }       
+        }
     }
 
     #region ElementTester
@@ -744,7 +783,7 @@ namespace YARPLUGIN
     }
     public static class UIElementTester
     {
-        
+
         /// <summary>
         /// UIElement validation check
         /// </summary>
@@ -773,7 +812,7 @@ namespace YARPLUGIN
                 }
             }
             catch
-            { 
+            {
                 return false;
             }
             return true;
@@ -804,7 +843,7 @@ namespace YARPLUGIN
     }
     #endregion
 
-    
+
 }
 #region Kickstart Custom Profile Behavior tag
 namespace YARPLUGIN
@@ -812,13 +851,13 @@ namespace YARPLUGIN
     using Zeta.XmlEngine;
     using Action = Zeta.TreeSharp.Action;
 
-    
+
     [XmlElement("Kickstart")]
     public class Kickstart : ProfileBehavior
     {
         public Kickstart()
         {
-            _time = DateTime.Now; // used for delay
+            //r_time = DateTime.Now; // used for delay
         }
 
         private DateTime _time;
@@ -829,17 +868,21 @@ namespace YARPLUGIN
         [XmlAttribute("Profile")]
         private string Profile { get; set; }
 
+        public override void OnStart()
+        {
+            _time = DateTime.Now;
+            Logging.Write("YAR Kickstarter: Profile set to {0}", Profile);
+            Logging.Write("YAR Kickstarter: Delay set to {0}", Delay);
+        }
+
         protected override Composite CreateBehavior()
         {
-            return new Action((x) =>
-                                  {
-                                      if (DateTime.Now.Subtract(_time).TotalSeconds > Convert.ToInt32(Delay))
-                                      {
-                                          Logging.Write("[YAR Kickstart] Load profile: {0}", Profile);
-                                          ProfileManager.Load(Profile);
-                                          _isdone = true;
-                                      }
-                                  });
+            Sequence s =
+            new Sequence(
+                new Action(ret => Logging.Write("[YAR Kickstart] Load profile: {0}", Profile)),
+                new Action(ret => ProfileManager.Load(Profile))
+            );
+            return s;
         }
 
         private bool _isdone;
@@ -850,10 +893,10 @@ namespace YARPLUGIN
         public override void ResetCachedDone()
         {
             _isdone = false;
-            base.ResetCachedDone();
+            //base.ResetCachedDone();
         }
     }
- 
+
 }
 #endregion
 
@@ -870,7 +913,7 @@ namespace YARPLUGIN
         {
             Initialized = true;
             YARPLUGIN.Log("Initialize Trinity Support");
-            var asm = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name.ToLower().StartsWith("gilestrinity"));
+            var asm = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name.ToLower().StartsWith("trinity"));
             if (asm != null)
             {
                 try
@@ -896,7 +939,7 @@ namespace YARPLUGIN
         {
             get
             {
-                var plugin = PluginManager.Plugins.FirstOrDefault(p => p.Plugin.Name.Equals("GilesTrinity"));
+                var plugin = PluginManager.Plugins.FirstOrDefault(p => p.Plugin.Name.Equals("Trinity"));
                 return (plugin != null && plugin.Enabled);
             }
         }
